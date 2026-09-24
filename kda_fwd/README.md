@@ -4,17 +4,20 @@ Final kernels produced by native Claude Code `/goal` sessions, each written from
 scratch without reading the reference kernel. Only the operator code (kernel +
 its launcher) is included; benchmarks, probes and test harnesses are omitted.
 
-Device times are the figures from the results table (B200).
+The reference is the CAKE `recurrent_kda` B200 backend (FlashKDA, called through
+`flashinfer.recurrent_kda`) for the same case. Device time and the ratio to the
+reference are the numbers each session measured itself on B200; ratio > 1 means
+faster than the reference.
 
-| case | model | files | device time | wall time |
-|---|---|---|---|---|
-| `h64_fixed8192` 单条定长长序列 (B=1, T=8192, H=64, D=128) | Opus-4.8 | `h64_fixed8192/opus-4.8/kda_triton12.py` (+ `kda_triton8.py`) | 1280 µs | 20 h |
-| | Opus-5 | `h64_fixed8192/opus-5/kda_k2.cu` (+ ctypes launcher `kda_cuda2.py`) | 477 µs | 6 h |
-| | Fable-5.1 | `h64_fixed8192/fable-5.1/kda_v21.py` (Gluon) | 467.1 µs | 10.53 h |
-| `h96_uniform` 等长打包 (T=8192 = 8×1024, H=96, D=128) | Opus-4.8 | `h96_uniform/opus-4.8/triton_kda_best.py` | 1544 µs | 14 h |
-| | Opus-5 | `h96_uniform/opus-5/kda_fwd.cu` + `kda_common.cuh` (+ ctypes launcher `kda_cuda.py`) | 888 µs | 16 h |
-| | Fable-5.1 | `h96_uniform/fable-5.1/kda_cuda49.cu` (+ JIT launcher `kda_cuda49.py`) | 505.7 µs | 11 h |
-| `h96_mixed` 混合长度打包 (T=8192 = 6 seqs, H=96, D=128) | Fable-5.1 | `h96_mixed/fable-5.1/kda_fwd_best_legacy_mma.cu` (+ JIT launcher `mine.py`) | 688 µs | 6 h |
+| case | model | files | device time | vs reference | wall time |
+|---|---|---|---|---|---|
+| `h64_fixed8192` 单条定长长序列 (B=1, T=8192, H=64, D=128) | Opus-4.8 | `h64_fixed8192/opus-4.8/kda_triton12.py` (+ `kda_triton8.py`) | 1280 µs | 0.37x | 20 h |
+| | Opus-5 | `h64_fixed8192/opus-5/kda_k2.cu` (+ ctypes launcher `kda_cuda2.py`) | 520.2 µs | 0.916x | 6 h |
+| | Fable-5.1 | `h64_fixed8192/fable-5.1/kda_v21.py` (Gluon) | 467.1 µs | 1.02x | 10.53 h |
+| `h96_uniform` 等长打包 (T=8192 = 8×1024, H=96, D=128) | Opus-4.8 | `h96_uniform/opus-4.8/triton_kda_best.py` | 1644.5 µs | 0.247x | 14 h |
+| | Opus-5 | `h96_uniform/opus-5/kda_fwd.cu` + `kda_common.cuh` (+ ctypes launcher `kda_cuda.py`) | 876.3 µs | 0.47x | 16 h |
+| | Fable-5.1 | `h96_uniform/fable-5.1/kda_cuda49.cu` (+ JIT launcher `kda_cuda49.py`) | 505.7 µs | 0.83x | 11 h |
+| `h96_mixed` 混合长度打包 (T=8192 = 6 seqs, H=96, D=128) | Fable-5.1 | `h96_mixed/fable-5.1/kda_fwd_best_legacy_mma.cu` (+ JIT launcher `mine.py`) | 688 µs | 0.567x | 6 h |
 
 Notes
 
