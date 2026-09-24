@@ -7,11 +7,18 @@ its launcher) is included; benchmarks, probes and test harnesses are omitted.
 The reference is the CAKE `recurrent_kda` B200 backend (FlashKDA, called through
 `flashinfer.recurrent_kda`) for the same case. Device time and the ratio to the
 reference are the numbers each session measured itself on B200; ratio > 1 means
-faster than the reference.
+faster than the reference. Device time is the sum of the kernels' device time for
+one call (torch.profiler, or CUPTI with cold L2 for the two Fable-5.1 `h96` rows),
+except where marked ¹.
+
+¹ `h64_fixed8192` / Opus-4.8: timed with CUDA events around 500 back-to-back calls,
+so the figure includes launch gaps between its four Triton kernels and is not a pure
+device time; the ratio is against the published CAKE reference time (0.470 ms), not
+a reference measured in the same session.
 
 | case | model | files | device time | vs reference | wall time |
 |---|---|---|---|---|---|
-| `h64_fixed8192` 单条定长长序列 (B=1, T=8192, H=64, D=128) | Opus-4.8 | `h64_fixed8192/opus-4.8/kda_triton12.py` (+ `kda_triton8.py`) | 1280 µs | 0.37x | 20 h |
+| `h64_fixed8192` 单条定长长序列 (B=1, T=8192, H=64, D=128) | Opus-4.8 | `h64_fixed8192/opus-4.8/kda_triton12.py` (+ `kda_triton8.py`) | 1280 µs¹ | 0.37x¹ | 20 h |
 | | Opus-5 | `h64_fixed8192/opus-5/kda_k2.cu` (+ ctypes launcher `kda_cuda2.py`) | 520.2 µs | 0.916x | 6 h |
 | | Fable-5.1 | `h64_fixed8192/fable-5.1/kda_v21.py` (Gluon) | 467.1 µs | 1.02x | 10.53 h |
 | `h96_uniform` 等长打包 (T=8192 = 8×1024, H=96, D=128) | Opus-4.8 | `h96_uniform/opus-4.8/triton_kda_best.py` | 1644.5 µs | 0.247x | 14 h |
