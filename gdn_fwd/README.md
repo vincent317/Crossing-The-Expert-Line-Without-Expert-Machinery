@@ -42,3 +42,24 @@ Notes
   resumed it across the subscription's rate-limit windows, and the reference kernel lived
   only on a separate judge node that scored candidates shipped to it — so the agent never
   had the reference source on its own machine.
+
+## Interactive `/goal` sessions (Fable-5.1)
+
+Same case and reference kernel family as above (the KDA 0.5 contest kernel, published
+125.53 µs for this workload), but a different session setup and timing method, so the
+rows are kept separate. The session ran through the interactive `/goal` command with the
+reference installed on its own machine as a black box; its transcript was audited and
+contains no read of the reference source.
+
+Device time follows the contest's official protocol (`compare_human_best`): CUPTI
+kernel span with the L2 flushed (256 MB) before every iteration, 3 warm-up / 50 timed
+iterations, median per trial, mean of 3 trials; candidate and reference back to back on
+the same idle B200. `vs reference` = reference / candidate.
+
+| case | model | files | device time | reference | vs reference | develop time |
+|---|---|---|---|---|---|---|
+| `t8192_n20` | Fable-5.1 | `t8192_n20/fable-5.1/gdn_cuda.cu` (+ JIT launcher `gdn_cuda.py`) | 95.36 µs | 125.21 µs | 1.313x | 9 h |
+
+Entry point `gdn_prefill(q, k, v, state, A_log, a, dt_bias, b, cu_seqlens, scale)`.
+With a warm L2 the same measurement gives 94.50 µs vs 124.72 µs (1.320x). Correctness
+passed the same 7x-reference relative-L2 rule against the fp32 naive.
