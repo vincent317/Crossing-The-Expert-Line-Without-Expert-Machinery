@@ -19,6 +19,10 @@ results can be compared across model generations.
 This repository contains only the final operator code from each session (kernel +
 launcher). Benchmarks, probes and session logs are not included.
 
+## Paper
+
+The paper draft is at [`paper.pdf`](paper.pdf).
+
 ## Contents
 
 | directory | operator | cases |
