@@ -58,3 +58,60 @@ Notes
   its sheet-baseline ratio is 1387 / 1195.5 = 1.160x. During the session the model was blocked once and fell
   back to Opus-4.8 for about 1 h (198 replies) before returning to Fable-5.1; continuation turns only said
   "continue". Earlier versions of this session measured 0.947x.
+
+## Harness ablation — `varlen_t32768_n13_h16`, Fable-5.1
+
+Three extra sessions on the varlen case, all Fable-5.1, all given the same `/goal`
+prompt as the `varlen_t32768_n13_h16` Fable-5.1 row above, except for one clause each. They vary the harness, not the
+model, so they are listed separately from the cross-model table:
+
+- `fable-5.1-kernel-wiki` — the prompt additionally points at the KernelWiki repository;
+- `fable-5.1-ncu` — the prompt additionally asks for NCU profiling;
+- `fable-5.1-no-accuracy-constraint` — the correctness clause (fp32 naive + 7x tolerance)
+  is removed from the prompt.
+
+Timing caliber differs from the table above: these rows were **not** re-measured on a
+fresh idle node under the `ncu` all-kernel protocol. Each number is the session's own
+measurement on its own B200 devspace — device-kernel time summed over preprocess, main
+kernel and postprocess (torch profiler, 20 iterations, median of repeated runs; the
+no-accuracy-constraint row is a CUDA-graph replay total) — against a reference the same
+session measured on the same machine. The three self-measured references disagree
+(1633 / 1544.6 / 1775 µs, against 1639 µs in the team results sheet), so `vs reference`
+is meaningful within a row but not across rows. A unified re-measurement is pending.
+
+| arm | files | device time | reference (self-measured) | vs reference | develop time |
+|---|---|---|---|---|---|
+| Kernel Wiki | `fable-5.1-kernel-wiki/fa_bwd_kernel.py` (CuTe DSL; launcher `fa_bwd.py` with Triton pre/post-processing) | 1619 µs | 1633 µs | 1.009x | 13 h |
+| NCU | `fable-5.1-ncu/fa4bwd_varlen_gluon.py` (Gluon) | 1286.6 µs | 1544.6 µs | **1.200x** | 16 h |
+| no accuracy constraint | `fable-5.1-no-accuracy-constraint/fa4_bwd_varlen_gluon.py` (Gluon) | 1766 µs | 1775 µs | 1.005x | 8 h |
+
+Entry points: `FaBwd(q, k, v, o, do, lse, cu_seqlens)`, then `.compile()` and `.run()`
+(Kernel Wiki); `VarlenBwd(cu_seqlens_cpu, H, T, device)(q, k, v, o, do, lse, scale)` (NCU);
+`flash_bwd_varlen(q, k, v, o, do, lse, cu_seqlens, max_seqlen)` (no accuracy constraint).
+All return `(dq, dk, dv)`.
+
+Notes
+
+- All three wrote the kernel from scratch and called the reference only as a black box,
+  as in the rows above.
+- The Kernel Wiki and NCU arms followed the fp32-naive + 7x-tolerance protocol themselves.
+  The no-accuracy-constraint arm did not — with the clause dropped from its prompt it only
+  compared against FA4 directly, with no fp32 gold standard — so its kernel was audited
+  afterwards under the standard protocol on an idle B200: dq/dk/dv max-abs error vs the
+  fp32 naive is 0.015203/0.017755/0.017920 against 7x-FA4 tolerances
+  0.106418/0.124287/0.125443, i.e. identical to FA4's own error. Removing the correctness
+  requirement bought no speed here.
+- That arm also produced an fp8 path (1340.6 µs, 1.28x) which is excluded: it assumes the
+  bf16 to fp8 cast is fused into the forward pass and thus leaves the cast out of the
+  measurement, and it reports gradient errors of 7% and above.
+- The Kernel Wiki arm stopped at 1.009x with a structural argument: on its machine the
+  1.2x goal (<= 1361 µs for the whole call) is below FA4's own main kernel alone
+  (1459 µs), so the arm has to beat FA4's main kernel *and* absorb the pre/post-processing
+  cost. The no-accuracy-constraint arm reached the same conclusion from the other side: its
+  compute floor with the dQ epilogue removed is 1433 µs, leaving no room for the 2.4 GB
+  fp16 read-modify-write of the dQ reduction.
+- The NCU arm crossed the goal by keeping K/V resident in smem per work unit, a 3-stage
+  Q/dO TMA pipeline and an fp16 TMA reduce-add into a per-document 64-aligned dQ
+  accumulator; its remaining limits are a ~72% active tensor pipe (N=64 issue cadence) and
+  a power-capped main kernel (~1.55 GHz at 148 CTAs).
+- Develop times are the sessions' wall times as recorded in the team results sheet.
