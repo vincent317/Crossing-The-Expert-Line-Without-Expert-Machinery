@@ -32,5 +32,6 @@ The paper draft is at [`paper.pdf`](paper.pdf).
 | [`dsa_decode_fwd/`](dsa_decode_fwd/) | DeepSeek Sparse Attention paged MLA decode forward (B200) | `t2_topk2048`, `t8_topk2048`, `t2_topk2048_short` |
 | [`fa4_bwd/`](fa4_bwd/) | FlashAttention-4 backward (B200) | `mha_b8_n4096_h16`, `gqa_b8_n4096_h16_kv2`, `varlen_t32768_n13_h16` |
 | [`gqa_paged_decode/`](gqa_paged_decode/) | GQA paged-KV decode (B200) | `b1_kv173`, `b16_kv2841`, `b64_kv58134` |
+| [`mla_paged_prefill/`](mla_paged_prefill/) | MLA paged prefill, causal (B200) | `b1_q33_kv34`, `b1_q199_kv203`, `b18_q15883_kv15937` |
 
 See each directory's README for the per-case results.
