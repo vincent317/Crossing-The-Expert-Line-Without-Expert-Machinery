@@ -16,6 +16,10 @@ expert-written reference kernel for that case, under three rules:
 The same case is run with several models (Opus-4.8, Opus-5, Fable-5.1) so the
 results can be compared across model generations.
 
+The FA4 backward varlen case additionally has three Fable-5.1 sessions that vary the
+prompt rather than the model (KernelWiki pointer, NCU profiling, correctness clause
+removed); see [`fa4_bwd/README.md`](fa4_bwd/README.md).
+
 This repository contains only the final operator code from each session (kernel +
 launcher). Benchmarks, probes and session logs are not included.
 
