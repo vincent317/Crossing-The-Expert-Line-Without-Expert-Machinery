@@ -63,3 +63,46 @@ the same idle B200. `vs reference` = reference / candidate.
 Entry point `gdn_prefill(q, k, v, state, A_log, a, dt_bias, b, cu_seqlens, scale)`.
 With a warm L2 the same measurement gives 94.50 µs vs 124.72 µs (1.320x). Correctness
 passed the same 7x-reference relative-L2 rule against the fp32 naive.
+
+## NCU-skill `/goal` session and humanize2 ablation — `t8192_n20`, Fable-5.1 (2026-10-20)
+
+Two more Fable-5.1 sessions on `t8192_n20`, from a harness ablation. Their full
+trajectories are included (`<arm>/trajectory/`, see the top-level README).
+
+- `fable-5.1-ncu-skill` — interactive `/goal` session whose prompt asks it to use the
+  NCU skill (`mit-han-lab/ncu-report-skill` at `c7980a4`); the reference (KDA 0.5 GDN
+  kernel) was installed on its machine as a run-only command;
+- `fable-5.1-flame-chase` — the same prompt without the NCU line and the `/goal` prefix,
+  run under humanize2's `flame_chase` flow (two Fable-5.1 chasers taking turns, each turn
+  a fresh session sharing the git workspace), 24 h budget, stopped after 13 h.
+
+Both numbers are the sessions' own acceptance runs on their own B200: CUPTI kernel span
+with the L2 flushed every call (`flashinfer.testing.bench_gpu_time`), 5 alternating rounds
+of reference and candidate, median. Correctness is the 7x-reference rule against an fp32
+naive on output and new state. Not independently re-verified.
+
+| arm | files | device time | reference | vs reference | develop time |
+|---|---|---|---|---|---|
+| NCU skill (`/goal`) | `fable-5.1-ncu-skill/gdn.cu` (mma.sync + cp.async.bulk, PDL; build `build.sh`, ctypes launcher `gdn.py`) | 86.56 µs | 125.22 µs | 1.447x | 2.0 h |
+| flame chase | `fable-5.1-flame-chase/gdn_kernel.cu` (tcgen05 UMMA + TMA, PDL; ctypes launcher `gdn_cuda.py`) | 97.09 µs | 125.20 µs | 1.290x | 6.9 h (of 13 h) |
+
+Entry points: `gdn.run(q, k, v, state, A_log, a, dt_bias, b, cu_seqlens, scale)` and
+`gdn_cuda.gdn_forward(q, k, v, state, A_log, a, dt_bias, b, cu_seqlens, scale)`, both
+returning `(out, new_state)` and loading `libgdn.so` from their own directory. Build:
+`nvcc -O3 -std=c++17 -arch=sm_100a --shared -Xcompiler -fPIC -o libgdn.so gdn.cu`
+(`-gencode arch=compute_100a,code=sm_100a` for `gdn_kernel.cu`).
+
+Notes
+
+- Both are two kernels per call: a chunk-parallel prepass (gates, cumulative decay,
+  KKᵀ/QKᵀ, T=(I+A)⁻¹ in the WY form, 64-token chunks) and a per-(sequence, v-head, v-slice)
+  recurrence with the fp32 state in registers, launched with programmatic dependent launch.
+  The flame-chase kernel reformulates each chunk step as two back-to-back matmuls on UMMA.
+- NCU skill: once the session's Stop hook rejected an acceptance run that timed the
+  reference as a subprocess, the session inspected the reference launcher (file header,
+  `ps`/`/proc` to see which script it starts) and then ran that entry script in-process
+  with `runpy` to time both sides in one process. It did not read the reference source,
+  but this goes beyond calling the command; it is in the transcript.
+- Flame chase: its acceptance script timed the reference in a separate process, although
+  the prompt asked for alternating timing in one process. Its best kernel was committed
+  6.9 h in; the remaining ~6 h were ~125 short turns that only re-ran acceptance.

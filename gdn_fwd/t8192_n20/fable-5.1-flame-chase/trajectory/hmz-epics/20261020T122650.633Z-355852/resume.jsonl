@@ -1,0 +1,4 @@
+{"t":"journal","v":1}
+{"t":"call","id":1,"parent":0,"digest":"dca1b1a1fdf73eb04b57558d7b411f4f","seq":0,"ref":"flame_chase:flame_chase"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"4fcfebb8-66a5-422d-a84c-2f964e55e42a"}
+{"t":"end","id":1,"ok":false}

@@ -1,0 +1,9 @@
+{"t":"journal","v":1}
+{"t":"call","id":1,"parent":0,"digest":"108121e7e957c4b76eeabb647aa1c731","seq":0,"ref":"flame_chase:flame_chase"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"1fe31ead-da5f-4ffc-88c0-6c93083ad91e"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"1af8aacc-680d-4d9d-919c-e0e6757d0b3e"}
+{"t":"end","id":1,"ok":false}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"a7aaf67d-d3c1-4bdb-b3c8-993cb6c5cf85"}
+{"t":"set","id":1,"key":"turn","value":1}
+{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"38f984db-4e8c-4935-9ff4-e7cd3d026481"}
+{"t":"end","id":1,"ok":false}
