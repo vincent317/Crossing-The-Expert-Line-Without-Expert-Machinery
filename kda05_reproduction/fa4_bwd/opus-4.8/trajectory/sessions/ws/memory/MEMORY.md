@@ -1,0 +1,2 @@
+- [attn-bwd-fa4-task](attn-bwd-fa4-task.md) — B200 attention_bwd kernel task: setup, eval workflow, baselines, correctness rule
+- [attn-bwd-fa4-progress](attn-bwd-fa4-progress.md) — current status, best results, design, bottleneck, next steps

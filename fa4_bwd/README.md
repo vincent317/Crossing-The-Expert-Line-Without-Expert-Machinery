@@ -115,3 +115,50 @@ Notes
   accumulator; its remaining limits are a ~72% active tensor pipe (N=64 issue cadence) and
   a power-capped main kernel (~1.55 GHz at 148 CTAs).
 - Develop times are the sessions' wall times as recorded in the team results sheet.
+
+## NCU-skill `/goal` session and humanize2 ablation — `varlen_t32768_n13_h16`, Fable-5.1 (2026-10-20)
+
+Two more sessions on the varlen case, both Fable-5.1, from a later round of the harness
+ablation. Their full trajectories are included (`<arm>/trajectory/`, see the top-level
+README).
+
+- `fable-5.1-ncu-skill` — interactive `/goal` session whose prompt asks it to use the
+  NCU skill (`mit-han-lab/ncu-report-skill` at `c7980a4`, installed in the session's
+  otherwise empty Claude Code config);
+- `fable-5.1-flame-chase` — the same prompt with the NCU line and the `/goal` prefix
+  removed, run instead under humanize2's `flame_chase` flow: two Fable-5.1 chasers take
+  turns, each turn a fresh Claude Code session sharing only the git workspace. It had a
+  24 h budget and was stopped after 13 h.
+
+Both numbers are the sessions' own measurements on their own B200 (SM clock capped at
+1.5 GHz), warm L2, not re-measured on a fresh node and not under the `ncu` protocol of the
+first table: `fable-5.1-ncu-skill` sums the call's kernel durations from `torch.profiler`
+(30 iterations) and compares against a reference time the same session measured the same
+way in a separate run; `fable-5.1-flame-chase` times a CUDA-graph replay of the whole call
+(100 replays) with the reference in the same process. Develop time runs from session
+start to the version kept here.
+
+| arm | files | device time | reference (self-measured) | vs reference | develop time |
+|---|---|---|---|---|---|
+| NCU skill (`/goal`) | `fable-5.1-ncu-skill/fa4bwd.cu` + `sm100_utils.cuh` (raw PTX tcgen05/UMMA/TMA + CuTe headers; build `build.sh`, ctypes launcher `fa4bwd.py`) | 1443.6 µs | 1776.5 µs | 1.231x | 9.4 h |
+| flame chase | `fable-5.1-flame-chase/fa_bwd_v4.py` (Gluon; `cluster_launch.py` patches Triton's launcher for 2-CTA clusters) | 2734.3 µs | 1766.1 µs | 0.646x | 4.6 h (of 13 h) |
+
+Entry points: `fa4_bwd(q, k, v, o, do, lse, cu_seqlens, softmax_scale)` with q/k/v/o/do
+`(T, H, 128)` bf16 and lse `(H, T)` fp32 (NCU skill; loads `libfa4bwd.so` from its own
+directory); `FaBwd4(cu_seqlens, T, H)(q, k, v, o, do, lse, scale)` (flame chase; imports
+`kernel.cluster_launch`, so it expects to live in a package named `kernel`). Both return
+`(dq, dk, dv)`.
+
+Notes
+
+- Both pass the fp32-naive + 7x-FA4 tolerance (NCU skill dq/dk/dv max-abs
+  0.0172/0.0133/0.0179 against 0.106/0.124/0.125).
+- NCU skill: a persistent 148-CTA kernel over (doc, head, 128-key block) items, longest
+  doc first, K/V resident in smem, Q/dO streamed through 4- and 3-stage TMA rings, the lse
+  and delta subtractions folded into the S and dP MMAs as an extra K=16 step, P and dS kept
+  in TMEM for the dV/dK MMAs, dQ accumulated in fp16 with `red.global.add.noftz.f16x2`.
+  `build.sh` hard-codes the CUTLASS headers shipped inside the image's flashinfer package
+  and `/usr/local/cuda/bin/nvcc`.
+- Flame chase: the later chaser rewrote the kernel in CUDA C++ and reported 0.685x for an
+  uncommitted version minutes before the stop; that exact version was overwritten by a
+  further edit and is lost, so the last committed and accepted version (0.646x) is kept.

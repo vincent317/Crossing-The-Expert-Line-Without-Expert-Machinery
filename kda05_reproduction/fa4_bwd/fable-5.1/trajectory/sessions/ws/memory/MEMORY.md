@@ -1,0 +1,2 @@
+- [attn-bwd-b200-environment](attn-bwd-b200-environment.md) — devspace/dataset/evaluator facts, baseline latencies, remote helper scripts, Bash-guard quirk
+- [attn-bwd-b200-design-notes](attn-bwd-b200-design-notes.md) — what limits the bwd kernel (TMEM-bound softmax/MMA chain, tensor-pipe floor 1.44 us/tile), rejected directions, persistent-kernel lessons, CuTe DSL pitfalls (loop-carried pipeline states), hung-kernel debugging

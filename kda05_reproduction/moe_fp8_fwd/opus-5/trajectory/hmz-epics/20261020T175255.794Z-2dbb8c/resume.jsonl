@@ -1,0 +1,12 @@
+{"t":"journal","v":1}
+{"t":"call","id":1,"parent":0,"digest":"ff6d5d503a98ca1e6844d00d17c12006","seq":0,"ref":"flame_chase:flame_chase"}
+{"t":"set","id":1,"key":"turn","value":0}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"cba0c209-48ac-40c7-add8-723dd2420bc3"}
+{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"a7f4e1c3-4b79-4b96-98ba-b15bbcd3e481"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"9ef44ab3-011f-4b31-a445-9ebdf00559ff"}
+{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"2d96b882-19a6-47b2-9433-7d64ae7f6015"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"1c6455cb-a6e7-4541-9c10-b5f23f4246df"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"d79b7e2f-067b-40bf-adea-06128544a44c"}
+{"t":"end","id":1,"ok":false}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"b5ef07db-f00c-477e-897a-0b88f86c0405"}
+{"t":"end","id":1,"ok":false}
