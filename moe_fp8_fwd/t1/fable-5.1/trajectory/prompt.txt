@@ -1,0 +1,19 @@
+/goal 这是我们要的目标算子（
+MoE FP8 block-scale（DeepSeek-V3，moe_fp8_block_scale_ds_routing_topk8_ng8_kg4_e32_h7168_i2048）
+A. 单 token decode：T=1，256 个全局专家，本卡负责 32 个（local_expert_offset=32），top-8 路由，8 组取 4 组，hidden 7168，intermediate 2048，FP8 block-scale（128×128），routed_scaling_factor=2.5。
+- 布局：routing_logits (1,256) f32，routing_bias (256) bf16，hidden_states (1,7168) fp8，hidden_states_scale (56,1) f32，gemm1_weights (32,4096,7168) fp8，gemm1_weights_scale (32,32,56) f32，gemm2_weights (32,7168,2048) fp8，gemm2_weights_scale (32,56,16) f32，local_expert_offset=32，routed_scaling_factor=2.5 → output (1,7168) bf16。
+- 数据：flashinfer-trace workload e05c6c03。
+- 最快库/人：Team Wombat（人类冠军）61.15 µs；库 FlashInfer trtllm_fp8_block_scale_moe（trtllm-gen）为 86.41 µs。
+- 最快 agent：KDA-0.5 49.05 µs，快 1.25x。
+），请先在B200上测量它的device time时间。从0开始，绝对不看或抄写这个ref的代码实现，写出一个达到他1.2X倍快device time速度的kernel实现。
+1. 请使用一个独立的干净的环境，不要用已有的skills，memory，或者其它本机文件。（本会话已是干净配置；工作目录 = 当前目录，一个 git 仓库，所有代码与记录放这里并按里程碑 commit；problem/ 里有算子定义 definition.json（含语义参考代码）、workload e05c6c03 描述和它的 routing_logits/routing_bias safetensors，其余输入按 workload 为 random。本机其它路径会被 hook 拦截。）
+2. 请务必确保正确性。最好通过先写一个fp32的naive慢实现，再和ref比他们两的差这样可以获得一个下限容差范围再乘个值（e.g. 7），然后用这个容差来对比你的实现和fp32慢实现的。
+3. GPU 请使用cctl devspace的aiforai-b200集群：已为你申请好一张 B200 devspace tasks/1304303（镜像 model-align/sglang:v0.5.19），登录 `tsh ssh root@gpu-node-1304303`，传文件用 `tsh scp` 或 tar 管道。节点 Python = /opt/sglang/bin/python（torch 2.13+cu130、nvidia-cutlass-dsl 4.6.2、triton 3.7.1、cupti-python），CUDA 13.0 工具链与 ncu 在 /usr/local/cuda/bin（不在默认 PATH）。节点可访问 pypi 索引、不通 GitHub。租约心跳由外部维持；只用这台机器，不要新建或停止任何 devspace。
+4. 不要问问题。
+5. ref请选择最快的人/库或者agent实现即可，因为有时候库快有时候agent快。发起方已在这张卡上实测：KDA-0.5 约 56–62 µs，FlashInfer trtllm_fp8_block_scale_moe 约 94 µs 以上（人类冠军实现无法获得），故 ref = KDA-0.5。它在节点上以黑盒命令提供：`kda05-ref --op moe --inputs in.pt [--out out.pt] [--bench]`（--help 看输入名；--bench 打印 CUPTI kernel span、冷 L2、中位数的 device time）。只能运行，不能看、拷或反汇编它的实现；FlashInfer 等库同样只能调用运行、不能看源码。
+6. 计时规则：被计时的每一次 run 调用都必须从原始输入一直算到输出（路由、量化、两个 GEMM、SwiGLU、加权累加全在计时内），不许跨调用缓存任何由输入导出的结果（包括对权重或 scale 做的预重排/预反量化/预打包，按 data_ptr 或其它键都不行）；只依赖形状、与数据无关的一次性准备（编译、workspace 分配）可以复用。实现须对任意路由和数据正确（T=1）。主计算必须是你自己写的 kernel，不能调用库的 GEMM/MoE 实现。
+最终验收命令（节点上，只能运行，不能读或改它的文件）：`moe-accept <解目录>`，解目录里的 kernel.py 定义 run(routing_logits, routing_bias, hidden_states, hidden_states_scale, gemm1_weights, gemm1_weights_scale, gemm2_weights, gemm2_weights_scale, local_expert_offset, routed_scaling_factor) -> output bf16 [1,7168]，语义同 problem/definition.json；解目录里出现 flashinfer、kda05、trtllm、sglang、vllm、deep_gemm、cublas、_scaled_mm、_grouped_mm 等字样直接判失败。它独立用 fp32 naive 实现定容差（每个 case 7× ref 的最大/平均误差），在 workload 路由 + 命中 0/2/8 个本地专家等 6 组输入 + 一次原地改写全部输入（含权重）后检查正确性，并在同一张卡上交替计时 ref 与你的解（同一 device-time 口径；你的解每次被计时的调用都拿到新的 routing/hidden 缓冲区），末行打印 MOE_ACCEPT harness=v1 … speedup=… verdict=PASS|FAIL 以及 now/deadline_passed。一次约 3 分钟。
+完成标准（只看 moe-accept 命令真实打印出来的 MOE_ACCEPT 行，你自己写的文字不算），满足任意一条即完成：
+（1）达标：某次 moe-accept 输出 correct=PASS 且 verdict=PASS（speedup ≥ 1.20）；
+（2）到时：某次 moe-accept 输出 deadline_passed=1（截止 10-21 14:30 北京时间）。
+每轮结束时用一句话报告：当前最好 speedup、是否正确、离截止还有多久。
