@@ -18,10 +18,19 @@ results can be compared across model generations.
 
 The FA4 backward varlen case additionally has three Fable-5.1 sessions that vary the
 prompt rather than the model (KernelWiki pointer, NCU profiling, correctness clause
-removed); see [`fa4_bwd/README.md`](fa4_bwd/README.md).
+removed); see [`fa4_bwd/README.md`](fa4_bwd/README.md). A later ablation round (FA4
+varlen, GDN `t8192_n20`, DSA `t8_topk2048`) adds sessions with the NCU skill installed,
+and the same prompts run under humanize2's two-agent `flame_chase` flow instead of
+`/goal`; they are documented in the corresponding operator READMEs.
 
-This repository contains only the final operator code from each session (kernel +
-launcher). Benchmarks, probes and session logs are not included.
+[`kda05_reproduction/`](kda05_reproduction/) is a separate experiment: a reproduction of
+the KDA 0.5 agent setup (humanize2 `flame_chase`, the KDA 0.1 contest task prompts, the
+FlashInfer-Bench evaluator) with each of the same three models, on the DSA, GDN, MoE and
+FA4-backward definitions.
+
+For most sessions the repository contains only the final operator code (kernel +
+launcher). Sessions run from 2026-10-20 on also include their full trajectory; see
+[Trajectories](#trajectories).
 
 ## Paper
 
@@ -37,5 +46,34 @@ The paper draft is at [`paper.pdf`](paper.pdf).
 | [`fa4_bwd/`](fa4_bwd/) | FlashAttention-4 backward (B200) | `mha_b8_n4096_h16`, `gqa_b8_n4096_h16_kv2`, `varlen_t32768_n13_h16` |
 | [`gqa_paged_decode/`](gqa_paged_decode/) | GQA paged-KV decode (B200) | `b1_kv173`, `b16_kv2841`, `b64_kv58134` |
 | [`mla_paged_prefill/`](mla_paged_prefill/) | MLA paged prefill, causal (B200) | `b1_q33_kv34`, `b1_q199_kv203`, `b18_q15883_kv15937` |
+| [`moe_fp8_fwd/`](moe_fp8_fwd/) | MoE FP8 block-scale, DeepSeek routing (B200) | `t1`, `t901`, `t14107` |
+| [`kda05_reproduction/`](kda05_reproduction/) | KDA 0.5 setup reproduced with the three models (B200) | DSA, GDN, MoE and FA4-backward definitions |
 
 See each directory's README for the per-case results.
+
+## Trajectories
+
+Sessions run from 2026-10-20 on (`moe_fp8_fwd/`, the `fable-5.1-ncu-skill`,
+`fable-5.1-ncu-prompt` and `fable-5.1-flame-chase` directories, and
+`kda05_reproduction/`) carry a `trajectory/` directory next to their kernel:
+
+- `/goal` sessions: `prompt.txt` (the `/goal` prompt, in Chinese; `prompt.v1.txt` where it
+  was revised mid-run), `guard_hook.py` (the PreToolUse hook the session ran under), and
+  `session/` — the Claude Code transcript (`<session-id>.jsonl.xz`, one JSON record per
+  line), the large tool outputs Claude Code stored out of line
+  (`<session-id>/tool-results/`), and the session's own memory files (`memory/`).
+- humanize2 `flame_chase` runs: `TASK.md` (the task prompt), `hmz-console/` (humanize2's
+  console output, one file per supervisor attempt), `hmz-epics/` (humanize2's own record of
+  each run and its turns), and `sessions/<workspace>/` — one Claude Code transcript per
+  chaser turn, grouped by the working directory (main workspace or a git worktree the
+  agent created).
+
+Files over 16 KB are xz-compressed (`xz -d` or `xzcat`). The transcripts are verbatim
+except for these replacements, made before publication: internal GPU host names
+(`gpu-node-<id>`), one IP address and one domain, an internal git host name, and the
+content of the operator's personal `~/.claude/CLAUDE.md`. That file was loaded as project
+instructions into every `kda05_reproduction/` session, because those workspaces sat under
+the operator's home directory; the `/goal` and `fable-5.1-flame-chase` sessions ran from
+`/Users/Shared` with a clean config and did not see it. No credentials appear in the
+transcripts.
+
