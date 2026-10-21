@@ -1,0 +1,11 @@
+{"t":"journal","v":1}
+{"t":"call","id":1,"parent":0,"digest":"f40008516cb322204e9991ad77ef79ac","seq":0,"ref":"flame_chase:flame_chase"}
+{"t":"set","id":1,"key":"turn","value":1}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"c1bbcd8f-eda7-465f-ba66-9359d562e054"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"c0481536-09e0-421b-aa98-78943eac1eec"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"70c3069a-0780-41cc-9fb9-34187aa441f6"}
+{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"35b5151c-e316-4947-81ca-678ce2af5840"}
+{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"bb41c712-e953-42d9-8c78-ab1899482b27"}
+{"t":"end","id":1,"ok":false}
+{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-fable-5-1[1m]","session":"c0eeb67e-5627-43ba-9f7c-43e06cd616c4"}
+{"t":"end","id":1,"ok":false}

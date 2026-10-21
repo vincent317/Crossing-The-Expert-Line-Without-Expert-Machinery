@@ -1,0 +1,3 @@
+- [MoE devspace environment](moe-devspace-environment.md) — how to reach the B200 devspace, paths, transfer method, guard quirks
+- [MoE B200 perf findings](moe-b200-perf-findings.md) — TMA feed caps, UMMA promotion-chain bound, split-K fixup cost, routing chain, dirty-L2, variance
+- [MoE project state](moe-project-state.md) — shipped candidate v67 (2.076 official), what was tried in session 4, remaining ideas
