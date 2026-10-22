@@ -21,7 +21,9 @@ prompt rather than the model (KernelWiki pointer, NCU profiling, correctness cla
 removed); see [`fa4_bwd/README.md`](fa4_bwd/README.md). A later ablation round (FA4
 varlen, GDN `t8192_n20`, DSA `t8_topk2048`) adds sessions with the NCU skill installed,
 and the same prompts run under humanize2's two-agent `flame_chase` flow instead of
-`/goal`; they are documented in the corresponding operator READMEs.
+`/goal`; they are documented in the corresponding operator READMEs. GDN `t8192_n20` also
+has an earlier (2026-09-21) Fable-5.1 `/goal` session pointed at KernelWiki, with its full
+trajectory; see [`gdn_fwd/README.md`](gdn_fwd/README.md).
 
 [`kda05_reproduction/`](kda05_reproduction/) is a separate experiment: a reproduction of
 the KDA 0.5 agent setup (humanize2 `flame_chase`, the KDA 0.1 contest task prompts, the
@@ -29,8 +31,8 @@ FlashInfer-Bench evaluator) with each of the same three models, on the DSA, GDN,
 FA4-backward definitions.
 
 For most sessions the repository contains only the final operator code (kernel +
-launcher). Sessions run from 2026-10-20 on also include their full trajectory; see
-[Trajectories](#trajectories).
+launcher). Sessions run from 2026-10-20 on, and the 2026-09-21 GDN KernelWiki session,
+also include their full trajectory; see [Trajectories](#trajectories).
 
 ## Paper
 
@@ -55,13 +57,16 @@ See each directory's README for the per-case results.
 
 Sessions run from 2026-10-20 on (`moe_fp8_fwd/`, the `fable-5.1-ncu-skill`,
 `fable-5.1-ncu-prompt` and `fable-5.1-flame-chase` directories, and
-`kda05_reproduction/`) carry a `trajectory/` directory next to their kernel:
+`kda05_reproduction/`), and `gdn_fwd/t8192_n20/fable-5.1-kernelwiki` (2026-09-21), carry a
+`trajectory/` directory next to their kernel:
 
 - `/goal` sessions: `prompt.txt` (the `/goal` prompt, in Chinese; `prompt.v1.txt` where it
   was revised mid-run), `guard_hook.py` (the PreToolUse hook the session ran under), and
   `session/` — the Claude Code transcript (`<session-id>.jsonl.xz`, one JSON record per
   line), the large tool outputs Claude Code stored out of line
   (`<session-id>/tool-results/`), and the session's own memory files (`memory/`).
+  The 2026-09-21 KernelWiki session has no guard hook; it has `BRIEF.md`, `node/`,
+  `LOG.md` and `supervisor.log` instead (see [`gdn_fwd/README.md`](gdn_fwd/README.md)).
 - humanize2 `flame_chase` runs: `TASK.md` (the task prompt), `hmz-console/` (humanize2's
   console output, one file per supervisor attempt), `hmz-epics/` (humanize2's own record of
   each run and its turns), and `sessions/<workspace>/` — one Claude Code transcript per
@@ -70,10 +75,13 @@ Sessions run from 2026-10-20 on (`moe_fp8_fwd/`, the `fable-5.1-ncu-skill`,
 
 Files over 16 KB are xz-compressed (`xz -d` or `xzcat`). The transcripts are verbatim
 except for these replacements, made before publication: internal GPU host names
-(`gpu-node-<id>`), one IP address and one domain, an internal git host name, and the
-content of the operator's personal `~/.claude/CLAUDE.md`. That file was loaded as project
+(`gpu-node-<id>`) and cluster, project and resource-pool names, one IP address and one
+domain, an internal git host name, the account e-mail address, the content of the
+operator's personal `~/.claude/CLAUDE.md`, and a few tool outputs that printed
+NVIDIA-proprietary-licensed source (replaced by a note giving their length). That file was loaded as project
 instructions into every `kda05_reproduction/` session, because those workspaces sat under
 the operator's home directory; the `/goal` and `fable-5.1-flame-chase` sessions ran from
-`/Users/Shared` with a clean config and did not see it. No credentials appear in the
+`/Users/Shared` with a clean config and did not see it, and the 2026-09-21 KernelWiki
+session ran with `--safe-mode`, which does not load it. No credentials appear in the
 transcripts.
 
