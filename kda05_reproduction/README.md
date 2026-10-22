@@ -4,8 +4,8 @@ A reproduction of the agent setup behind KDA 0.5 (the MLSys 2026 FlashInfer cont
 submission `mit-han-lab/mlsys2026-flashinfer-contest-solution`), run once with each of
 the three models used elsewhere in this repository, so that the `/goal` results can be
 compared against what the same model achieves inside KDA's own harness. Each directory
-holds the solutions that produced the reported numbers and the run's full trajectory
-(`<op>/<model>/trajectory/`, see the top-level README).
+holds the solutions that produced the reported numbers; only the operator code is
+included.
 
 Setup, aligned with KDA 0.5 where it is public:
 
@@ -17,7 +17,7 @@ Setup, aligned with KDA 0.5 where it is public:
   2026-08-31.
 - **Task.** The KDA 0.1 contest prompts (published with the contest repository; phases
   1–3: correct kernel, optimize, full evaluation), with only the planning step of the first
-  humanize version removed and the evaluator command filled in (`trajectory/TASK.md`). The
+  humanize version removed and the evaluator command filled in. The
   scope is a whole FlashInfer-Bench definition (all of its workloads), not one case. No
   reference kernel and no speed target are given; the only baseline is the contest's
   FlashInfer wrapper solution. MoE is restricted to CUDA C++ / CuTe DSL as in the contest.
@@ -30,7 +30,7 @@ Setup, aligned with KDA 0.5 where it is public:
   evaluator: CUPTI kernel span, cold L2, median) with the contest dataset, run by the agents
   on their own B200; the reported numbers are the best PASSED trace per workload over the
   run.
-- **Guard.** A PreToolUse hook (`guard_hook.py`) refused fetches of the KDA and contest
+- **Guard.** A PreToolUse hook refused fetches of the KDA and contest
   winner repositories and reads outside the arm's own workspace.
 - **Budget.** 24 h; all twelve runs were stopped at the same moment, after 23.1–23.2 h
   (DSA, GDN, MoE) and 15.7 h (FA4, started later).
@@ -93,8 +93,8 @@ renamed to keep three versions of one name apart.
 Notes
 
 - These workspaces sat under the operator's home directory, so every session loaded the
-  operator's personal `~/.claude/CLAUDE.md` as project instructions (redacted in the
-  published transcripts). Among other things it told the agent to use a fresh git worktree
+  operator's personal `~/.claude/CLAUDE.md` as project instructions (general working
+  rules, unrelated to the task). Among other things it told the agent to use a fresh git worktree
   for every task, which is why the runs worked in `ws/.claude/worktrees/*`. This differs
   from the `/goal` sessions, which ran with a clean config.
 - FA4: the Opus-4.8 and Fable-5.1 solutions start from NVIDIA CUTLASS's CuTe DSL Blackwell

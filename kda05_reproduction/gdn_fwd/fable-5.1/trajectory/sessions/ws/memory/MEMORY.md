@@ -1,2 +1,0 @@
-- [GDN prefill devspace workflow](gdn-prefill-devspace-workflow.md) — sync/runner scripts, patched baseline, CUPTI timing semantics, workload distribution
-- [GDN prefill progress](gdn-prefill-progress.md) — FINAL v12.4 (af21329, 40.92x official full-100, re-verified 2026-10-21 06:25 CST, closed 06:30 — do not re-verify), Phase 9 LPT order / ws7 dispatch facts, rejected ideas incl. launch-floor probe, remaining levers

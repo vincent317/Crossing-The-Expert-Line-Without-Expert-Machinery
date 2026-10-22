@@ -1,1 +1,0 @@
-- [DSA kernel best state](dsa-kernel-best-state.md) — CONVERGED at v15 (68.616x official, 23/23 correct); worktree/scripts, frontier + rejected levers, remaining latency floor

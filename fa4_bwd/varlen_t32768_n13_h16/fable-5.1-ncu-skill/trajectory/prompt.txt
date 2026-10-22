@@ -1,8 +1,0 @@
-/goal 这是我们要的目标算子（FA4 BWD varlen MHA：13 篇文档共 T=32768 个 token 打包（长度 4096, 217, 8192, 1500, 513, 2800, 6144, 700, 1777, 257, 3500, 1024, 2048，max 8192），H=16, D=128, bf16，每篇文档内部 causal，布局 (T,H,D)，用 cu_seqlens 标明每篇的边界。参照是镜像 model-align/sglang:v0.5.19 自带的 flash-attn-4 4.0.0b19 的 varlen bwd 入口。），请先在B200上测量它的device time时间。从0开始，绝对不看或抄写这个ref的代码实现，写出一个达到他1.2X倍快device time速度的kernel实现。
-1. 请使用一个独立的干净的环境，不要用已有的skills，memory，或者其它本机文件。（本会话已是干净配置；工作目录 = 当前目录，一个 git 仓库，所有代码与记录放这里并按里程碑 commit；本机其它路径会被 hook 拦截。）
-2. 请务必确保正确性。最好通过先写一个fp32的naive慢实现，再和ref比他们两的差这样可以获得一个下限容差范围再乘个值（e.g. 7），然后用这个容差来对比你的实现和fp32慢实现的。
-3. GPU 请使用cctl devspace的b200集群：已为你申请好一张 B200 devspace tasks/1301975（镜像 model-align/sglang:v0.5.19），登录 `tsh ssh root@gpu-node-1301975`，传文件用 `tsh scp`。节点上 Python = /opt/sglang/bin/python（torch 2.13+cu130、flash-attn-4 4.0.0b19、nvidia-cutlass-dsl 4.6.2），CUDA 13.0 工具链与 ncu 在 /usr/local/cuda/bin（不在默认 PATH）。节点可访问 pypi 索引、不通 GitHub。租约心跳由外部维持；只用这台机器，不要新建或停止任何 devspace。
-4. 不要问问题。
-5. ref请选择最快的人/库或者agent实现即可，因为有时候库快有时候agent快。（任何被选作 ref 的实现都只能调用运行、不能看或抄它的代码。）
-6. 请使用NCU skill（GitHub - mit-han-lab/ncu-report-skill，已装在本会话的 skills 里）。
-完成标准：转录里出现最终验收脚本的真实输出，同时显示 (a) 你的实现的 dQ、dK、dV 相对 fp32 naive 实现的误差都在上述容差内；(b) 同一张 B200、同一计时口径（device time）下 ref 时间 / 你的时间 ≥ 1.20。
