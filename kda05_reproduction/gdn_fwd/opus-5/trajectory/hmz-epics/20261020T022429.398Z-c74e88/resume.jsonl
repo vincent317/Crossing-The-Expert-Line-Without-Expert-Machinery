@@ -1,6 +1,0 @@
-{"t":"journal","v":1}
-{"t":"call","id":1,"parent":0,"digest":"2850d383ba39bac30c5602ac6c39944b","seq":0,"ref":"flame_chase:flame_chase"}
-{"t":"session","id":1,"role":"first_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"50a81f1f-a8fd-4dd9-9eb3-8e5777251407"}
-{"t":"set","id":1,"key":"turn","value":1}
-{"t":"session","id":1,"role":"second_chaser","harness":"claude","model":"claude-opus-5[1m]","session":"649269b9-5150-4c2d-a218-4646d5ca6548"}
-{"t":"end","id":1,"ok":false}

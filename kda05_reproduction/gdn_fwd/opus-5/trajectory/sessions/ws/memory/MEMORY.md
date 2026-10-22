@@ -1,8 +1,0 @@
-- [flashinfer-bench timing is bimodal per process](fib-bench-per-process-bimodality.md) — cross-process A/Bs on this benchmark measure allocation placement, not your change; official spread is ±0.47%
-- [`-arch=sm_100a` does not enable sm_100a in CUDA 13](cuda13-arch-sm100a-flag.md) — only `-gencode arch=compute_100a,code=sm_100a` does
-- [CUTLASS C++ headers ship inside the flashinfer package](cutlass-headers-in-flashinfer.md) — useful as a reference for tcgen05/UMMA encodings
-- [tcgen05 needs M in {64,128,256}](tcgen05-shape-and-layout-constraints.md) — and canonical UMMA smem layouts; rules out small-M gemms
-- [Uniform `break` in an unrolled loop: when it pays](uniform-break-in-unrolled-loops.md) — skips a barrier-delimited stage, yes; inside a scheduled dependency chain, no
-- [GDN prefill B200 project state](gdn-prefill-b200-project.md) — where the work lives and what it reached (Phase 6: 17.92 us, 19.47x)
-- [GDN prefill measured ceilings](gdn-prefill-ceilings.md) — which optimisation directions are closed, and by what number
-- [Pre-computation pays per consumer](precompute-pays-per-consumer.md) — the same algebraic fold was +3% in one kernel and −8% in another, for one reason

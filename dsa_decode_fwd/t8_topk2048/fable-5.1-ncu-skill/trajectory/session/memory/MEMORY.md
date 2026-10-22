@@ -1,1 +1,0 @@
-- [DSA kernel floor findings](dsa-kernel-floor-findings.md) — sol18 at 1.138x; list of measured dead ends and the few real wins
