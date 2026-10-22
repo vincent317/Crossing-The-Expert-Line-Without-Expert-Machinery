@@ -28,11 +28,14 @@ trajectory; see [`gdn_fwd/README.md`](gdn_fwd/README.md).
 [`kda05_reproduction/`](kda05_reproduction/) is a separate experiment: a reproduction of
 the KDA 0.5 agent setup (humanize2 `flame_chase`, the KDA 0.1 contest task prompts, the
 FlashInfer-Bench evaluator) with each of the same three models, on the DSA, GDN, MoE and
-FA4-backward definitions.
+FA4-backward definitions. [`goal_fullshape/`](goal_fullshape/) runs the `/goal` setup at that
+same scope (one solution per whole definition) with the same three models, and compares
+the two on one GPU.
 
 For most sessions the repository contains only the final operator code (kernel +
-launcher). Sessions run from 2026-10-20 on, and the 2026-09-21 GDN KernelWiki session,
-also include their full trajectory; see [Trajectories](#trajectories).
+launcher). Sessions run from 2026-10-20 on (except `goal_fullshape/`), and the 2026-09-21
+GDN KernelWiki session, also include their full trajectory; see
+[Trajectories](#trajectories).
 
 ## Paper
 
@@ -50,6 +53,7 @@ The paper draft is at [`paper.pdf`](paper.pdf).
 | [`mla_paged_prefill/`](mla_paged_prefill/) | MLA paged prefill, causal (B200) | `b1_q33_kv34`, `b1_q199_kv203`, `b18_q15883_kv15937` |
 | [`moe_fp8_fwd/`](moe_fp8_fwd/) | MoE FP8 block-scale, DeepSeek routing (B200) | `t1`, `t901`, `t14107` |
 | [`kda05_reproduction/`](kda05_reproduction/) | KDA 0.5 setup reproduced with the three models (B200) | DSA, GDN, MoE and FA4-backward definitions |
+| [`goal_fullshape/`](goal_fullshape/) | `/goal` on whole definitions, three models (B200) | DSA, GDN, MoE and FA4-backward definitions |
 
 See each directory's README for the per-case results.
 
