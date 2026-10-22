@@ -1,0 +1,3 @@
+Fix: vectorise the pairwise gram pass and stop the cudnn stub breaking fla
+gdn_kernel.cu
+refmod.py

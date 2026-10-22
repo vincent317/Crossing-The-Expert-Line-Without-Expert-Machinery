@@ -1,0 +1,15 @@
+01f4b16 Feat: add FA fwd d256 causal harness and from-scratch Triton kernel
+fc816b0 Feat: add TMA-descriptor FA kernels and SMEM diagnostics
+9bcd29f Feat: add Gluon stage-A FlashAttention kernel (TMA + tcgen05 + TMEM)
+449c697 Feat: add warp-specialised Gluon FA kernels (stage B and C)
+e09c774 Feat: add stage-D kernel with software-pipelined softmax partition
+239d397 Feat: add stage-E kernel with tree reductions and FMA exp2 emulation
+0211e19 Feat: add stage-F kernel with 128-column softmax tiles
+e7c08fa Feat: add stage-G kernel with max off the softmax critical path
+340eece Feat: add stage-H kernel processing softmax tiles in 32-column halves
+a16e3fc Feat: add stage-P persistent kernel (grid-stride loop over work items)
+be504ce Feat: add stage-Q kernel with Q resident in tensor memory
+0c60f75 Feat: add stage-R kernel with 3-stage K/V ring (Q staged through K ring)
+d85a5c9 Feat: add stage-S kernel with barrier-free rescale flags
+8feafe5 Test: add final evidence script (ref vs stage-S, same data and harness)
+03fb04b Docs: add SUMMARY.md and clock-controlled final evaluation

@@ -1,0 +1,7 @@
+Feat: v2 kernel (QTILE=256/KTILE=64, 3-stage K/V, QK lookahead) + debug harness
+dbg_main.cu
+dbg_main2.cu
+fa_fwd.cu
+fa_fwd.py
+fa_fwd2.cu
+run_v2.sh

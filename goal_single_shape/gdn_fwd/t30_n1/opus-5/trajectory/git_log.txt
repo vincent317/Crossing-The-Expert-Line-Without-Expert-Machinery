@@ -1,0 +1,22 @@
+64b5b58 Feat: fused single-launch GDN forward kernel for T=30 short sequence
+8ed3c70 Perf: replace the chunked Triton kernel with a register-resident CUDA scan
+ab4df7e Chore: ignore cctl job id scratch files
+edeeda0 Feat: sweep kernel shapes from one build and add a secondary reference
+dc3ecc3 Perf: group RG tokens per scan step in the CUDA kernel
+3ff1d6a Feat: calibrate the CUDA kernel shape inside the benchmark
+e855bd8 Fix: keep the benchmark alive when one implementation fails to build
+efd722b Feat: fall back to fla's chunk_gated_delta_rule when the CuTe-DSL path is unusable
+a8f3caf Chore: trim kernel instantiations and fail pip attempts fast
+86e3d74 Docs: record methodology, findings and the clock-state trap
+8fcb3b4 Test: CPU cross-check of the grouped-scan algebra
+87388c7 Docs: print an explicit goal-condition checklist at the end of the bench
+2533cc5 Test: also cross-check the single-chunk WY form on the CPU
+494d023 Chore: install the fallback reference before the CuTe-DSL chain
+8ad2b73 Docs: list every file and point Reproduce at the one-command entry points
+8cbc5fd Docs: record the CPU algebra verification in the summary
+4736203 Feat: adaptive clock warm-up, zero-cost ablation switch, fla-first reference
+a89149f Fix: vectorise the pairwise gram pass and stop the cudnn stub breaking fla
+213294f Fix: give fla the layout it actually wants, and calibrate the Triton config too
+701c370 Fix: call the CuTe-DSL reference the way it actually wants to be called
+4fac57e Bench: measure every reference prefill path and judge against the published bar
+368c39e Docs: final result against the CuTe-DSL reference, and what the last 5% needs

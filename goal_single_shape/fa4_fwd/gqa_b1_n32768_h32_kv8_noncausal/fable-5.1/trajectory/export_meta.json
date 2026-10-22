@@ -1,0 +1,26 @@
+{
+  "config_stem": "F3_fa_fwd_longctx",
+  "run_name": "fa-fwd-F3-longctx",
+  "model": "claude-fable-5-1",
+  "run_dir": "/Users/cyj/goal-runs/fa-fwd-F3-longctx-nMzUoW",
+  "kernel_files": [
+    "fa_kernel_v3.py",
+    "fa_kernel.py",
+    "fa_kernel_v2.py",
+    "bench_ref.py",
+    "bench_v2.py",
+    "bench_v3.py",
+    "submit.sh",
+    "bench_mine.py",
+    "bench_v4.py",
+    "common.py",
+    "probe.py",
+    "fa_kernel_v4_opt.py",
+    "wait.sh",
+    "bench_v4_opt.py",
+    "ablate_v4.py",
+    "micro_softmax.py",
+    "fa_kernel_v4.py"
+  ],
+  "session_jsonl": "/Users/cyj/goal-runs/F3_fa_fwd_longctx.jsonl"
+}

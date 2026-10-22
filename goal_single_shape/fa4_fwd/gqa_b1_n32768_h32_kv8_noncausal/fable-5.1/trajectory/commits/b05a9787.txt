@@ -1,0 +1,11 @@
+Feat: FlashAttention v4 with comprehensive optimization and analysis
+__pycache__/fa_kernel_v4_opt.cpython-312.pyc
+bench_v4_opt.py
+fa_kernel_v4_opt.py
+micro_softmax.py
+runs/1051962/log.txt
+runs/1052000/log.txt
+runs/1052070/log.txt
+runs/1052086/log.txt
+runs/1052098/log.txt
+runs/task.json

@@ -1,0 +1,8 @@
+Feat: add Gluon stage-A FlashAttention kernel (TMA + tcgen05 + TMEM)
+.last_job
+__pycache__/bench_gluon.cpython-312.pyc
+__pycache__/kernel_gluon.cpython-312.pyc
+bench_gluon.py
+kernel_gluon.py
+probe_cute.py
+probe_gluon.py

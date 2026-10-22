@@ -1,0 +1,21 @@
+{
+  "config_stem": "3_dsa_fwd_C_mixed",
+  "run_name": "dsa-fwd-C-mixed",
+  "model": "claude-opus-5",
+  "run_dir": "/Users/cyj/goal-runs/dsa-fwd-C-mixed-mpzFxL",
+  "kernel_files": [
+    "check.py",
+    "ref_contest.py",
+    "final_run.py",
+    "dsa_cuda.py",
+    "workload.py",
+    "bench.py",
+    "README.md",
+    "dsa_triton.py",
+    "timing.py",
+    "ref_dsa_kernel.py",
+    "dsa_kernel.cu",
+    "impls.py"
+  ],
+  "session_jsonl": null
+}

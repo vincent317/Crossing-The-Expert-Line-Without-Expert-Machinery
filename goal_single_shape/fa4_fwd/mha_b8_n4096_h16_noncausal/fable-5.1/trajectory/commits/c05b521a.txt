@@ -1,0 +1,2 @@
+Fix: tcgen05.fence::before/after_thread_sync around every TMEM handoff
+fmha.cu

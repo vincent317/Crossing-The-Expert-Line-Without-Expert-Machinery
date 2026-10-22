@@ -1,0 +1,10 @@
+Feat: DSA FWD sparse-MLA decode kernels plus reference/accuracy/bench harness
+bench.py
+check.py
+dsa_cuda.py
+dsa_kernel.cu
+dsa_triton.py
+impls.py
+ref_flashinfer.py
+timing.py
+workload.py

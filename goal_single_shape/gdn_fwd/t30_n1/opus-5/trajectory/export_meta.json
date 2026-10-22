@@ -1,0 +1,10 @@
+{
+  "config_stem": "5_gdn_fwd_B_short",
+  "run_name": "gdn-fwd-B-short",
+  "model": "claude-opus-5",
+  "run_dir": "/Users/cyj/goal-runs/gdn-fwd-B-short-0SBjA5",
+  "kernel_files": [
+    "kernel.py"
+  ],
+  "session_jsonl": null
+}

@@ -1,0 +1,20 @@
+{
+  "config_stem": "6_gdn_fwd_C_fewlong",
+  "run_name": "gdn-fwd-C-fewlong",
+  "model": "claude-opus-5",
+  "run_dir": "/Users/cyj/goal-runs/gdn-fwd-C-fewlong-aUYj78",
+  "kernel_files": [
+    "final.py",
+    "check.py",
+    "run_final3.sh",
+    "bench.py",
+    "diag.py",
+    "gdn_data.py",
+    "bench_util.py",
+    "probe_ref.py",
+    "gdn_kernel.py",
+    "probe_ref2.py",
+    "ref_flashinfer.py"
+  ],
+  "session_jsonl": null
+}

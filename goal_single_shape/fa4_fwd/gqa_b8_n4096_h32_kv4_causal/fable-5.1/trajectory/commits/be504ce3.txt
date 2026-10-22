@@ -1,0 +1,8 @@
+Feat: add stage-Q kernel with Q resident in tensor memory
+__pycache__/bench_gluon_b.cpython-312.pyc
+__pycache__/kernel_gluon_q.cpython-312.pyc
+bench_gluon_b.py
+kernel_gluon_q.py
+runs/1052129/log.txt
+runs/1052132/log.txt
+runs/task.json

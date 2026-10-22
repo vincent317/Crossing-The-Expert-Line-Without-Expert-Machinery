@@ -1,0 +1,17 @@
+Perf: software-pipeline Gluon dK/dV; measure MMA-only bf16/fp8 ceiling
+ceiling.py
+gluon_kernel.py
+probe_ceiling.py
+runs/1051118/log.txt
+runs/1051200/log.txt
+runs/1051313/log.txt
+runs/1051330/log.txt
+runs/1051375/log.txt
+runs/1051409/log.txt
+runs/1051461/log.txt
+runs/1052034/log.txt
+runs/1052057/log.txt
+runs/1052199/log.txt
+runs/1052322/log.txt
+runs/task.json
+test_gluon.py

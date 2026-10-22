@@ -1,0 +1,7 @@
+1e4b74f Feat: FlashAttention fwd kernels v1-v3 with B200 benchmark harness
+ee63839 Feat: add Gluon tcgen05 warp-specialized FlashAttention fwd (v4)
+8ef5e72 Fix: make Gluon v4 kernel compile and run correctly on B200
+8e53b05 Feat: add ablation modes and packed-math softmax path to Gluon v4
+b05a978 Feat: FlashAttention v4 with comprehensive optimization and analysis
+3d58960 Docs: Add comprehensive summary of v4 optimization results
+361ba4e Docs: Add terminal evidence summary for all completion criteria

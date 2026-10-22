@@ -1,0 +1,12 @@
+Feat: two-level parallel scan + precomputed intra-block attention for GDN fwd
+SUMMARY.md
+bench.py
+check.py
+diag.py
+final.py
+gdn_data.py
+gdn_kernel.py
+probe_ref.py
+probe_ref2.py
+ref_flashinfer.py
+run_v5.sh

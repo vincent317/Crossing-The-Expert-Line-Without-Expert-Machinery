@@ -1,0 +1,6 @@
+Feat: lazy-rescale option, occupancy diagnostic, tcgen05 peak probe
+binding.cu
+build_ext.py
+fmha.cu
+probe_umma.cu
+run_next.sh

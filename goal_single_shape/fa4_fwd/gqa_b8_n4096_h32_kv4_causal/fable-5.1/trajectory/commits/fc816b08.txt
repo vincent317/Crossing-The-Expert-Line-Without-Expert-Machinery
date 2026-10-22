@@ -1,0 +1,7 @@
+Feat: add TMA-descriptor FA kernels and SMEM diagnostics
+.last_job
+bench2.py
+bench3.py
+kernel_tma.py
+kernel_v3.py
+probe.py

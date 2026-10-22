@@ -1,0 +1,2 @@
+Test: CPU cross-check of the grouped-scan algebra
+verify_math.py

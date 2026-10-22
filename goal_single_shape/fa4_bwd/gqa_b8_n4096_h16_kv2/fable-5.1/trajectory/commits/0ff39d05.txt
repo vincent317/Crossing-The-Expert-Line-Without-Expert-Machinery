@@ -1,0 +1,11 @@
+Feat: FA bwd Triton v1 (kv-outer, GQA-packed dK/dV) + ref/naive harness
+bench_landscape.py
+eref.py
+fa_bwd_triton.py
+fwd_lse.py
+naive_ref.py
+probe.py
+run_mine.py
+submit.sh
+timing.py
+wait.sh

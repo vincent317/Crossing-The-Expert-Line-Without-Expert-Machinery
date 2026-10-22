@@ -1,0 +1,1 @@
+export DSA_VARIANTS="v2:-DDSA_CTA_VERIFY=2"

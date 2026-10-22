@@ -1,0 +1,21 @@
+{
+  "config_stem": "4_gdn_fwd_A_long",
+  "run_name": "gdn-fwd-A-long",
+  "model": "claude-opus-5",
+  "run_dir": "/Users/cyj/goal-runs/gdn-fwd-A-long-BA9M77",
+  "kernel_files": [
+    "check.py",
+    "final_run.py",
+    "run_perf.sh",
+    "run_final2.sh",
+    "bench.py",
+    "README.md",
+    "run_verify.sh",
+    "gdn_data.py",
+    "bench_util.py",
+    "gdn_triton.py",
+    "gdn_ref.py",
+    "gdn_naive.py"
+  ],
+  "session_jsonl": null
+}

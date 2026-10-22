@@ -1,0 +1,10 @@
+Feat: KDA forward benchmark harness and fused Triton kernel
+bench.py
+check.py
+check_mine.py
+kda_common.py
+kda_triton.py
+refwrap.py
+run_mine.sh
+run_stage2b.sh
+stage2b.py

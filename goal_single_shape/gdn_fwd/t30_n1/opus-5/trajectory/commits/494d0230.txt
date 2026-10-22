@@ -1,0 +1,2 @@
+Chore: install the fallback reference before the CuTe-DSL chain
+setup_ref.sh

@@ -1,0 +1,5 @@
+Chore: cycle-level profiling mode (FA_MODE=9) + tcgen05.mma throughput microbench
+fa_fwd3.cu
+mma_bench.cu
+prof_dump.py
+run_prof.sh

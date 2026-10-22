@@ -1,0 +1,10 @@
+Feat: add stage-G kernel with max off the softmax critical path
+__pycache__/bench_gluon_b.cpython-312.pyc
+__pycache__/diag_ptx.cpython-312.pyc
+__pycache__/kernel_gluon_g.cpython-312.pyc
+bench_gluon_b.py
+diag_ptx.py
+kernel_gluon_g.py
+runs/1051983/log.txt
+runs/1052007/log.txt
+runs/task.json

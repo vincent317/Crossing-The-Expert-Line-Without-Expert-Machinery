@@ -1,0 +1,11 @@
+{
+  "config_stem": "T3_topk_C_large",
+  "run_name": "topk-T3-C-large",
+  "model": "claude-fable-5-1",
+  "run_dir": "/Users/cyj/goal-runs/topk-T3-C-large-MIzHLT",
+  "kernel_files": [
+    "bench_ref.py",
+    "run_all.py"
+  ],
+  "session_jsonl": "/Users/cyj/goal-runs/T3_topk_C_large.jsonl"
+}

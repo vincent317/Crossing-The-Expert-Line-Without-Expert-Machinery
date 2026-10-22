@@ -1,0 +1,5 @@
+Perf: TMA row gather, pipelined mma, live-only reduction, release publish
+bench.py
+bench_common.py
+dsa_kernel.cu
+dsa_kernel.py

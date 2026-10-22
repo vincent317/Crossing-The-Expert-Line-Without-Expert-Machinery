@@ -1,0 +1,12 @@
+Perf: single-kernel split-KV DSA FWD decode, 1.227x the CuTe-DSL reference
+.gitignore
+README.md
+bench.py
+check.py
+dsa_cuda.py
+dsa_kernel.cu
+final_run.py
+impls.py
+ref_contest.py
+ref_flashinfer.py
+timing.py

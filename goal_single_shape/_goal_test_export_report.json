@@ -1,0 +1,140 @@
+[
+  {
+    "config": "1_dsa_fwd_A_heavy",
+    "run_dir": "/Users/cyj/goal-runs/dsa-fwd-A-heavy-8JwVAR",
+    "dest": "goal_single_shape/dsa_decode_fwd/t8_topk2048/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "2_dsa_fwd_B_small",
+    "run_dir": "/Users/cyj/goal-runs/dsa-fwd-B-small-X8X0FV",
+    "dest": "goal_single_shape/dsa_decode_fwd/t2_topk2048_short/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "3_dsa_fwd_C_mixed",
+    "run_dir": "/Users/cyj/goal-runs/dsa-fwd-C-mixed-mpzFxL",
+    "dest": "goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5",
+    "status": "exported"
+  },
+  {
+    "config": "4_gdn_fwd_A_long",
+    "run_dir": "/Users/cyj/goal-runs/gdn-fwd-A-long-BA9M77",
+    "dest": "goal_single_shape/gdn_fwd/t8192_n20/opus-5",
+    "status": "exported"
+  },
+  {
+    "config": "5_gdn_fwd_B_short",
+    "run_dir": "/Users/cyj/goal-runs/gdn-fwd-B-short-0SBjA5",
+    "dest": "goal_single_shape/gdn_fwd/t30_n1/opus-5",
+    "status": "exported"
+  },
+  {
+    "config": "6_gdn_fwd_C_fewlong",
+    "run_dir": "/Users/cyj/goal-runs/gdn-fwd-C-fewlong-aUYj78",
+    "dest": "goal_single_shape/gdn_fwd/t5709_n2/opus-5",
+    "status": "exported"
+  },
+  {
+    "config": "7_kda_fwd_A_mixed",
+    "run_dir": "/Users/cyj/goal-runs/kda-fwd-A-mixed-huLOV3",
+    "dest": "goal_single_shape/kda_fwd/h96_mixed/opus-5",
+    "status": "exported"
+  },
+  {
+    "config": "B1_fa_bwd_mha8k",
+    "run_dir": "/Users/cyj/goal-runs/fa-bwd-B1-mha8k-hGi0yr",
+    "dest": "goal_single_shape/fa4_bwd/mha_b8_n4096_h16/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "B2_fa_bwd_d256",
+    "run_dir": "/Users/cyj/goal-runs/fa-bwd-B2-d256-mxWeES",
+    "dest": "goal_single_shape/fa4_bwd/mha_b8_n4096_h16/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "B3_fa_bwd_gqa4to1",
+    "run_dir": "/Users/cyj/goal-runs/fa-bwd-B3-gqa4to1-vYPzCa",
+    "dest": "goal_single_shape/fa4_bwd/gqa_b8_n4096_h16_kv2/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "B4_fa_bwd_long16k",
+    "run_dir": "/Users/cyj/goal-runs/fa-bwd-B4-long16k-dnMAMi",
+    "dest": "goal_single_shape/fa4_bwd/mha_b8_n4096_h16/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "B5_fa_bwd_qwen3",
+    "run_dir": "/Users/cyj/goal-runs/fa-bwd-B5-qwen3-Z1s22c",
+    "dest": "goal_single_shape/fa4_bwd/gqa_b8_n4096_h16_kv2/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F1_fa_fwd_short",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F1-short-bagnsx",
+    "dest": "goal_single_shape/fa4_fwd/mha_b8_n4096_h16_noncausal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F2_fa_fwd_train",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F2-train-8JWKjf",
+    "dest": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_noncausal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F3_fa_fwd_longctx",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F3-longctx-nMzUoW",
+    "dest": "goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_noncausal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F4_fa_fwd_gqa16to1",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F4-gqa16to1-gWjJt1",
+    "dest": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv8_noncausal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F5_fa_fwd_causal",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F5-causal-MdEl1z",
+    "dest": "goal_single_shape/fa4_fwd/mha_b8_n4096_h16_causal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F6_fa_fwd_d256",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F6-d256-eM08V6",
+    "dest": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F7_fa_fwd_qwen3",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F7-qwen3-6LgoEK",
+    "dest": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv8_noncausal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "F8_fa_fwd_varlen",
+    "run_dir": "/Users/cyj/goal-runs/fa-fwd-F8-varlen-mC047W",
+    "dest": "goal_single_shape/fa4_fwd/mha_b1_n32768_h16_causal/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "T1_topk_A_single",
+    "run_dir": "/Users/cyj/goal-runs/topk-T1-A-single-3IQOsV",
+    "dest": "goal_single_shape/dsa_topk_indexer/topk_T1_A_single/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "T2_topk_B_mid",
+    "run_dir": "/Users/cyj/goal-runs/topk-T2-B-mid-z5YECQ",
+    "dest": "goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1",
+    "status": "exported"
+  },
+  {
+    "config": "T3_topk_C_large",
+    "run_dir": "/Users/cyj/goal-runs/topk-T3-C-large-MIzHLT",
+    "dest": "goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1",
+    "status": "exported"
+  }
+]

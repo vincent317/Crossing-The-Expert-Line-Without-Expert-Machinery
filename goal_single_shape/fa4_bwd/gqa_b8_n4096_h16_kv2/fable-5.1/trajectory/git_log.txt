@@ -1,0 +1,2 @@
+0ff39d0 Feat: FA bwd Triton v1 (kv-outer, GQA-packed dK/dV) + ref/naive harness
+af9712d Feat: Gluon tcgen05 FA bwd (v4 serial + v5 warp-specialized)

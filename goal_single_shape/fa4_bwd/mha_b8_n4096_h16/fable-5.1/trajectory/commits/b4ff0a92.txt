@@ -1,0 +1,6 @@
+Perf: ablate dQ reduce-add cost, add zero-atomic split variant
+bench.py
+kernel.py
+probe.py
+runs/1051028/log.txt
+runs/task.json

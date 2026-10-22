@@ -1,0 +1,2 @@
+Perf: fold softmax scale into exp2 and add lazy O rescale (thresh 2^8)
+fa_fwd2.cu

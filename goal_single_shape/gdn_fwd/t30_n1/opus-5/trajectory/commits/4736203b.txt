@@ -1,0 +1,6 @@
+Feat: adaptive clock warm-up, zero-cost ablation switch, fla-first reference
+common.py
+floor.py
+gdn_kernel.cu
+kernel_cuda.py
+setup_ref2.sh

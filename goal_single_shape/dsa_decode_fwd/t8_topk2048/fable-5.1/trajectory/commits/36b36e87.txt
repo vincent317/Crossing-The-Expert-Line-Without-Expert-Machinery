@@ -1,0 +1,6 @@
+Perf: per-SM slot chunk assignment, 8-warp CTAs, single softmax; add SUMMARY
+SUMMARY.md
+bench.py
+check.py
+dsa_kernel.cu
+dsa_kernel.py

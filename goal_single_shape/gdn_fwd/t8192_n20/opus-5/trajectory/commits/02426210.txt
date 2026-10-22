@@ -1,0 +1,25 @@
+Feat: chunked Gated-DeltaNet forward kernel in Triton for B200
+.gitignore
+bench.py
+bench_util.py
+check.py
+dbg_fla.py
+gdn_data.py
+gdn_naive.py
+gdn_ref.py
+gdn_triton.py
+pipretry.sh
+probe.sh
+probe_fi.py
+probe_ref_fla.py
+probe_triton.py
+ref_bench.py
+run_fla2.sh
+run_mine.py
+run_mine.sh
+run_ref.sh
+run_ref_fi.sh
+run_ref_fla.sh
+run_sweep.sh
+run_triton_probe.sh
+sweep.py

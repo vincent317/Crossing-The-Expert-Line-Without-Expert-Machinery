@@ -1,0 +1,10 @@
+{
+  "config_stem": "F2_fa_fwd_train",
+  "run_name": "fa-fwd-F2-train",
+  "model": "claude-fable-5-1",
+  "run_dir": "/Users/cyj/goal-runs/fa-fwd-F2-train-8JWKjf",
+  "kernel_files": [
+    "kernel4.py"
+  ],
+  "session_jsonl": "/Users/cyj/goal-runs/F2_fa_fwd_train.jsonl"
+}

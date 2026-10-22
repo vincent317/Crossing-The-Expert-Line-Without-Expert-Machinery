@@ -1,0 +1,10 @@
+Feat: fused single-launch GDN forward kernel for T=30 short sequence
+.gitignore
+README.md
+bench.py
+check.py
+common.py
+kernel.py
+refmod.py
+setup_ref.sh
+submit.sh

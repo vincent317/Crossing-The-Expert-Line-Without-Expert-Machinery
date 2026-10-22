@@ -1,0 +1,9 @@
+Feat: Gluon tcgen05 FA bwd (v4 serial + v5 warp-specialized)
+fa_bwd_gluon.py
+fa_bwd_gluon_ws.py
+fa_bwd_triton.py
+probe_gluon.py
+run_mine.py
+runs/1051011/log.txt
+runs/1051349/log.txt
+runs/task.json

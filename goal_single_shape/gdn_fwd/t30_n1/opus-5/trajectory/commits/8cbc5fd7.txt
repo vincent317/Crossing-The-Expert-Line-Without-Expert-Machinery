@@ -1,0 +1,2 @@
+Docs: record the CPU algebra verification in the summary
+SUMMARY.md

@@ -1,0 +1,15 @@
+Feat: DSA sparse-attention decode kernels, benchmark and accuracy harness
+.gitignore
+bench.py
+check.py
+dsa_kernel.cu
+dsa_mma.cu
+dsa_ops.py
+fetch_log.sh
+job.sh
+naive_fp32.py
+run_ref.py
+sass_summary.py
+sparse_indices_9d4a5f21268e484ea05a2f2af91d9fa7.safetensors
+submit_job.sh
+workload.py

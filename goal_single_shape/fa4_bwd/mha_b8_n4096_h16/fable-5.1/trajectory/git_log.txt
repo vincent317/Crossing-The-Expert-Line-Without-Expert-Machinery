@@ -1,0 +1,6 @@
+98c4046 Feat: FlashAttention causal MHA backward in Triton for B200
+6156a2a Perf: transposed FA bwd formulation with TMA loads and dQ^T reduce-add
+b4ff0a9 Perf: ablate dQ reduce-add cost, add zero-atomic split variant
+1fb0f0d Perf: software-pipeline Gluon dK/dV; measure MMA-only bf16/fp8 ceiling
+1e3f67b Test: measure fp8 e4m3 feasibility and per-GEMM error attribution
+a9e1c8c Docs: add SUMMARY.md with best result and measured bottleneck

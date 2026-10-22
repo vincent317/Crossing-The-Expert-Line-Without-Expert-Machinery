@@ -1,0 +1,5 @@
+Fix: tcgen05.st operand numbering in tmem_st32 (address is %0, data %1..%32)
+fa_fwd.cu
+fa_fwd2.cu
+fa_fwd3.cu
+run_abl.sh

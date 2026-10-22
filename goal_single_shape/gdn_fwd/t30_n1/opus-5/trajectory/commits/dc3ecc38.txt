@@ -1,0 +1,9 @@
+Perf: group RG tokens per scan step in the CUDA kernel
+.next_job_id
+bench.py
+common.py
+diag.py
+diag_cuda.py
+gdn_kernel.cu
+kernel_cuda.py
+setup_ref.sh

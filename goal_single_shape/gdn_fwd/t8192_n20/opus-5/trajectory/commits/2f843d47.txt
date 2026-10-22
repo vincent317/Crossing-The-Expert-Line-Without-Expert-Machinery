@@ -1,0 +1,12 @@
+Docs: record the verified reference timing, tolerance and result
+README.md
+SUMMARY.md
+bench.py
+check.py
+dbg_ref.py
+doc_ref.py
+iso_ref.py
+ref_gdn.py
+run_cu13.sh
+run_final.sh
+run_verify.sh

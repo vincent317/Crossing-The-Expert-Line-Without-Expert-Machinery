@@ -1,0 +1,2 @@
+Docs: record measured bf16 ceiling showing the 1.2x target is unreachable
+SUMMARY.md

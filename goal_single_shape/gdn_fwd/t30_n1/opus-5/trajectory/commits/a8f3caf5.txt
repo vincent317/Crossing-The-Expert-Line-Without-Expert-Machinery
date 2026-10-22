@@ -1,0 +1,5 @@
+Chore: trim kernel instantiations and fail pip attempts fast
+bench.py
+gdn_kernel.cu
+kernel_cuda.py
+setup_ref.sh

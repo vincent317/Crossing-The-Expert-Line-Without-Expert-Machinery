@@ -1,0 +1,7 @@
+Feat: add ablation modes and packed-math softmax path to Gluon v4
+ablate_v4.py
+fa_kernel_v4.py
+micro_softmax.py
+runs/1051482/log.txt
+runs/1051818/log.txt
+runs/task.json

@@ -1,0 +1,10 @@
+{
+  "config_stem": "F5_fa_fwd_causal",
+  "run_name": "fa-fwd-F5-causal",
+  "model": "claude-fable-5-1",
+  "run_dir": "/Users/cyj/goal-runs/fa-fwd-F5-causal-MdEl1z",
+  "kernel_files": [
+    "kernel4.py"
+  ],
+  "session_jsonl": "/Users/cyj/goal-runs/F5_fa_fwd_causal.jsonl"
+}

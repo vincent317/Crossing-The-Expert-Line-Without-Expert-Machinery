@@ -1,0 +1,21 @@
+{
+  "config_stem": "1_dsa_fwd_A_heavy",
+  "run_name": "dsa-fwd-A-heavy",
+  "model": "claude-fable-5-1",
+  "run_dir": "/Users/cyj/goal-runs/dsa-fwd-A-heavy-8JwVAR",
+  "kernel_files": [
+    "dsa_data.py",
+    "check.py",
+    "dsa_naive.py",
+    "bench_common.py",
+    "bench.py",
+    "dsa_kernel.py",
+    "umma_bench.py",
+    "dsa_kernel_tcgen05.py",
+    "dsa_kernel.cu",
+    "dsa_kernel_tcgen05.cu",
+    "job_ref.py",
+    "check_common.py"
+  ],
+  "session_jsonl": null
+}
