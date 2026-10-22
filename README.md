@@ -60,3 +60,9 @@ goal_full_shape/<operator>/<model>/<definition>/      solution.json + its source
 kda05_reproduction/<operator>/<model>/<solution>/     solution.json + its sources
 ablation/<operator>/<case>/fable-5.1-<arm>/           kernel + launcher
 ```
+
+## License
+
+Licensed under the [Apache License, Version 2.0](LICENSE). Files adapted from NVIDIA
+CUTLASS examples keep their BSD-3-Clause headers and license; they are listed in
+[`NOTICE`](NOTICE).
