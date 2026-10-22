@@ -64,7 +64,44 @@ is the kept solution's official result.
 ² Not an agent kernel: for T ≤ 2048 this solution replays a CUDA graph of FlashInfer's
 `trtllm_fp8_block_scale_moe`, the same library kernel as the baseline, and for larger T it
 calls FlashInfer's grouped FP8 GEMMs. The task asked for CUDA C++ or CuTe DSL. The files are
-kept as the run produced them.
+kept as the run produced them. The run was repeated with library calls explicitly banned;
+see the next section.
+
+## Re-measured on one GPU
+
+All solutions above were later re-run with the official evaluator (same version and flags)
+on a single B200, together with KDA 0.5 itself packaged as a FlashInfer-Bench solution, in
+three alternating rounds (two for FA4), median. Each cell is the fastest of the solutions
+that still existed at the end of the run; where the run had overwritten the fastest one,
+the cell uses the fastest surviving version. This is the table to compare across models
+and with [`goal_full_shape/`](../goal_full_shape/). Device time in µs:
+
+| operator | workload | Opus-4.8 | Opus-5 | Fable-5.1 | KDA 0.5 |
+|---|---|---|---|---|---|
+| FA4 backward | MHA `5d2f3c61` | 1337 | 1416 | 1200 | — |
+| | GQA `8c41e9b2` | 1238 | 1478 | 1163 | — |
+| | varlen `e3a7b5d9` | 1557 | 1697 | 1378 | — |
+| DSA decode | `564007ac` (T=8) | 12.18 ³ | 8.30 | 7.43 | 10.13 |
+| | `9d4a5f21` (T=2) | 5.74 ³ | 4.41 | 3.56 | 3.35 |
+| | `05f6de65` (T=2) | 8.75 ³ | 6.29 | 5.11 | 6.92 |
+| GDN prefill | `a9540651` (T 8192, N 20) | 710 | 125.9 | 233.7 | 124.9 |
+| | `62447caf` (T 30, N 1) | 15.24 | 4.74 | 4.67 | 4.81 |
+| | `07aa7922` (T 5709, N 2) | 973 | 138.1 | 311.6 | 107.7 |
+| MoE FP8 | `e05c6c03` (T=1) | 134.7 ⁴ | 72.95 | 42.1 | 52.0 |
+| | `1a4c6ba1` (T=901) | 335.6 ⁴ | 385.9 | 280.5 | 275.8 |
+| | `5e8dc11c` (T=14107) | 1271 ⁴ | 1582 | 923.1 | 1028.6 |
+
+³ This solution returns only the attention output, not the log-sum-exp; the DSA evaluator
+accepts this.
+
+⁴ The rerun with library calls banned (13.8 h; directory
+`moe_fp8_fwd/opus-4.8/moe_a3_dsl_v1__rerun_2b5b5e9`). Its two grouped GEMMs are NVIDIA's
+CuTe DSL blockwise-FP8 grouped-GEMM example kernels (`cute_grouped_gemm.py`,
+`cute_masked_gemm.py`, BSD-3-Clause headers kept), driven from the run's own routing,
+scatter and SwiGLU kernels (`moe_kernels.cu`) and wrapper (`dsl_gemm.py`), although its
+`main.py` docstring calls them its own kernels. A stricter check (fp32 reference, 7× KDA
+0.5's error per row) finds 3 of 901 and 78 of 14107 token rows wrong; the official
+evaluator passes it through its 90 % matched-ratio rule.
 
 ## Contents
 
@@ -77,18 +114,18 @@ renamed to keep three versions of one name apart.
 
 | op / model | solution → rows |
 |---|---|
-| `fa4_bwd/opus-4.8` | `cute_fabwd_bshd_v5c_fusedzero` → MHA; `cute_fabwd_bshd_v6_gridreorder` → GQA; `cute_fabwd_varlen_v5c_fusedzero` → varlen |
+| `fa4_bwd/opus-4.8` | `cute_fabwd_bshd_v5c_fusedzero` → MHA; `cute_fabwd_bshd_v6_gridreorder` → GQA; `cute_fabwd_varlen_v5c_fusedzero` → varlen. One-GPU table: `cute_fabwd_bshd_v6_gridreorder` → MHA, GQA; `cute_fabwd_varlen_v6_gridreorder` (same sources, varlen entry point) → varlen |
 | `fa4_bwd/opus-5` | `d20b_bshd` → MHA; `final6_bshd` → GQA; `final5_varlen` → varlen |
-| `fa4_bwd/fable-5.1` | `fable51_attn_bwd_v009_bshd` → MHA, GQA; `fable51_attn_bwd_v009_varlen` → varlen |
-| `dsa_decode_fwd/opus-4.8` | `dsa_triton_v15` → 564007ac; `dsa_triton_v11` → 9d4a5f21; `dsa_triton_v14` → 05f6de65 |
-| `dsa_decode_fwd/opus-5` | `dsa_b200_cluster16_dsmem_v25` → 564007ac; `dsa_cluster_split16_v33` → 9d4a5f21; `dsa_b200_cluster16_dsmem` → 05f6de65 |
+| `fa4_bwd/fable-5.1` | `fable51_attn_bwd_v009_bshd` → MHA, GQA; `fable51_attn_bwd_v009_varlen` → varlen. One-GPU table: `fable51_attn_bwd_v010_bshd` → MHA, GQA; `fable51_attn_bwd_v010_varlen` → varlen (the run's last versions; only `fmha_bwd_sm100.py` differs from v009) |
+| `dsa_decode_fwd/opus-4.8` | `dsa_triton_v15` → 564007ac; `dsa_triton_v11` → 9d4a5f21; `dsa_triton_v14` → 05f6de65. One-GPU table: `dsa_triton_v15` → all three |
+| `dsa_decode_fwd/opus-5` | `dsa_b200_cluster16_dsmem_v25` → 564007ac; `dsa_cluster_split16_v33` → 9d4a5f21; `dsa_b200_cluster16_dsmem` → 05f6de65. One-GPU table: `dsa_b200_cluster16_dsmem` → 564007ac, 05f6de65; `dsa_cluster_split16_v33` → 9d4a5f21 |
 | `dsa_decode_fwd/fable-5.1` | `fable51_dsa_attn_v23` → 564007ac; `fable51_dsa_attn_v26` → 9d4a5f21; `fable51_dsa_attn_v20` → 05f6de65 |
 | `gdn_fwd/opus-4.8` | `gdn-prefill-opus48-v1` → all three |
-| `gdn_fwd/opus-5` | `gdn_prefill_b200_cuda__phase6_c082ff2` → a9540651; `__phase5_fa377b7` → 62447caf; `__phase7_final` → 07aa7922 |
+| `gdn_fwd/opus-5` | `gdn_prefill_b200_cuda__phase6_c082ff2` → a9540651; `__phase5_fa377b7` → 62447caf; `__phase7_final` → 07aa7922. One-GPU table: `__phase7_final` → all three |
 | `gdn_fwd/fable-5.1` | `gdn-prefill-fused-fable51` → all three |
-| `moe_fp8_fwd/opus-4.8` | `moe_p3_fastsw` → e05c6c03; `moe_p3_d9tune` → 1a4c6ba1; `moe_p3_fastrt` → 5e8dc11c |
-| `moe_fp8_fwd/opus-5` | `moe_b200_p1_splitk` → e05c6c03; `moe_b200_tc_v2` → 1a4c6ba1; `moe_b200_tc_v1` → 5e8dc11c |
-| `moe_fp8_fwd/fable-5.1` | `fable51_moe_v84` → e05c6c03; `fable51_moe_v94` → 1a4c6ba1; `fable51_moe_v93` → 5e8dc11c |
+| `moe_fp8_fwd/opus-4.8` | `moe_p3_fastsw` → e05c6c03; `moe_p3_d9tune` → 1a4c6ba1; `moe_p3_fastrt` → 5e8dc11c (library calls, see ²). One-GPU table: `moe_a3_dsl_v1__rerun_2b5b5e9` → all three |
+| `moe_fp8_fwd/opus-5` | `moe_b200_p1_splitk` → e05c6c03; `moe_b200_tc_v2` → 1a4c6ba1; `moe_b200_tc_v1` → 5e8dc11c. One-GPU table: `moe_b200_tc_v2` → all three |
+| `moe_fp8_fwd/fable-5.1` | `fable51_moe_v84` → e05c6c03; `fable51_moe_v94` → 1a4c6ba1; `fable51_moe_v93` → 5e8dc11c. One-GPU table: `fable51_moe_v82` → e05c6c03; `fable51_moe_v93` → 1a4c6ba1; `fable51_moe_v94` → 5e8dc11c |
 
 Notes
 
