@@ -47,6 +47,8 @@ Operators covered in each:
 | MoE FP8 block-scale, DeepSeek routing | [`moe_fp8_fwd`](goal_single_shape/moe_fp8_fwd/) | [`moe_fp8_fwd`](goal_full_shape/moe_fp8_fwd/) | [`moe_fp8_fwd`](kda05_reproduction/moe_fp8_fwd/) | |
 | GQA paged-KV decode | [`gqa_paged_decode`](goal_single_shape/gqa_paged_decode/) | | | |
 | MLA paged prefill, causal | [`mla_paged_prefill`](goal_single_shape/mla_paged_prefill/) | | | |
+| MLA paged decode | [`mla_paged_decode`](goal_single_shape/mla_paged_decode/) | | | |
+| FlashAttention-4 forward | [`fa4_fwd`](goal_single_shape/fa4_fwd/) | | | |
 
 See each directory's README for the per-case results.
 
