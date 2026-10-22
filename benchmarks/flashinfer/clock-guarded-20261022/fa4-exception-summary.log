@@ -1,0 +1,75 @@
+now using node mbkj-k8s-existed-node-hhua
+[Thread 0x7ffead3de6c0 (LWP 1589) exited]
+[Thread 0x7ffeae3e06c0 (LWP 1587) exited]
+[Thread 0x7ffeaf3e26c0 (LWP 1585) exited]
+[Thread 0x7ffeafbe36c0 (LWP 1584) exited]
+[Thread 0x7ffeb03e46c0 (LWP 1583) exited]
+[Thread 0x7ffeb0be56c0 (LWP 1582) exited]
+[Thread 0x7ffeb13e66c0 (LWP 1581) exited]
+[Thread 0x7ffeb1be76c0 (LWP 1580) exited]
+[Thread 0x7ffeb23e86c0 (LWP 1579) exited]
+[Thread 0x7ffeb2be96c0 (LWP 1578) exited]
+[Thread 0x7ffeb33ea6c0 (LWP 1577) exited]
+[Thread 0x7ffeb3beb6c0 (LWP 1576) exited]
+[Thread 0x7ffeb43ec6c0 (LWP 1575) exited]
+[Thread 0x7ffeb4bed6c0 (LWP 1574) exited]
+[Thread 0x7ffeb53ee6c0 (LWP 1573) exited]
+[Thread 0x7ffeb5bef6c0 (LWP 1572) exited]
+[Thread 0x7ffeb63f06c0 (LWP 1571) exited]
+[Thread 0x7ffeb6bf16c0 (LWP 1570) exited]
+[Thread 0x7ffeb73f26c0 (LWP 1569) exited]
+[Thread 0x7ffeb7bf36c0 (LWP 1568) exited]
+[Thread 0x7ffeb83f46c0 (LWP 1567) exited]
+[Thread 0x7ffeb8bf56c0 (LWP 1566) exited]
+[Thread 0x7ffeb93f66c0 (LWP 1565) exited]
+[Thread 0x7ffeb9bf76c0 (LWP 1564) exited]
+[Thread 0x7ffeba3f86c0 (LWP 1563) exited]
+[Thread 0x7ffebabf96c0 (LWP 1562) exited]
+[Thread 0x7ffebb3fa6c0 (LWP 1561) exited]
+[Thread 0x7ffebbbfb6c0 (LWP 1560) exited]
+[Thread 0x7ffebc3fc6c0 (LWP 1559) exited]
+[Thread 0x7ffebcbfd6c0 (LWP 1558) exited]
+[Thread 0x7ffebd3fe6c0 (LWP 1557) exited]
+[Thread 0x7ffebdbff6c0 (LWP 1556) exited]
+[Detaching after fork from child process 1622]
+[New Thread 0x7ffe9ebc16c0 (LWP 1630)]
+ALLOCATOR native
+REPEAT_OK 0
+REPEAT_OK 100
+CUDA Exception: Warp Illegal Instruction
+The exception was triggered at PC 0x7ffeb35b8ab0  fa4::fa4_bwd_kernel(fa4::Params)  (sm100_utils.cuh:35 in _ZN1k21mbar_arrive_expect_txEPmj inlined from fa4bwd.cu:226)
+Thread 1 "python" received signal CUDA_EXCEPTION_4, Warp Illegal Instruction.
+[Switching focus to CUDA kernel 0, grid 440, block (80,0,0), thread (384,0,0), device 0, sm 86, warp 15, lane 0]
+fa4::fa4_bwd_kernel<<<(148,1,1),(512,1,1)>>> () at /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu:215
+215	        for (int j = w.j1; j >= w.j0; --j, ++g) {
+  Kernel Parent Dev Grid Status                                 SMs Mask   GridDim  BlockDim Invocation            
+*      0      -   0  440 Active 0x0fffffffffffffffffffffffffffffffffffff (148,1,1) (512,1,1) fa4::fa4_bwd_kernel() 
+   BlockIdx ThreadIdx To BlockIdx To ThreadIdx Count                 PC                                                                                                                                                   Filename  Line 
+Kernel 0
+    (0,0,0)   (0,0,0)     (0,0,0)     (63,0,0)    64 0x00007ffeb35bf690       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   438 
+    (0,0,0)  (64,0,0)     (0,0,0)     (95,0,0)    32 0x00007ffeb35bf680 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh    55 
+    (0,0,0)  (96,0,0)     (0,0,0)    (127,0,0)    32 0x00007ffeb35bf690       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   438 
+    (0,0,0) (128,0,0)     (0,0,0)    (383,0,0)   256 0x00007ffeb35c0e90       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   526 
+    (0,0,0) (384,0,0)     (0,0,0)    (384,0,0)     1 0x00007ffeb35b8560       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   219 
+    (0,0,0) (385,0,0)     (0,0,0)    (415,0,0)    31 0x00007ffeb35c5140       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   633 
+    (0,0,0) (416,0,0)     (0,0,0)    (447,0,0)    32 0x00007ffeb35b93d0       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   255 
+    (0,0,0) (448,0,0)     (0,0,0)    (479,0,0)    32 0x00007ffeb35ba3a0 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   162 
+    (0,0,0) (480,0,0)     (0,0,0)    (511,0,0)    32 0x00007ffeb35bb540       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   294 
+    (1,0,0)   (0,0,0)     (1,0,0)     (31,0,0)    32 0x00007ffeb35bd3a0 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   133 
+    (1,0,0)  (32,0,0)     (1,0,0)     (63,0,0)    32 0x00007ffeb35bd320 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   133 
+    (1,0,0)  (64,0,0)     (1,0,0)     (95,0,0)    32 0x00007ffeb35bd440 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   130 
+    (1,0,0)  (96,0,0)     (1,0,0)    (127,0,0)    32 0x00007ffeb35bd380 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   133 
+    (1,0,0) (128,0,0)     (1,0,0)    (159,0,0)    32 0x00007ffeb35c5000 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   109 
+    (1,0,0) (160,0,0)     (1,0,0)    (223,0,0)    64 0x00007ffeb35c5070 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh    96 
+    (1,0,0) (224,0,0)     (1,0,0)    (255,0,0)    32 0x00007ffeb35c5080                                                                                                               /usr/local/cuda/include/sm_30_intrinsics.hpp   110 
+    (1,0,0) (256,0,0)     (1,0,0)    (287,0,0)    32 0x00007ffeb35c2510       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   550 
+    (1,0,0) (288,0,0)     (1,0,0)    (319,0,0)    32 0x00007ffeb35c2790       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   552 
+    (1,0,0) (320,0,0)     (1,0,0)    (351,0,0)    32 0x00007ffeb35c25e0       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   552 
+    (1,0,0) (352,0,0)     (1,0,0)    (383,0,0)    32 0x00007ffeb35c2680       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu    73 
+    (1,0,0) (384,0,0)     (1,0,0)    (384,0,0)     1 0x00007ffeb35c5510 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh    55 
+    (1,0,0) (385,0,0)     (1,0,0)    (415,0,0)    31 0x00007ffeb35c5140       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   633 
+    (1,0,0) (416,0,0)     (1,0,0)    (447,0,0)    32 0x00007ffeb35b9370       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   120 
+    (1,0,0) (448,0,0)     (1,0,0)    (479,0,0)    32 0x00007ffeb35ba750 /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/sm100_utils.cuh   162 
+    (1,0,0) (480,0,0)     (1,0,0)    (511,0,0)    32 0x00007ffeb35bbb00       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   296 
+    (2,0,0)   (0,0,0)     (2,0,0)    (127,0,0)   128 0x00007ffeb35bc810       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   394 
+    (2,0,0) (128,0,0)     (2,0,0)    (255,0,0)   128 0x00007ffeb35c0e90       /jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu   526 

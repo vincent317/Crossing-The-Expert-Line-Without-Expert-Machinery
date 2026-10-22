@@ -1,0 +1,71 @@
+{
+  "results/goal_single_shape__gdn_fwd__t5709_n2__opus-5.json": {
+    "path": "goal_single_shape/gdn_fwd/t5709_n2/opus-5",
+    "source_sha256": {
+      "check.py": "6d81bcdb32ef208d87f681c5f4230a2250e969e800cf021ba1ba117db85f8a0d",
+      "bench.py": "ec68f9a5a570db186c8e875cc82d3a2acb7f51cdace498e4500687a8d34d93a5",
+      "kernel/check.py": "6d81bcdb32ef208d87f681c5f4230a2250e969e800cf021ba1ba117db85f8a0d",
+      "kernel/final.py": "26f63b5917e8ec6755c955ed03916ecf2fd04fc0924f622ebbbbbaaa03098607",
+      "kernel/probe_ref.py": "efc184d453672320f56cc80c71cb8ec65f9cf50e74de4e7695fd2bad2e115913",
+      "kernel/probe_ref2.py": "4695b3a6fc71c1b4f9db723a819b95a20d694e7cdf6605070f895a6b990f319f",
+      "kernel/gdn_data.py": "1b319728cbdeb480521b378a5c28d41888dd056000f86bf187a8ed40b52ad83b",
+      "kernel/ref_flashinfer.py": "fd27ec504e06ecd3b1b7f6e2e4fd6cf1454aa3a02fe671b47dea9459cfe4b433",
+      "kernel/bench_util.py": "19ab88478d512bf3411f67667f3f37d7652cfb484b2716426acab62f9ad1076b",
+      "kernel/diag.py": "668690d0707574be9c9901055dfd865b8233b09d86d20951a88713d98575aefa",
+      "kernel/bench.py": "ec68f9a5a570db186c8e875cc82d3a2acb7f51cdace498e4500687a8d34d93a5",
+      "kernel/gdn_kernel.py": "9f72eea2db3cc3b1129f4e0014d78621d38e2c1bde8c57cd69e78fd638b7efd8"
+    },
+    "metrics": [
+      {
+        "seed": -1,
+        "outputs": [
+          {
+            "elements": 5846016,
+            "candidate_max": 18560.00079345703,
+            "candidate_rms": 40.161502497652684,
+            "flashinfer_bench": {
+              "standard_pass": false,
+              "standard_matched_ratio": 0.98722429086749,
+              "candidate_max_abs": 18560.0,
+              "candidate_max_rel": 6047998464.0,
+              "standard_atol": 0.01,
+              "standard_rtol": 0.01,
+              "standard_required_matched_ratio": 1.0,
+              "reference_center": "mathematical_reference"
+            }
+          },
+          {
+            "elements": 262144,
+            "candidate_max": 53341.033214785624,
+            "candidate_rms": 497.889843365262,
+            "flashinfer_bench": {
+              "standard_pass": false,
+              "standard_matched_ratio": 0.893768310546875,
+              "candidate_max_abs": 53341.03515625,
+              "candidate_max_rel": 9705462784.0,
+              "standard_atol": 0.01,
+              "standard_rtol": 0.01,
+              "standard_required_matched_ratio": 1.0,
+              "reference_center": "mathematical_reference"
+            }
+          }
+        ]
+      }
+    ],
+    "timing": [],
+    "complete": false,
+    "gpu_uuid": "ea91b590-3275-ee03-03bf-52dd3854fc5c"
+  },
+  "exits": [
+    {
+      "path": "goal_single_shape/gdn_fwd/t5709_n2/opus-5",
+      "shape": "",
+      "returncode": 1
+    },
+    {
+      "path": "goal_single_shape/gdn_fwd/t8192_n20/opus-5",
+      "shape": "",
+      "returncode": 1
+    }
+  ]
+}

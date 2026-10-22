@@ -1,0 +1,30 @@
+{
+  "gdn-final-fable-5.1": {
+    "name": "tasks/1336051",
+    "status": "Succeeded"
+  },
+  "gdn-final-opus-4.8": {
+    "name": "tasks/1336052",
+    "status": "Succeeded"
+  },
+  "gdn-final-opus-5": {
+    "name": "tasks/1336053",
+    "status": "Succeeded"
+  },
+  "gdn-single-published-config": {
+    "name": "tasks/1336195",
+    "status": "Succeeded"
+  },
+  "post-clock-final-r2": {
+    "name": "tasks/1336615",
+    "status": "Succeeded"
+  },
+  "cuda12-fa4-b1": {
+    "name": "tasks/1336901",
+    "status": "Succeeded"
+  },
+  "cuda12-fa4-b8": {
+    "name": "tasks/1336903",
+    "status": "Succeeded"
+  }
+}

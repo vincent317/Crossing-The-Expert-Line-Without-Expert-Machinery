@@ -1,0 +1,121 @@
+now using node mbkj-k8s-existed-node-v47c
+name, uuid, driver_version
+NVIDIA B200, GPU-acf037a5-b5bc-df9f-85f3-9476b64cb579, 580.105.08
+CUPTI /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/cupti/__init__.py 13.2.0
+All done.
+SMOKE_RESULT before {"passed": true, "policy_version": 2, "loaded_samples": 19, "fast_samples": 19, "active_reasons": [], "loaded_clocks": {"1965.0": 19}, "minimum_sm_mhz": 1900, "required_fast_fraction": 0.9}
+ORIGINAL_SO_SHA fca2612422f65a23fc3b796639138e5c25b1bdd888bd1b95e0926521739748ba
+upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu(767): warning #177-D: variable "nkv_by_rank_dummy" was declared but never referenced
+    __attribute__((shared)) int nkv_by_rank_dummy;
+                                ^
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+upstream/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.cu(767): warning #177-D: variable "nkv_by_rank_dummy" was declared but never referenced
+    __attribute__((shared)) int nkv_by_rank_dummy;
+                                ^
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+BUILD_PASS old keep
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS keep
+BUILD_PASS old discard
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS discard
+BUILD_PASS fresh keep
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS keep
+BUILD_PASS fresh discard
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS discard
+BUILD_PASS lineinfo keep
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS keep
+BUILD_FAIL lineinfo discard
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+Traceback (most recent call last):
+  File "/jiuzhang_train/user/chenyaojian/kernelgoal-clock-guarded-20261022/fa4-build-ab/minimal.py", line 12, in <module>
+    torch.cuda.synchronize()
+  File "/jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/torch/cuda/__init__.py", line 1181, in synchronize
+    return torch._C._cuda_synchronize()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: unspecified launch failure
+Search for `cudaErrorLaunchFailure' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+OLD_CHECK_PASS
+========= COMPUTE-SANITIZER
+REPEAT_OK 0
+REPEAT_OK 100
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS discard
+========= ERROR SUMMARY: 0 errors
+REPEAT_OK 200
+REPEAT_OK 300
+REPEAT_OK 400
+REPEAT_OK 500
+REPEAT_OK 600
+REPEAT_OK 700
+REPEAT_OK 800
+REPEAT_OK 900
+REPEAT_PASS discard
+========= ERROR SUMMARY: 0 errors
+SMOKE_RESULT after {"passed": true, "policy_version": 2, "loaded_samples": 25, "fast_samples": 25, "active_reasons": [], "loaded_clocks": {"1965.0": 25}, "minimum_sm_mhz": 1900, "required_fast_fraction": 0.9}
+MARK_BUILD_AB_DONE

@@ -1,0 +1,52 @@
+# 当前上游算子复测结果
+
+本报告于 2026-10-23 发布。结论仅适用于下述被测提交，不代表发布时最新代码已复测。
+
+固定上游提交：`03413a0a10e670d6881314765b4a07bfdcbe87ba`。统计单位是实现目录，不是算子家族或 workload。
+
+共 135 个实现目录、11 个算子家族；在已测输入范围内通过 114 个，标记 `invalid` 20 个（失败或输出不完整），缺少候选实现 1 个，待收尾 0 个。当前活动任务：无。
+
+`coverage.json` 是逐目录结论、源码对应关系和证据入口。按用户要求，20 个未通过验收的实现统一标记为 `invalid`，不修复、不启动修复后重测；原测试状态保留在 `test_status`，失败原因和证据不变。计数包括昨晚已测且源码匹配的记录，未将修复版通过结论套用到上游原版。原版失败但本地修复版通过的目录有 10 个。
+
+## GDN 全 shape
+
+- fable-5.1：已收 100/100，状态 {'PASSED': 100}；通过项候选耗时 3.91–231.50 µs。证据：`gdn-final-fable-5.1-traces.json`。
+- opus-4.8：已收 100/100，状态 {'PASSED': 100}；通过项候选耗时 9.24–2013.16 µs。证据：`gdn-final-opus-4.8-traces.json`。
+- opus-5：已收 100/100，状态 {'PASSED': 100}；通过项候选耗时 5.48–241.08 µs。证据：`gdn-final-opus-5-traces.json`。
+
+长序列停滞的堆栈定位在评测器对逐 token Python reference 的重复计时。使用评测器原生 `profile_baseline=False` 关闭 reference 计时，保留 reference 输出计算、官方精度检查和候选计时；候选源码未改。trace 中 reference latency 和 speedup 的零值是禁用计时的占位值，不可用于加速比。
+
+完整通过的 GDN 批次都有前后及每 25 项频率检查；以原始日志中的 `SMOKE_RESULT` 为准。其余新增通过项的三轮热/冷缓存耗时汇总在 `monitor-passing-results.json`，每轮各 50 次；全 shape 官方计时与此协议不同，不能直接混排比较。
+
+## Invalid 与阻塞
+
+- **invalid** `goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5`：缺少规定的 LSE 输出。 证据：`other-additional-results.json`。
+- **invalid** `goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1`：Top-k 成员集合错误；按 token 交错布局寻址，与输入的分页布局不符。 证据：`other-additional-results.json`。
+- `goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1`：只有 reference 调用脚本，缺少独立候选 kernel。 证据：`coverage.json`。
+- **invalid** `goal_single_shape/fa4_bwd/varlen_t32768_n13_h16/opus-4.8`：候选导入了仓库缺失的 problem 模块。 证据：`backward-0-results.json`。
+- **invalid** `goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_causal/fable-5.1`：CUDA 12.9 下可运行；134217728 个元素中有 1 个不满足 atol=0.01、rtol=0.01、全部元素通过的判据，最大绝对误差 0.015625。 证据：`cuda12-fa4-b1-results.json`。
+- **invalid** `goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1`：CuTe DSL 的 NVVM 后端编译失败。 证据：`clock-evidence-final-results.json`。
+- **invalid** `goal_single_shape/gdn_fwd/t5709_n2/opus-5`：采用公布参数后，输出最大绝对误差 18560、state 最大绝对误差 53341.035。 证据：`gdn-single-published-config-results.json`。
+- **invalid** `goal_single_shape/gdn_fwd/t8192_n20/opus-5`：采用公布参数后，候选输出出现非有限值。 证据：`gdn-single-published-config.log`。
+- **invalid** `goal_single_shape/kda_fwd/h64_fixed8192/opus-4.8`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `goal_single_shape/kda_fwd/h64_fixed8192/opus-5`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `goal_single_shape/kda_fwd/h96_mixed/opus-5`：将 reference 的 lower_bound 与候选对齐后，state 仍未通过精度检查。 证据：`interrupted-harvest-results.json`。
+- **invalid** `goal_single_shape/kda_fwd/h96_uniform/opus-4.8`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `goal_single_shape/kda_fwd/h96_uniform/opus-5`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `goal_single_shape/mla_paged_prefill/b18_q15883_kv15937/fable-5.1`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v11`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v14`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v15`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `ablation/dsa_decode_fwd/t8_topk2048/fable-5.1-ncu-skill`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
+- **invalid** `ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../clock-guarded-20261022/fa4-pipeline-diagnosis.md`。
+- **invalid** `ablation/gdn_fwd/t8192_n20/fable-5.1-ncu`：CUDA 13.2 下段错误退出；CUDA 12.9 下编译成功但执行超过 5 分钟未返回，GPU 利用率 100%、Tensor Core 活跃度 0，已停止。 证据：`cuda12-inspect.log`。
+- **invalid** `goal_full_shape/moe_fp8_fwd/opus-5/moe_fp8_block_scale_ds_routing_topk8_ng8_kg4_e32_h7168_i2048`：19/19 workload 均出现 Triton launch 参数不匹配：要求 36 个，实际 27 个。 证据：`fullshape-r2-select.log`。
+
+## 验证边界
+
+- “完成复测”不代表全部通过，失败项不提供可接受的性能结论。
+- 6 个 FA4 全 shape 目录仅完成固定 MHA/GQA/varlen 代表性输入的独立 Tri Dao 精度复核；原始完整 workload 数据集缺失，未达到原始全 shape 覆盖。不能以目录已测冒充全 shape 已测。
+- MLA decode B16/B64 原始长度分布缺失，使用均衡合成长度；B1 固定总长度 408。GDN decode 使用两组随机输入。新增 GDN prefill 使用冻结输入及随机种子 0、42；若先遇失败则后续种子和计时停止。
+- 不同评测协议的阈值不同：官方全 shape 保留对应 definition 的判据；新增单 shape 通常使用数学 reference、atol/rtol 均为 0.01、要求全部元素满足；FA4 backward 使用独立 Tri Dao 梯度，Top-k 要求精确成员集合及 padding。旧记录保留原有输入范围与判据，不能宣称任意输入均正确。
+- 频率检查通过仅证明抽样检查通过，不证明每个计时瞬间频率固定。原始低频任务的性能未作为正常频率结果采用；部分正常批次存在 `sw_power_cap`，需结合实际时钟，不等同于异常热降频。
+- 两批中断经平台错误信息确认是临时存储超限；续跑把临时目录及编译缓存移到共享盘。CUDA 13.2 双目标编译、原地 state 的测试适配和包内嵌源码问题均在测试入口修正，没有修改上游候选 kernel。
