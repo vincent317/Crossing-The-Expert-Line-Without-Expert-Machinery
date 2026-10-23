@@ -1,2 +1,0 @@
-Test: structured inputs (V=I, Q=0) to localise P-layout vs V^T faults
-check.py

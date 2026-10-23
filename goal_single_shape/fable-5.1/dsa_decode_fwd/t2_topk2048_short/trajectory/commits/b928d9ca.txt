@@ -1,2 +1,0 @@
-Chore: track all B200 job logs as evidence
-.gitignore

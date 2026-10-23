@@ -1,2 +1,0 @@
-Docs: Add terminal evidence summary for all completion criteria
-FINAL_EVIDENCE.txt

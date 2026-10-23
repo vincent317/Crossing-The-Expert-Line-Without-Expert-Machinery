@@ -1,2 +1,0 @@
-Fix: probe executed tcgen05.ld from a single lane; bound the MMA queue
-probe_umma.cu

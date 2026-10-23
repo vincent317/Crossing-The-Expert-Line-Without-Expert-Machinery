@@ -1,7 +1,0 @@
-Feat: add FA fwd d256 causal harness and from-scratch Triton kernel
-.last_job
-bench_mine.py
-common.py
-kernel.py
-naive_fp32.py
-run_ref.py

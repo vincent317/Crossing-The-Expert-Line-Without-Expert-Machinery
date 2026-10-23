@@ -1,3 +1,0 @@
-Perf: transposed FA bwd formulation with TMA loads and dQ^T reduce-add
-bench.py
-kernel.py

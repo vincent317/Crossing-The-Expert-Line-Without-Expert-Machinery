@@ -1,4 +1,0 @@
-Docs: record methodology, findings and the clock-state trap
-README.md
-SUMMARY.md
-run_on_b200.sh

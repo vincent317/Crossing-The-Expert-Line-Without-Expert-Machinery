@@ -1,5 +1,0 @@
-0242621 Feat: chunked Gated-DeltaNet forward kernel in Triton for B200
-488ea46 Perf: cut register pressure in wy, keep scan state transposed
-38515ec Docs: add SUMMARY skeleton and amortized timing in bench
-e46b48a Perf: fold chunk decay into W/Uv, hoist scan scalars, add nsq knob
-2f843d4 Docs: record the verified reference timing, tolerance and result

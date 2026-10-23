@@ -1,5 +1,0 @@
-Bench: measure every reference prefill path and judge against the published bar
-bench.py
-probe12.py
-probe13.py
-refmod.py

@@ -1,3 +1,0 @@
-Fix: parity array initialiser for NSTAGE=1 builds
-fmha.cu
-run_next2.sh

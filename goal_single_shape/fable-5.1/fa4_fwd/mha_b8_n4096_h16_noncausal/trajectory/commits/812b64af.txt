@@ -1,3 +1,0 @@
-Test: bisect kernel correctness across seqlen 128/256 before the 512 gate
-check.py
-common.py

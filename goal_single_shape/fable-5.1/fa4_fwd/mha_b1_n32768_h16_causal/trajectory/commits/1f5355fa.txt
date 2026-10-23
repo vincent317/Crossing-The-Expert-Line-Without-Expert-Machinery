@@ -1,4 +1,0 @@
-Feat: v3 persistent kernel with atomic work counter (LPT dynamic scheduling)
-dbg_main3.cu
-fa_fwd3.cu
-run_v3.sh

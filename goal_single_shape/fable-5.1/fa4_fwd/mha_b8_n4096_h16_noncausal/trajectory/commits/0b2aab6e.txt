@@ -1,3 +1,0 @@
-Fix: double-buffer V so the N64 prefetch cannot clobber the in-flight tile
-fmha.cu
-run_next3.sh

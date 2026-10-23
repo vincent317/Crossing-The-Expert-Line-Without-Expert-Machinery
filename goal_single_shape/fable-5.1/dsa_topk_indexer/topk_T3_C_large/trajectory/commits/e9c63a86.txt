@@ -1,3 +1,0 @@
-Docs: add SUMMARY of results, design and bottlenecks; SASS stats helper
-SUMMARY.md
-sass_stats.py

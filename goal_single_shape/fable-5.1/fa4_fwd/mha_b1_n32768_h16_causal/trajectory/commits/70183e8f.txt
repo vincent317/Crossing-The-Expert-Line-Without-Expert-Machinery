@@ -1,4 +1,0 @@
-Fix: add v2-specific test scripts (bench_v2.py, check_v2.py)
-bench_v2.py
-check_v2.py
-final_retest_v2.sh

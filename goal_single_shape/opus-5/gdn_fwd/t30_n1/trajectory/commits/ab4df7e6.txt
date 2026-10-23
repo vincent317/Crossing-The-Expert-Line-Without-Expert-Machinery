@@ -1,5 +1,0 @@
-Chore: ignore cctl job id scratch files
-.gitignore
-.job_diag
-.job_mine
-.job_ref

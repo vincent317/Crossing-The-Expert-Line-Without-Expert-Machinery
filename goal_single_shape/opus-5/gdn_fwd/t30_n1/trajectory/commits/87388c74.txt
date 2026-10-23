@@ -1,2 +1,0 @@
-Docs: print an explicit goal-condition checklist at the end of the bench
-bench.py

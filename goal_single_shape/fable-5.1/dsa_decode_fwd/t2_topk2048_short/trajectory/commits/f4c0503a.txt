@@ -1,8 +1,0 @@
-Perf: speculative row gather with warp-local verification, 4-warp variant
-bench.py
-dsa_kernel.cu
-dsa_mma.cu
-dsa_ops.py
-job.sh
-run_until_done.sh
-sass_summary.py

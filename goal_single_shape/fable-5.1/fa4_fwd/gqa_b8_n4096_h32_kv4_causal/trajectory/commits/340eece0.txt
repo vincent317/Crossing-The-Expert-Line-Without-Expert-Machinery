@@ -1,7 +1,0 @@
-Feat: add stage-H kernel processing softmax tiles in 32-column halves
-__pycache__/bench_gluon_b.cpython-312.pyc
-__pycache__/kernel_gluon_h.cpython-312.pyc
-bench_gluon_b.py
-kernel_gluon_h.py
-runs/1052071/log.txt
-runs/task.json

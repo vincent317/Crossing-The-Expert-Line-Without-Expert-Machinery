@@ -1,3 +1,0 @@
-78ee64a Feat: KDA forward benchmark harness and fused Triton kernel
-2c79907 Feat: pin CAKE M128 reference config and switch kernel to the safe gate
-723caca Docs: record B200 measurements and the remaining performance gap

@@ -1,8 +1,0 @@
-Docs: add SUMMARY.md and clock-controlled final evaluation
-SUMMARY.md
-__pycache__/final_eval.cpython-312.pyc
-final_eval.py
-runs/1052274/log.txt
-runs/1052287/log.txt
-runs/1052296/log.txt
-runs/task.json

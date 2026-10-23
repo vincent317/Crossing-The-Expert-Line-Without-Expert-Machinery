@@ -1,2 +1,0 @@
-Chore: run script aborts on a hung accuracy check
-run_next4.sh
