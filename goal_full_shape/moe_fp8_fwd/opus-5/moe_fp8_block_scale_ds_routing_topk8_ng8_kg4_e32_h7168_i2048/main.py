@@ -1163,7 +1163,6 @@ def reduce_kernel(G2, out_ptr, nloc, tslot, cnt_ptr, T, TP, BM: tl.constexpr,
 # host side
 # --------------------------------------------------------------------------- #
 _WS = {}
-_KC = {}
 _ALLOC = [None]
 
 
@@ -1306,49 +1305,6 @@ def _ws(T, device):
         )
         _WS[T] = w
     return w
-
-
-def _spec(args):
-    """Specialisation properties Triton keys its own JIT cache on.
-
-    Triton treats an integer argument that is exactly 1 as a compile-time
-    constant and also records 16-divisibility, so two calls whose integer
-    arguments differ in those properties get different code.  Our cached
-    CompiledKernel lookups have to key on the same thing, or a kernel compiled
-    for seq_len 1 can be replayed for seq_len 16 and silently process one row.
-    """
-    return tuple(1 if a == 1 else (16 if a % 16 == 0 else 0)
-                 for a in args if isinstance(a, int))
-
-
-def _jit_keys(jitfn):
-    out = set()
-    try:
-        for cache in jitfn.device_caches.values():
-            out |= set(cache[0].keys())
-    except Exception:
-        pass
-    return out
-
-
-def _remember(jitfn, key, before):
-    """After a JIT launch, record the CompiledKernel that was just added.
-
-    Re-launching through the CompiledKernel skips Triton's python-side
-    specialisation work; that work would otherwise leave the GPU idle between
-    our kernels, and the idle time lands inside the measured CUPTI span.  The
-    key must identify the exact constexpr set, because a kernel compiled for a
-    different NCTA would silently process the work list twice.
-    """
-    try:
-        for cache in jitfn.device_caches.values():
-            for k, v in cache[0].items():
-                if k not in before:
-                    _KC[key] = v
-                    return v
-    except Exception:
-        pass
-    return None
 
 
 @torch.no_grad()
@@ -1512,13 +1468,6 @@ def run(routing_logits, routing_bias, hidden_states, hidden_states_scale,
                      dict(BM=BM, BR=c["BR"], NCTA=ncr, EL=EL,
                           num_warps=c["RW"])))
 
-    ck = []
-    for i, (fn, key, grid, args, cx) in enumerate(plan):
-        key = key + _spec(args)
-        plan[i] = (fn, key, grid, args, cx)
-        k = _KC.get(key)
-        ck.append(None if k is None else k[(grid, 1, 1)])
-
     if not inline_route:
         _cuda_mod().routing_only(routing_logits, routing_bias,
                                  hidden_states_scale, cnt, w["tokids"],
@@ -1526,11 +1475,7 @@ def run(routing_logits, routing_bias, hidden_states, hidden_states_scale,
                                  int(local_expert_offset),
                                  float(routed_scaling_factor), EL, 0, c["RK"])
 
-    for (fn, key, grid, args, cx), launch in zip(plan, ck):
-        if launch is not None:
-            launch(*args)
-        else:
-            before = _jit_keys(fn)
-            fn[(grid,)](*args, **cx)
-            _remember(fn, key, before)
+    # Use Triton's public launcher; it owns constexpr ABI and specialization caching.
+    for fn, key, grid, args, cx in plan:
+        fn[(grid,)](*args, **cx)
     return out
