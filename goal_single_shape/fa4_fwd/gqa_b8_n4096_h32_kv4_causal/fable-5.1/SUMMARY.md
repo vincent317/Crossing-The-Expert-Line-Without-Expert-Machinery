@@ -1,3 +1,5 @@
+> 2026-10-23 更新：当前 `fa_v9.py` 已重写为 Triton 因果 GQA，B8/S4096/H32/KV4/D128 的精度与性能见[修复验收](../../../../benchmarks/flashinfer/remaining-repair-20261023/README.md)。下文为历史实验材料，其不同 shape、实现及耗时不代表当前代码。
+
 # FlashAttention FWD (d=256, causal, bf16) on B200 — from scratch in Gluon
 
 Target: `q/k/v (4,4096,32,256) bf16`, `softmax_scale=1/16`, `causal=True`, beat
