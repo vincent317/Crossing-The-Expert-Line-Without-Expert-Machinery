@@ -61,7 +61,7 @@ class DsaCuda:
         # needs zeroing between launches, plus two monotonic counters. A CTA
         # derives its generation from the ticket it draws, which makes the whole
         # scheme CUDA-graph safe.
-        self.num = torch.zeros((T, H, D), device=dev, dtype=torch.bfloat16)
+        self.num = torch.zeros((T, H, D), device=dev, dtype=torch.float32)
         self.den = torch.zeros((2, T, H), device=dev, dtype=torch.float32)
         # 32-int stride: one counter per 128-byte line, so the two requests'
         # arrival counters do not share a line.
@@ -93,7 +93,11 @@ class DsaCuda:
                          self.tick, self.done, self.sm_scale,
                          self.block_n, self.num_warps, self.head_groups, self.tpp, self.fused,
                          stop)
-        return self.out
+        if self.fused:
+            final_lse = self.lse.flatten()[:self.out.shape[0] * self.out.shape[1]].view(self.out.shape[:2])
+        else:
+            final_lse = torch.logsumexp(self.lse, dim=-1) * 1.4426950408889634
+        return self.out, final_lse
 
     def staged(self, stop):
         """Callable that stops after stage `stop` (see the kernel's `stop` switch)."""

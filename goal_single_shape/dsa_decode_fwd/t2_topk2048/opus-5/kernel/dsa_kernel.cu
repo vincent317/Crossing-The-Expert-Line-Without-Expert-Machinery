@@ -217,7 +217,7 @@ template <int BN, int NWARP, int HG, int MODE, int TPP>
 __device__ __forceinline__ void dsa_tiles_body(
     const __nv_bfloat16 *__restrict__ q_nope, const __nv_bfloat16 *__restrict__ q_pe,
     const __nv_bfloat16 *__restrict__ ckv, const __nv_bfloat16 *__restrict__ kpe,
-    __nv_bfloat16 *__restrict__ o_part, float *__restrict__ lse, __nv_bfloat16 *__restrict__ num,
+    __nv_bfloat16 *__restrict__ o_part, float *__restrict__ lse, float *__restrict__ num,
     float *__restrict__ den, __nv_bfloat16 *s_q, __nv_bfloat16 *s_k, __nv_bfloat16 *s_p,
     float *s_max, float *s_sum, const int *s_slot, const int (&anyt)[TPP],
     const int (&mine)[TPP], float *s_out, float *s_l,
@@ -419,16 +419,19 @@ __device__ __forceinline__ void dsa_tiles_body(
   }
 
   if (MODE == 1) {
-    // Each lane owns 2 consecutive output dims, which is exactly one bf16x2
-    // reduction - no lane pairing, and half the bytes of the fp32 form.
-    __nv_bfloat16 *nm = num + ((size_t)req * DSA_H + hg * HPC) * DSA_D;
+    // Keep cross-CTA sums in FP32 to avoid cumulative BF16 atomic rounding.
+    float *nm = num + ((size_t)req * DSA_H + hg * HPC) * DSA_D;
 #pragma unroll
     for (int j = 0; j < NT; ++j) {
       const int d = d0w + j * 8 + tig * 2;
-      if (gid < HPC)
-        red_add_bf16x2(&nm[gid * DSA_D + d], __floats2bfloat162_rn(acc[j][0], acc[j][1]));
-      if (HG == 1)
-        red_add_bf16x2(&nm[(gid + 8) * DSA_D + d], __floats2bfloat162_rn(acc[j][2], acc[j][3]));
+      if (gid < HPC) {
+        atomicAdd(&nm[gid * DSA_D + d], acc[j][0]);
+        atomicAdd(&nm[gid * DSA_D + d + 1], acc[j][1]);
+      }
+      if (HG == 1) {
+        atomicAdd(&nm[(gid + 8) * DSA_D + d], acc[j][2]);
+        atomicAdd(&nm[(gid + 8) * DSA_D + d + 1], acc[j][3]);
+      }
     }
     if (warp == 0 && tig == 0 && gid < HPC) {
       atomicAdd(&den[req * DSA_H + hg * HPC + gid], l0);
@@ -467,7 +470,7 @@ __global__ __launch_bounds__(NWARP * 32) void dsa_partial_kernel(
     const __nv_bfloat16 *__restrict__ q_nope, const __nv_bfloat16 *__restrict__ q_pe,
     const __nv_bfloat16 *__restrict__ ckv, const __nv_bfloat16 *__restrict__ kpe,
     const int *__restrict__ indices, __nv_bfloat16 *__restrict__ o_part,
-    float *__restrict__ lse, __nv_bfloat16 *__restrict__ num, float *__restrict__ den,
+    float *__restrict__ lse, float *__restrict__ num, float *__restrict__ den,
     __nv_bfloat16 *__restrict__ out, int *__restrict__ tick, int *__restrict__ done, int topk,
     int nsplit, int T, float sm_scale, int stop) {
   constexpr int NTHREADS = NWARP * 32;
@@ -575,13 +578,17 @@ __global__ __launch_bounds__(NWARP * 32) void dsa_partial_kernel(
 
   const float dv = den[bufd + req * DSA_H + h_out];
   const float inv = (dv > 0.f) ? 1.f / dv : 0.f;
-  __nv_bfloat16 *nm = num + bufn + ((size_t)req * DSA_H + h_out) * DSA_D + d_out;
+  float *nm = num + bufn + ((size_t)req * DSA_H + h_out) * DSA_D + d_out;
   __nv_bfloat16 *ob = out + ((size_t)req * DSA_H + h_out) * DSA_D + d_out;
   for (int i = tid; i < elems; i += NTHREADS) {
-    ob[i] = __float2bfloat16(__bfloat162float(nm[i]) * inv);
-    nm[i] = __float2bfloat16(0.f);  // ready for the next launch
+    ob[i] = __float2bfloat16(nm[i] * inv);
+    nm[i] = 0.f;  // ready for the next launch
   }
-  if (tid == 0 && d_out == 0) den[nxtd + req * DSA_H + h_out] = 0.f;
+  if (tid == 0 && d_out == 0) {
+    // MODE 1 has no partial LSE consumers; reuse its scratch for final base-2 LSE.
+    lse[req * DSA_H + h_out] = log2f(dv);
+    den[nxtd + req * DSA_H + h_out] = 0.f;
+  }
 }
 
 template <int DBLK>
@@ -641,7 +648,7 @@ static void launch_partial(const torch::Tensor &q_nope, const torch::Tensor &q_p
           indices.data_ptr<int>(),
           reinterpret_cast<__nv_bfloat16 *>(o_part.data_ptr<at::BFloat16>()),
           lse.data_ptr<float>(),
-          reinterpret_cast<__nv_bfloat16 *>(num.data_ptr<at::BFloat16>()),
+          num.data_ptr<float>(),
           den.data_ptr<float>(),
           reinterpret_cast<__nv_bfloat16 *>(out.data_ptr<at::BFloat16>()),
           tick.data_ptr<int>(), done.data_ptr<int>(), topk, nsplit, T, sm_scale, stop);

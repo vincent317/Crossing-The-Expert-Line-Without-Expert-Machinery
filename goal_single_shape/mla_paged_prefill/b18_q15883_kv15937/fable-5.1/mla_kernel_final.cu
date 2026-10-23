@@ -549,7 +549,7 @@ __global__ void __launch_bounds__(NUM_THREADS, 1) mla_prefill_kernel(const __gri
       const bool rvalid = (qpos < ti.Lq);
       const int head = rowlocal & 15;
       const size_t grow = (size_t)(ti.qs + qpos) * H + head;
-      if (rvalid && redslot == 0) P.lse[grow] = m_stale + lg2(l);
+      if (rvalid && redslot == 0) P.lse[grow] = (m_stale + lg2(l)) * 0.6931471805599453f;
       EPI(3);
       // hd half 0 (quads 0,1): O -> bf16 -> P buffer as 4 SW128 boxes [64 rows][64 cols]; warp 3 TMA-stores them asynchronously
       // (read completion is awaited right before the next q-tile's first P store). hd half 1 (quads 2,3): stored directly with
@@ -638,9 +638,7 @@ __global__ void __launch_bounds__(256) gather_kv_kernel(const uint4* __restrict_
 }  // namespace mla
 
 static PFN_cuTensorMapEncodeTiled_v12000 get_encoder() {
-  static PFN_cuTensorMapEncodeTiled_v12000 enc = nullptr;
-  if (!enc) { cudaDriverEntryPointQueryResult q; cudaGetDriverEntryPoint("cuTensorMapEncodeTiled", (void**)&enc, cudaEnableDefault, &q); }
-  return enc;
+  return &cuTensorMapEncodeTiled;
 }
 static int make_map(CUtensorMap* m, const void* base, uint64_t rows, uint64_t cols, uint32_t box_cols, uint32_t box_rows) {
   cuuint64_t gdim[2] = {cols, rows}; cuuint64_t gstr[1] = {cols * 2};

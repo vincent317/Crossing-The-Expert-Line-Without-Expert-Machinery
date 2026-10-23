@@ -27,7 +27,7 @@ Key design points (see docs/SOLUTION.md for the full rationale):
   CPU gap that the span-based CUPTI timer would otherwise count. A pinned-tensor LRU cache
   makes the data_ptr-based key a sound identity test.
 - Valid sparse indices are a contiguous prefix (padding `-1` is a suffix); each partial CTA
-  early-exits once a whole tile is padding. Returns only `output` (lse is optional).
+  early-exits once a whole tile is padding. Returns `output` and base-2 `lse`.
 """
 
 import torch
@@ -47,6 +47,7 @@ def _dsa_partial_kernel(
     m_ptr,               # [T, NUM_SPLITS, H] fp32        (ignored when WRITE_OUTPUT)
     l_ptr,               # [T, NUM_SPLITS, H] fp32        (ignored when WRITE_OUTPUT)
     out_ptr,             # [T, H, D_CKV] bf16             (used when WRITE_OUTPUT)
+    lse_ptr,
     sm_scale,
     stride_qn_t, stride_qn_h,
     stride_qp_t, stride_qp_h,
@@ -110,6 +111,7 @@ def _dsa_partial_kernel(
         l_safe = tl.where(l_i > 0.0, l_i, 1.0)
         out = (acc / l_safe[:, None]).to(out_ptr.dtype.element_ty)
         tl.store(out_ptr + t * stride_o_t + offs_h[:, None] * stride_o_h + offs_ckv[None, :], out)
+        tl.store(lse_ptr + t * H + offs_h, m_i * 1.4426950408889634 + tl.log2(l_safe))
     else:
         base = (t * NUM_SPLITS + s)
         tl.store(acc_ptr + base * H * D_CKV + offs_h[:, None] * D_CKV + offs_ckv[None, :], acc)
@@ -119,7 +121,7 @@ def _dsa_partial_kernel(
 
 @triton.jit
 def _dsa_combine_kernel(
-    acc_ptr, m_ptr, l_ptr, out_ptr,
+    acc_ptr, m_ptr, l_ptr, out_ptr, lse_ptr,
     stride_o_t, stride_o_h,
     H: tl.constexpr, D_CKV: tl.constexpr, NUM_SPLITS: tl.constexpr, D_BLOCK: tl.constexpr,
     HBLOCK: tl.constexpr,
@@ -156,6 +158,8 @@ def _dsa_combine_kernel(
     L_safe = tl.where(L > 0.0, L, 1.0)
     out = (ACC / L_safe[:, None]).to(out_ptr.dtype.element_ty)
     tl.store(out_ptr + t * stride_o_t + offs_h[:, None] * stride_o_h + offs_d[None, :], out)
+    if db == 0:
+        tl.store(lse_ptr + t * H + offs_h, M * 1.4426950408889634 + tl.log2(L_safe))
 
 
 import os as _os
@@ -220,13 +224,13 @@ def _pick_ns(sparse_indices):
     return ns, tiles_per_split * BLOCK_N
 
 
-def _launch(q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output,
+def _launch(q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output, lse,
             sm_scale, T, h, d_ckv, d_kpe, topk, ns, split_len):
     if ns == 1:
         # Single split: partial writes the final output directly; no combine launch.
         # SPLIT_LEN = TOPK so the one CTA covers all valid keys (early-exits at padding).
         _dsa_partial_kernel[(T, 1, _HGD)](
-            q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, output, output, output, output,
+            q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, output, output, output, output, lse,
             sm_scale,
             q_nope.stride(0), q_nope.stride(1),
             q_pe.stride(0), q_pe.stride(1),
@@ -238,7 +242,7 @@ def _launch(q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output,
     # Each split covers split_len keys (split_len/BLOCK_N inner tiles). ns*split_len covers the
     # valid prefix; packing >1 tile per split caps ns (and thus the combine's serial reduction).
     _dsa_partial_kernel[(T, ns, _HG)](
-        q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output,
+        q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output, lse,
         sm_scale,
         q_nope.stride(0), q_nope.stride(1),
         q_pe.stride(0), q_pe.stride(1),
@@ -247,7 +251,7 @@ def _launch(q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output,
         SPLIT_LEN=split_len, WRITE_OUTPUT=False, HPG=h // _HG, num_warps=_NW, num_stages=_NST,
     )
     _dsa_combine_kernel[(T, h // _CHB, d_ckv // _CBK)](
-        acc, m, l, output,
+        acc, m, l, output, lse,
         output.stride(0), output.stride(1),
         H=h, D_CKV=d_ckv, NUM_SPLITS=ns, D_BLOCK=_CBK, HBLOCK=_CHB,
         num_warps=_CNW, num_stages=_CNST,
@@ -281,10 +285,11 @@ def run(q_nope, q_pe, ckv_cache, kpe_cache, sparse_indices, sm_scale):
         if entry is not None:
             _graph_cache.move_to_end(key)
             entry["g"].replay()
-            return (entry["out"],)
+            return (entry["out"], entry["lse"])
 
     ns, split_len = _pick_ns(sparse_indices)
     output = torch.empty((T, h, d_ckv), dtype=torch.bfloat16, device=device)
+    lse = torch.empty((T, h), dtype=torch.float32, device=device)
     if ns > 1:
         acc = torch.empty((T, ns, h, d_ckv), dtype=torch.float32, device=device)
         m = torch.empty((T, ns, h), dtype=torch.float32, device=device)
@@ -292,12 +297,12 @@ def run(q_nope, q_pe, ckv_cache, kpe_cache, sparse_indices, sm_scale):
     else:
         acc = m = l = output  # unused placeholders for the direct path
 
-    args = (q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output,
+    args = (q_nope, q_pe, ckv_flat, kpe_flat, sparse_indices, acc, m, l, output, lse,
             sm_scale, T, h, d_ckv, d_kpe, topk, ns, split_len)
 
     if not _USE_GRAPH:
         _launch(*args)
-        return (output,)
+        return (output, lse)
 
     try:
         side = torch.cuda.Stream()
@@ -314,7 +319,7 @@ def run(q_nope, q_pe, ckv_cache, kpe_cache, sparse_indices, sm_scale):
         # data_ptr key remains a safe identity test. ckv_cache/kpe_cache pin the real
         # storage behind the flattened views.
         _graph_cache[key] = {
-            "g": g, "out": output, "acc": acc, "m": m, "l": l,
+            "g": g, "out": output, "lse": lse, "acc": acc, "m": m, "l": l,
             "pin": (q_nope, q_pe, ckv_cache, kpe_cache, sparse_indices),
         }
         while len(_graph_cache) > _GRAPH_CACHE_CAP:
@@ -322,4 +327,4 @@ def run(q_nope, q_pe, ckv_cache, kpe_cache, sparse_indices, sm_scale):
         g.replay()
     except Exception:
         _launch(*args)
-    return (output,)
+    return (output, lse)
