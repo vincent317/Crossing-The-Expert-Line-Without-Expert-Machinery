@@ -11,6 +11,7 @@ CUDA_FULL_SRC = r"""
 #include <float.h>
 #include <stdint.h>
 #include <torch/extension.h>
+#include <ATen/cuda/CUDAContext.h>
 
 #define H_DIM    64
 #define D_DIM    128
@@ -38,13 +39,14 @@ __device__ __forceinline__ float fp8_f32(uint8_t x) {
 }
 
 /* Convert 4 packed fp8 bytes (uint32) to 4 floats and dot with another 4 fp8. */
-__device__ __forceinline__ float dot4(uint32_t q4, uint32_t k4) {
+__device__ __forceinline__ float dot4(uint32_t q4, uint32_t k4, float scale) {
     __half2 qh0 = __nv_cvt_fp8x2_to_halfraw2(q4 & 0xFFFFu, __NV_E4M3);
     __half2 qh1 = __nv_cvt_fp8x2_to_halfraw2(q4 >> 16,     __NV_E4M3);
     __half2 kh0 = __nv_cvt_fp8x2_to_halfraw2(k4 & 0xFFFFu, __NV_E4M3);
     __half2 kh1 = __nv_cvt_fp8x2_to_halfraw2(k4 >> 16,     __NV_E4M3);
     float2 qf0 = __half22float2(qh0), qf1 = __half22float2(qh1);
     float2 kf0 = __half22float2(kh0), kf1 = __half22float2(kh1);
+    kf0.x *= scale; kf0.y *= scale; kf1.x *= scale; kf1.y *= scale;
     return qf0.x*kf0.x + qf0.y*kf0.y + qf1.x*kf1.x + qf1.y*kf1.y;
 }
 
@@ -81,10 +83,10 @@ __global__ void dsa_topk_kernel(
     for (int t = tid; t < seq_len; t += bsz) {
         const int page   = blk_tbl[b * max_pages + t / PAGE_SZ];
         const int pg_off = t % PAGE_SZ;
-        /* Pointer to the 132-byte row: 128 fp8 + 4 float32 */
+        /* Each page stores all FP8 rows, followed by all FP32 scales. */
         const uint8_t* kp =
-            (const uint8_t*)k_cache + ((long)page * PAGE_SZ + pg_off) * K_STRIDE;
-        const float kscale = *(const float*)(kp + D_DIM);
+            (const uint8_t*)k_cache + (long)page * PAGE_SZ * K_STRIDE + pg_off * D_DIM;
+        const float kscale = ((const float*)((const uint8_t*)k_cache + (long)page * PAGE_SZ * K_STRIDE + PAGE_SZ * D_DIM))[pg_off];
 
         float score = 0.0f;
         for (int h = 0; h < H_DIM; h++) {
@@ -93,9 +95,8 @@ __global__ void dsa_topk_kernel(
             float dot = 0.0f;
             /* 32 uint32 loads per head (4 fp8 per load -> 128 total) */
             for (int d = 0; d < D_DIM / 4; d++)
-                dot += dot4(qh32[d], kh32[d]);
-            dot *= kscale;
-            score += (dot > 0.0f ? dot : 0.0f) * wt_sh[h];
+                dot += dot4(qh32[d], kh32[d], kscale);
+            score += (isnan(dot) ? dot : fmaxf(dot, 0.0f)) * wt_sh[h];
         }
         sc_sh[t] = score;
         id_sh[t] = page * PAGE_SZ + pg_off;
@@ -121,8 +122,8 @@ __global__ void dsa_topk_kernel(
                     int ixj = i ^ j;
                     if (ixj > i) {
                         bool swap;
-                        if ((i & k) == 0) swap = sc_sh[i] < sc_sh[ixj]; /* even: desc */
-                        else              swap = sc_sh[i] > sc_sh[ixj]; /* odd:  asc  */
+                        if ((i & k) == 0) swap = (sc_sh[i] < sc_sh[ixj] || (!isnan(sc_sh[i]) && isnan(sc_sh[ixj]))); /* even: desc */
+                        else              swap = (sc_sh[i] > sc_sh[ixj] || (isnan(sc_sh[i]) && !isnan(sc_sh[ixj]))); /* odd:  asc  */
                         if (swap) {
                             float ts = sc_sh[i]; sc_sh[i] = sc_sh[ixj]; sc_sh[ixj] = ts;
                             int   ti = id_sh[i]; id_sh[i] = id_sh[ixj]; id_sh[ixj] = ti;
@@ -150,7 +151,7 @@ torch::Tensor dsa_topk(
     auto opts = torch::TensorOptions().dtype(torch::kInt32).device(q_u8.device());
     auto out  = torch::full({B, TOPK_K}, -1, opts);
 
-    dsa_topk_kernel<<<B, 256, SMEM_BYTES>>>(
+    dsa_topk_kernel<<<B, 256, SMEM_BYTES, at::cuda::getCurrentCUDAStream()>>>(
         (const uint8_t*)q_u8.data_ptr(),
         (const int8_t*) k_cache.data_ptr(),
         weights.data_ptr<float>(),
@@ -180,7 +181,7 @@ def _load():
         _mod = ext.load(
             name="dsa_topk_ext",
             sources=[src_path],
-            extra_cuda_cflags=["-O3", "--use_fast_math"],
+            extra_cuda_cflags=["-O3", "--fmad=false"],
             verbose=True,
         )
     return _mod
