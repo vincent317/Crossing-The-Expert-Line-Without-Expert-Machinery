@@ -45,14 +45,15 @@ KDA-0.5 reproduction.
 |-|-|
 | [`goal_single_shape/`](goal_single_shape/) | `/goal` runs on a single specified shape |
 | [`goal_full_shape/`](goal_full_shape/) | `/goal` runs on all shapes of an operator definition |
-| [`kda05_reproduction/`](kda05_reproduction/) | Runs under the KDA-0.5 setup |
-| [`kda05_single_shape/`](kda05_single_shape/) | Runs under the KDA-0.5 setup on a single specified shape |
+| [`kda05_reproduction_full_shape/`](kda05_reproduction_full_shape/) | Runs under the KDA-0.5 setup |
+| [`kda05_reproduction_single_shape/`](kda05_reproduction_single_shape/) | Runs under the KDA-0.5 setup on a single specified shape |
 | [`ablation/`](ablation/) | Ablation runs |
 | [`benchmarks/`](benchmarks/) | Retest results and evidence |
 
 Kernels are organized as `<operator>/<shape>/<model>/`. The `goal_full_shape/`,
-`kda05_reproduction/` and `kda05_single_shape/` kernels come with a
-[flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench) `solution.json`.
+`kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` kernels come
+with a [flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench)
+`solution.json`.
 
 ## Environment
 
@@ -61,8 +62,8 @@ Kernels are organized as `<operator>/<shape>/<model>/`. The `goal_full_shape/`,
   toolkit: `goal_single_shape/mla_paged_prefill/b1_q33_kv34/opus-5` and
   `goal_single_shape/gqa_paged_decode/b16_kv2841/opus-5`.
 - CuTe DSL (`nvidia-cutlass-dsl`): 4.6.2. The DSA, GDN and MoE kernels in
-  `kda05_reproduction/` and `kda05_single_shape/` use 4.6.0, the version pinned by the
-  KDA-0.5 setup.
+  `kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` use 4.6.0,
+  the version pinned by the KDA-0.5 setup.
 
 ## Contributing
 
