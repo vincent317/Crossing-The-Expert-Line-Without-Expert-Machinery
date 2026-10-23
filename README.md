@@ -10,8 +10,8 @@
 [![Kernels](https://img.shields.io/badge/Kernels-B200%20sm__100a-76b900)](#repository-layout)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery?style=flat)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/stargazers)
-[![Issues](https://img.shields.io/github/issues/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/issues)
+[![Stars](https://img.shields.io/github/stars/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal?style=flat)](https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal/stargazers)
+[![Issues](https://img.shields.io/github/issues/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal)](https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal/issues)
 
 <img src="assets/figure3.png" width="80%" alt="Speedup of JustGoal and the KDA-0.5 reproduction over the reference kernel across model generations on four operators">
 
@@ -76,7 +76,7 @@ build failures, and retest results from other B200 setups.
             and Shen, Yifei and Xiang, Shengye and Li, Zhen and Gan, Lin and Li, Yuxuan
             and Han, Xu and Liu, Zhiyuan},
   year   = {2026},
-  howpublished = {\url{https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery}}
+  howpublished = {\url{https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal}}
 }
 ```
 
