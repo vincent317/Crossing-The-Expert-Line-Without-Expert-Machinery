@@ -1,1 +1,5 @@
-bc81ed8 Feat: DSA top-k indexer CUDA kernel attempt + SUMMARY
+94eeff2 Feat: from-scratch DSA top-k indexer kernel with harness (v7, 9.15us)
+7261b41 Fix: strong store/load for key arrival signalling; v9 tail (8.94us)
+e9c63a8 Docs: add SUMMARY of results, design and bottlenecks; SASS stats helper
+b400a50 Refactor: broadcast tail parameters via shfl; finalize summary numbers
+f84762f Chore: add measurement variants and final A/B results to the summary

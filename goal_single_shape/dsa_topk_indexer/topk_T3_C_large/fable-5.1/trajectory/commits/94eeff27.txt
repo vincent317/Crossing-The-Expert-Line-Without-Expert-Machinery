@@ -1,0 +1,16 @@
+Feat: from-scratch DSA top-k indexer kernel with harness (v7, 9.15us)
+.gitignore
+bench.py
+check_accuracy.py
+dsa_topk_kernel.cu
+harness.py
+micro.cu
+micro.py
+micro2.cu
+micro2.py
+ref/data/8635db8f-5b62-464e-9b5b-0863d65788ee.safetensors
+ref/impl/__init__.py
+ref/impl/kernel.py
+ref/ref_entry.py
+timeline.py
+topk_indexer.py

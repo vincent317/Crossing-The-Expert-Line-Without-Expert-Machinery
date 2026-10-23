@@ -2,10 +2,10 @@
   "config_stem": "T3_topk_C_large",
   "run_name": "topk-T3-C-large",
   "model": "claude-fable-5-1",
-  "run_dir": "/Users/cyj/goal-runs/topk-T3-C-large-MIzHLT",
+  "run_dir": "/Users/cyj/goal-runs/topk-T3-C-large-a9F4jH",
   "kernel_files": [
-    "bench_ref.py",
-    "run_all.py"
+    "dsa_topk_kernel.cu",
+    "topk_indexer.py"
   ],
   "session_jsonl": "/Users/cyj/goal-runs/T3_topk_C_large.jsonl"
 }
