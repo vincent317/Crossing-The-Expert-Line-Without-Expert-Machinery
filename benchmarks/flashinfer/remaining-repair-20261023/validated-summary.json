@@ -1,0 +1,351 @@
+[
+  {
+    "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v11",
+    "label": "remaining-30-r1",
+    "job": "tasks/1340694",
+    "source_sha256": {
+      "main.py": "5f88dfed37426d5b2f27eb633cb39a4b943b81e763e886bb3b198b732b3e24be"
+    },
+    "hot_us": [
+      4.544,
+      4.544,
+      4.544
+    ],
+    "cold_l2_us": [
+      5.92,
+      5.952,
+      5.92
+    ]
+  },
+  {
+    "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v14",
+    "label": "remaining-31-r1",
+    "job": "tasks/1340695",
+    "source_sha256": {
+      "main.py": "291e89960423130b19c0588c15a52390ec35a9de77516cd447b82b4ab1f6705d"
+    },
+    "hot_us": [
+      7.008,
+      7.008,
+      7.008
+    ],
+    "cold_l2_us": [
+      9.2165,
+      9.216,
+      9.2325
+    ]
+  },
+  {
+    "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v15",
+    "label": "remaining-32-r1",
+    "job": "tasks/1340697",
+    "source_sha256": {
+      "main.py": "d2b16e6b03d2166e3fb0f3e82582561dc0043cf0310be9091461ea157fde6490"
+    },
+    "hot_us": [
+      10.815,
+      10.784,
+      10.784
+    ],
+    "cold_l2_us": [
+      14.112,
+      14.096,
+      14.128499999999999
+    ]
+  },
+  {
+    "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-4.8",
+    "label": "remaining-64-r1",
+    "job": "tasks/1340698",
+    "source_sha256": {
+      "kda_triton12.py": "3f9d48be559627927dde91dd2d46a99122827db534f174cf2eb9389cb7257756",
+      "kda_triton8.py": "fd5084ef34870a6b152b5d72d67adbc785fcca434e3b099054313a67a4189ba0"
+    },
+    "hot_us": [
+      3793.0550000000003,
+      3792.9579999999996,
+      3792.7665
+    ],
+    "cold_l2_us": [
+      3795.5514999999996,
+      3793.3105,
+      3794.4465
+    ]
+  },
+  {
+    "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-5",
+    "label": "remaining-65-r2",
+    "job": "tasks/1340721",
+    "source_sha256": {
+      "kda_k2.cu": "e7128a5c349525edd3bdfdec4060da729317f8eeb20f096922eb5663bc776a07",
+      "kda_cuda2.py": "825f528ef7f0c62bf9a4b1e4bed9f74f6bc9400a00cf57c8714057908b357090"
+    },
+    "hot_us": [
+      597.3625,
+      596.163,
+      594.0505
+    ],
+    "cold_l2_us": [
+      601.2345,
+      598.818,
+      598.4024999999999
+    ]
+  },
+  {
+    "path": "goal_single_shape/kda_fwd/h96_uniform/opus-4.8",
+    "label": "remaining-69-r1",
+    "job": "tasks/1340700",
+    "source_sha256": {
+      "triton_kda_best.py": "1a7a80c87e32111a8657b91b3aacca83967cddd0388ead04f30286e4208b890c"
+    },
+    "hot_us": [
+      2831.0789999999997,
+      2830.695,
+      2831.111
+    ],
+    "cold_l2_us": [
+      2833.2715,
+      2833.511,
+      2833.4155
+    ]
+  },
+  {
+    "path": "goal_single_shape/kda_fwd/h96_uniform/opus-5",
+    "label": "remaining-70-r2",
+    "job": "tasks/1340756",
+    "source_sha256": {
+      "kda_fwd.cu": "135589fe4770028c67e8afdad6c3cc746e5513c4b287e43c6e4f560fdf106891",
+      "kda_cuda.py": "4853e56f60898988b9c24b7081c231c4ef2b297ceeb3f46b3a208a87538bb6b1",
+      "kda_common.cuh": "431c3ce9ac1c647945c771216136174883da78555d1717dd188db83d6c6b5487"
+    },
+    "hot_us": [
+      2221.0995000000003,
+      2222.2034999999996,
+      2221.02
+    ],
+    "cold_l2_us": [
+      2223.7560000000003,
+      2224.3955,
+      2224.715
+    ]
+  },
+  {
+    "path": "goal_single_shape/mla_paged_prefill/b18_q15883_kv15937/fable-5.1",
+    "label": "remaining-71-r1",
+    "job": "tasks/1340702",
+    "source_sha256": {
+      "mla_prefill.py": "2d3ca111b73b7a02c93becc6162484294545de8171e9c7b57d462f5e298d9235",
+      "mla_kernel_final.cu": "533742b308527c17949898835f0d61399d89f371f17cd19667eed49682a3d084",
+      "umma.cuh": "e4676b75ab40700edad12485ebbaf3fa1c0988534464d5ff71279c9fccbdab1c"
+    },
+    "hot_us": [
+      420.09749999999997,
+      420.04949999999997,
+      422.0815
+    ],
+    "cold_l2_us": [
+      431.474,
+      435.90549999999996,
+      424.418
+    ]
+  },
+  {
+    "path": "goal_single_shape/fa4_bwd/varlen_t32768_n13_h16/opus-4.8",
+    "label": "remaining-fa4b-r2",
+    "job": "tasks/1340755",
+    "source_sha256": {
+      "mine.py": "df0dd60bccec50a46cc4359e6fb7211ef20a2a736bca4003ead03431f5f900af"
+    },
+    "hot_us": [
+      3370.748,
+      3370.076,
+      3370.668
+    ],
+    "cold_l2_us": [
+      3375.1639999999998,
+      3375.036,
+      3375.1800000000003
+    ]
+  },
+  {
+    "path": "goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5",
+    "label": "remaining-dsa-r2",
+    "job": "tasks/1340779",
+    "source_sha256": {
+      "check.py": "16c5379e3eadbeb7becf97d99f410a597c3df768a7f295818724685aada7a06c",
+      "timing.py": "39a53607d6261393b988a50e0ab8aa44bb5aa21da7f976d1c6ae87ca0d6477c5",
+      "bench.py": "852e33126530c6a550fa90c81cf17fe2cc40e8a96ea7c29ac693d9a51019f303",
+      "kernel/impls.py": "fc153c06af78bbb936e673cbfb74fb07906c433b06657511b81d9267bd149e6d",
+      "kernel/dsa_kernel.cu": "c02f439ddf2703bb2d12fe2694b697ed72855fc1d5e182285896da7a7e3cc5b0",
+      "kernel/check.py": "16c5379e3eadbeb7becf97d99f410a597c3df768a7f295818724685aada7a06c",
+      "kernel/workload.py": "75eb4f9f4b2f5db4f65106ef7a9a5fbc2f227d432d12b835d228aab7102c2970",
+      "kernel/dsa_cuda.py": "eccc605624877750254ffa1cef1e78fd43c3a74d7fc7c36cce48959d7ae1046d",
+      "kernel/ref_dsa_kernel.py": "344afd3432752e77e67d1d86bcdf1600779e340d4ad0b43653a4a7c48e3c9328",
+      "kernel/final_run.py": "f013643de3d9c5ed95220d5cb618857e79870a621349b0934142c96cc7b80b5a",
+      "kernel/timing.py": "39a53607d6261393b988a50e0ab8aa44bb5aa21da7f976d1c6ae87ca0d6477c5",
+      "kernel/dsa_triton.py": "8e79514360f943c5e28c8579b062caff9971e632f175c2c71797c64e7ac37a9b",
+      "kernel/ref_contest.py": "09d2210bb8bdba738a1582d10abcca70e2767a9607259e35ef89189985a3284b",
+      "kernel/bench.py": "852e33126530c6a550fa90c81cf17fe2cc40e8a96ea7c29ac693d9a51019f303"
+    },
+    "hot_us": [
+      6.592,
+      6.592,
+      6.592
+    ],
+    "cold_l2_us": [
+      7.5675,
+      7.504,
+      7.488
+    ]
+  },
+  {
+    "path": "goal_single_shape/gdn_fwd/t5709_n2/opus-5",
+    "label": "remaining-gdn5709-r2",
+    "job": "tasks/1340789",
+    "source_sha256": {
+      "check.py": "6d81bcdb32ef208d87f681c5f4230a2250e969e800cf021ba1ba117db85f8a0d",
+      "bench.py": "ec68f9a5a570db186c8e875cc82d3a2acb7f51cdace498e4500687a8d34d93a5",
+      "kernel/check.py": "6d81bcdb32ef208d87f681c5f4230a2250e969e800cf021ba1ba117db85f8a0d",
+      "kernel/final.py": "26f63b5917e8ec6755c955ed03916ecf2fd04fc0924f622ebbbbbaaa03098607",
+      "kernel/probe_ref.py": "efc184d453672320f56cc80c71cb8ec65f9cf50e74de4e7695fd2bad2e115913",
+      "kernel/probe_ref2.py": "4695b3a6fc71c1b4f9db723a819b95a20d694e7cdf6605070f895a6b990f319f",
+      "kernel/gdn_data.py": "1b319728cbdeb480521b378a5c28d41888dd056000f86bf187a8ed40b52ad83b",
+      "kernel/ref_flashinfer.py": "fd27ec504e06ecd3b1b7f6e2e4fd6cf1454aa3a02fe671b47dea9459cfe4b433",
+      "kernel/bench_util.py": "19ab88478d512bf3411f67667f3f37d7652cfb484b2716426acab62f9ad1076b",
+      "kernel/diag.py": "668690d0707574be9c9901055dfd865b8233b09d86d20951a88713d98575aefa",
+      "kernel/bench.py": "ec68f9a5a570db186c8e875cc82d3a2acb7f51cdace498e4500687a8d34d93a5",
+      "kernel/gdn_kernel.py": "9f03e78b66364f0b533b2eff9d149c72cabb17f649281a55b16d3b852bd0d0ee"
+    },
+    "hot_us": [
+      2592.2830000000004,
+      2595.594,
+      2594.474
+    ],
+    "cold_l2_us": [
+      2600.187,
+      2595.163,
+      2593.61
+    ]
+  },
+  {
+    "path": "goal_single_shape/gdn_fwd/t8192_n20/opus-5",
+    "label": "remaining-gdn8192-r2",
+    "job": "tasks/1340790",
+    "source_sha256": {
+      "check.py": "ae699165e847eeb51fb09947912b1b3db458fe8f648c88b62dd53c46884bf317",
+      "bench.py": "79183247863e461def54463896bbaa1691771a1d6d335eaea9db7bc013454f0b",
+      "kernel/gdn_triton.py": "89bb6f2a363dd10ec036e50dcbb6993cbb66b950871beeb9d784a107a679ed5c",
+      "kernel/check.py": "ae699165e847eeb51fb09947912b1b3db458fe8f648c88b62dd53c46884bf317",
+      "kernel/final_run.py": "b1bef0983ce41f4ae1e1ea9692f231fcd9c7ef8983557c53718150e38b1e5e32",
+      "kernel/gdn_data.py": "99e0ef0f5dbf30fb7aff7a37b0931599ad209d6b95471b55a50d1d83849eba8e",
+      "kernel/gdn_ref.py": "1d4fa81fbfcd108ce655fd83cc25763fc96d588bba8383278acace09983eea93",
+      "kernel/bench_util.py": "c844750b94eb235fac2ad4dda4e840463b38ff607d3de69f55c3aef701318c8c",
+      "kernel/bench.py": "79183247863e461def54463896bbaa1691771a1d6d335eaea9db7bc013454f0b",
+      "kernel/gdn_naive.py": "bec92942093cf181cac50105845a653e64ba7c0ba54c2dccb2594586e37f8ab4"
+    },
+    "hot_us": [
+      1125.702,
+      1124.3415,
+      1126.037
+    ],
+    "cold_l2_us": [
+      1126.741,
+      1126.1970000000001,
+      1125.525
+    ]
+  },
+  {
+    "path": "goal_single_shape/kda_fwd/h96_mixed/opus-5",
+    "label": "remaining-kdamixed-r2",
+    "job": "tasks/1340800",
+    "source_sha256": {
+      "check.py": "2d9e1b3d4a8bf32cf29a30a86db3889fc8f92e4f9aace4f6293243a5b6a02556",
+      "bench.py": "2c1278d8aef6480392201a2f7702ad13fee82f019501c3b6030a5b9c48204774",
+      "kernel/refprobe.py": "f441244979e8f56dbcff26e081ed5c87fa8ff1876c3dcef22a433e2c56123862",
+      "kernel/check.py": "2d9e1b3d4a8bf32cf29a30a86db3889fc8f92e4f9aace4f6293243a5b6a02556",
+      "kernel/kda_triton.py": "87ad417bb7fb1ed0e5e55fb8b01387460ee676b609ef7072e5bab3dfdd76dbe8",
+      "kernel/final.py": "a1df592fe47249ddc463aec2445e7330331d7883c807e52eb8a3a4c267c84338",
+      "kernel/refwrap.py": "ef7d098544aeb9fa9aa91fdcd60cab9e30375895a770cee99161e061838e6ccc",
+      "kernel/refdiag.py": "cb95ce8262c576061b19e5d49bd399d5793b7687d74a669a3219e249651f1a80",
+      "kernel/check_mine.py": "4268fd74725967a8edd39ab1454ce9e39c5e9e3d309e901d178009c33dbd119d",
+      "kernel/kda_common.py": "4d75721aab3e2e5d4a1fa399b7ee068ea8c6435a0e0845e6bf64a89512aefcb0",
+      "kernel/stage2b.py": "f553e752237c6943591c437d08bc29246361d51125fa7409e458adf8f3646ca0",
+      "kernel/bench.py": "2c1278d8aef6480392201a2f7702ad13fee82f019501c3b6030a5b9c48204774"
+    },
+    "hot_us": [
+      11239.294999999998,
+      11237.679,
+      11245.8705
+    ],
+    "cold_l2_us": [
+      11246.4145,
+      11246.3025,
+      11246.639
+    ]
+  },
+  {
+    "path": "goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_causal/fable-5.1",
+    "label": "remaining-fa4f-b1-r3",
+    "job": "tasks/1340815",
+    "source_sha256": {
+      "mine.py": "5ced04df2abce198d26bb8e81bc885834cd8c70cd7bf54929bd217f0567ee136",
+      "tmap.cuh": "9551b005444aef22022a7aa3e53b99faf61d03095f8ed09b239ad1b6ed5072bc",
+      "fa_fwd.cu": "66c87757d3653d994ed7daf14664395ed2caadc9e26f2a4e7c9408790326668f",
+      "ptx.cuh": "8afbd0cf88727973f1575b8e41e66cf902e3f239c8d0ca443c8f39fd0a35b406"
+    },
+    "hot_us": [
+      8191.9915,
+      8224.681,
+      8226.906500000001
+    ],
+    "cold_l2_us": [
+      8317.063,
+      8327.9915,
+      8318.681499999999
+    ]
+  },
+  {
+    "path": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1",
+    "label": "remaining-fa4f-b8-r5",
+    "job": "tasks/1340914",
+    "source_sha256": {
+      "fa_v9.py": "774eaa6fda58d776f1d930be2fca6d47c95c54c1d1d12046bf7a7989c541e348",
+      "naive_fp32.py": "1cc31ccaef48ec7f89be8a64606952277a8468d1e6ce2d528836615827a6897c",
+      "kernel/kernel.py": "2d3ae2e71b678afe64b1c48ff063f619164f5f9577bc32baf1efadd99753ca97"
+    },
+    "hot_us": [
+      2502.1639999999998,
+      2499.0919999999996,
+      2497.732
+    ],
+    "cold_l2_us": [
+      2503.9725,
+      2500.5485,
+      2499.764
+    ]
+  },
+  {
+    "path": "goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1",
+    "label": "remaining-topk-valid",
+    "job": "tasks/1340915",
+    "source_sha256": {
+      "naive_fp32.py": "0c215a551a0bd28470de93e4c9c2e6190f53913c640ccf28a6b60f3fd1a4640d",
+      "kernel/bench_all.py": "7c59e81eaf58ad46c08f514f14f139b45d7ee9ff7b5f2735c99eb13c9039869d",
+      "kernel/topk_cuda.py": "d5318d7b9ede60cf760c4d6029a643c468c905526e49b8090422fd5ac0729e78",
+      "kernel/bench_ref.py": "9737455d51987d9b0d489af1a791960d631e4dc346d98e9b40003bc497fc44ff",
+      "kernel/naive_fp32.py": "0c215a551a0bd28470de93e4c9c2e6190f53913c640ccf28a6b60f3fd1a4640d",
+      "kernel/topk_fast.py": "97d8c5432ea0b9aeba7a0c91cf1c23a237929e17b8b8456b80410a5a39282cd7",
+      "kernel/topk_triton.py": "6fd6ef80c8b211acdc5eb2498da9001a57d209e3c5b2bb0621fc8ae8c712e6bc"
+    },
+    "hot_us": [
+      3527.906,
+      3526.0175,
+      3527.105
+    ],
+    "cold_l2_us": [
+      3531.9695,
+      3532.065,
+      3530.5935
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 # 三项消融实验修复验收
 
-2026-10-23：仅修复下列三项，均通过 B200 精度回归并取消 invalid。其余 17 项 invalid 未修改。逐目录当前状态仍以[coverage.json](../remainder-03413a0-20261022/coverage.json)为准；原始提交的失败证据保留。
+2026-10-23：仅修复下列三项，均通过 B200 精度回归并取消 invalid。该批次未修改其余 17 项；后续已完成[剩余修复](../remaining-repair-20261023/README.md)。逐目录当前状态仍以[coverage.json](../remainder-03413a0-20261022/coverage.json)为准；原始提交的失败证据保留。
 
 ## 修复及精度
 

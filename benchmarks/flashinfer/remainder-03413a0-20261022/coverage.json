@@ -109,7 +109,7 @@
     },
     {
       "path": "goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [],
       "scheduled_jobs": [
@@ -126,7 +126,14 @@
       "failure_kind": "missing_output",
       "failure_reason": "Required LSE output absent.",
       "result_file": "other-additional-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340779",
+        "evidence": "../remaining-repair-20261023/remaining-dsa-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/dsa_decode_fwd/t2_topk2048_short/fable-5.1",
@@ -310,7 +317,7 @@
     },
     {
       "path": "goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [],
       "scheduled_jobs": [
@@ -327,14 +334,26 @@
       "failure_kind": "accuracy_failure",
       "failure_reason": "Top-k membership mismatch; token-interleaved cache addressing disagrees with page-packed input layout.",
       "result_file": "other-additional-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340915",
+        "evidence": "../remaining-repair-20261023/remaining-topk-valid-results.json",
+        "previous_status": "invalid",
+        "scope": "Exact membership on correctly packed finite FP8 inputs, seeds 0 and 42. Original generic int8 fixture produces NaNs and is not claimed to pass; see the repair report."
+      }
     },
     {
       "path": "goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1",
-      "status": "blocked_missing_candidate",
+      "status": "implementation_added_unverified",
       "matched": [],
       "unmatched": [],
-      "reason": "Repository run_all.py aliases the reference; no independent candidate kernel."
+      "reason": "Repository run_all.py aliases the reference; no independent candidate kernel.",
+      "previous_status": "blocked_missing_candidate",
+      "implementation_update": {
+        "commit": "731d977",
+        "scope": "Upstream added a CUDA implementation after the original audit. The new source has not been retested in this repair batch."
+      }
     },
     {
       "path": "goal_single_shape/fa4_bwd/gqa_b8_n4096_h16_kv2/fable-5.1",
@@ -618,7 +637,7 @@
     },
     {
       "path": "goal_single_shape/fa4_bwd/varlen_t32768_n13_h16/opus-4.8",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [
         {
@@ -641,7 +660,14 @@
       "failure_kind": "missing_dependency",
       "failure_reason": "Candidate imports missing problem module.",
       "result_file": "backward-0-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340755",
+        "evidence": "../remaining-repair-20261023/remaining-fa4b-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/fa4_bwd/varlen_t32768_n13_h16/opus-5",
@@ -753,7 +779,7 @@
     },
     {
       "path": "goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_causal/fable-5.1",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [
         {
@@ -790,7 +816,14 @@
       "failure_kind": "accuracy_failure",
       "failure_reason": "CUDA 12.9 runs; 1 of 134217728 elements fails atol=0.01/rtol=0.01 with required matched ratio 1.0; max absolute error 0.015625.",
       "result_file": "cuda12-fa4-b1-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340815",
+        "evidence": "../remaining-repair-20261023/remaining-fa4f-b1-r3-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_noncausal/fable-5.1",
@@ -828,7 +861,7 @@
     },
     {
       "path": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [
         {
@@ -850,7 +883,14 @@
       "failure_kind": "compilation_failure",
       "failure_reason": "CuTe DSL NVVM backend compilation failed.",
       "result_file": "clock-evidence-final-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340914",
+        "evidence": "../remaining-repair-20261023/remaining-fa4f-b8-r5-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_noncausal/fable-5.1",
@@ -1292,7 +1332,7 @@
     },
     {
       "path": "goal_single_shape/gdn_fwd/t5709_n2/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [],
       "scheduled_jobs": [
@@ -1309,7 +1349,14 @@
       "failure_kind": "accuracy_failure",
       "failure_reason": "Published configuration: output max abs error 18560; state max abs error 53341.035.",
       "result_file": "gdn-single-published-config-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340789",
+        "evidence": "../remaining-repair-20261023/remaining-gdn5709-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/gdn_fwd/t8192_n20/fable-5.1",
@@ -1401,7 +1448,7 @@
     },
     {
       "path": "goal_single_shape/gdn_fwd/t8192_n20/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [],
       "scheduled_jobs": [
@@ -1418,7 +1465,14 @@
       "failure_kind": "nonfinite_output",
       "failure_reason": "Published configuration produces non-finite candidate output.",
       "result_file": "gdn-single-published-config.log",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340790",
+        "evidence": "../remaining-repair-20261023/remaining-gdn8192-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/gqa_paged_decode/b16_kv2841/opus-5",
@@ -1598,7 +1652,7 @@
     },
     {
       "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-4.8",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-4.8/kda_triton12.py",
@@ -1651,11 +1705,18 @@
         ]
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340698",
+        "evidence": "../remaining-repair-20261023/remaining-64-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "goal_single_shape/kda_fwd/h64_fixed8192/opus-5/kda_k2.cu",
@@ -1709,7 +1770,14 @@
         "complete": false
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340721",
+        "evidence": "../remaining-repair-20261023/remaining-65-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/kda_fwd/h96_mixed/fable-5.1",
@@ -1801,7 +1869,7 @@
     },
     {
       "path": "goal_single_shape/kda_fwd/h96_mixed/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [],
       "scheduled_jobs": [],
@@ -1817,7 +1885,14 @@
       "failure_kind": "accuracy_failure",
       "failure_reason": "State still fails after matching reference lower_bound to candidate.",
       "result_file": "interrupted-harvest-results.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340800",
+        "evidence": "../remaining-repair-20261023/remaining-kdamixed-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/kda_fwd/h96_uniform/fable-5.1",
@@ -1874,7 +1949,7 @@
     },
     {
       "path": "goal_single_shape/kda_fwd/h96_uniform/opus-4.8",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "goal_single_shape/kda_fwd/h96_uniform/opus-4.8/triton_kda_best.py",
@@ -1910,11 +1985,18 @@
         "complete": false
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340700",
+        "evidence": "../remaining-repair-20261023/remaining-69-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/kda_fwd/h96_uniform/opus-5",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "goal_single_shape/kda_fwd/h96_uniform/opus-5/kda_cuda.py",
@@ -1986,7 +2068,14 @@
         "complete": false
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340756",
+        "evidence": "../remaining-repair-20261023/remaining-70-r2-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/mla_paged_decode/b16_kv9657/fable-5.1",
@@ -2067,7 +2156,7 @@
     },
     {
       "path": "goal_single_shape/mla_paged_prefill/b18_q15883_kv15937/fable-5.1",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "goal_single_shape/mla_paged_prefill/b18_q15883_kv15937/fable-5.1/mla_kernel_final.cu",
@@ -2139,7 +2228,14 @@
         "complete": false
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340702",
+        "evidence": "../remaining-repair-20261023/remaining-71-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "goal_single_shape/mla_paged_prefill/b1_q199_kv203/opus-5",
@@ -2945,7 +3041,7 @@
     },
     {
       "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v11",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v11/main.py",
@@ -2984,11 +3080,18 @@
         ]
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340694",
+        "evidence": "../remaining-repair-20261023/remaining-30-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v14",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v14/main.py",
@@ -3027,11 +3130,18 @@
         ]
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340695",
+        "evidence": "../remaining-repair-20261023/remaining-31-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v15",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v15/main.py",
@@ -3070,7 +3180,14 @@
         ]
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340697",
+        "evidence": "../remaining-repair-20261023/remaining-32-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "kda05_reproduction/dsa_decode_fwd/opus-5/dsa_b200_cluster16_dsmem",
@@ -5916,7 +6033,7 @@
     },
     {
       "path": "goal_full_shape/moe_fp8_fwd/opus-5/moe_fp8_block_scale_ds_routing_topk8_ng8_kg4_e32_h7168_i2048",
-      "status": "invalid",
+      "status": "repaired_pass",
       "solution_sha256": "1bcc731c70209937a4d3ac29e8ca4c4bd9b55d7cda474d7745a0025044627a59",
       "scheduled_jobs": [
         "tasks/1334342"
@@ -5924,7 +6041,14 @@
       "failure_kind": "runtime_failure",
       "failure_reason": "19/19 Triton launch signature mismatch: expected 36 arguments, received 27.",
       "result_file": "fullshape-r2-select.log",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340758",
+        "evidence": "../remaining-repair-20261023/remaining-moe-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "19/19 workloads pass the unchanged evaluation configuration: atol=1, rtol=0.3, required_matched_ratio=0.9. This is not all-element 0.01 accuracy."
+      }
     }
   ]
 }
