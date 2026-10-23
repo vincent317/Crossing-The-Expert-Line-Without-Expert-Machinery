@@ -1,0 +1,95 @@
+now using node mbkj-k8s-existed-node-ei5d
+name, uuid, driver_version
+NVIDIA B200, GPU-83b171ae-4c44-4533-d22a-f9c1980ce23f, 580.105.08
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2026 NVIDIA Corporation
+Built on Thu_Mar_19_11:12:51_PM_PDT_2026
+Cuda compilation tools, release 13.2, V13.2.78
+Build cuda_13.2.r13.2/compiler.37668154_0
+EVAL_HASH /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/flashinfer-bench/flashinfer_bench/bench/config.py 8f2fc3c906b865876d1e69d446eb41a62f32c3dc8ad37411d09b27e95a7212de
+EVAL_HASH /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/flashinfer-bench/flashinfer_bench/bench/timing.py c9165db58615afdf03a223120b37418ed5afaf538b4450641f432f53bf68cbe3
+All done.
+SMOKE_RESULT selection {"passed": true, "policy_version": 2, "loaded_samples": 28, "fast_samples": 28, "active_reasons": [], "loaded_clocks": {"1965.0": 28}, "minimum_sm_mhz": 1900, "required_fast_fraction": 0.9}
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2026 NVIDIA Corporation
+Built on Thu_Mar_19_11:12:51_PM_PDT_2026
+Cuda compilation tools, release 13.2, V13.2.78
+Build cuda_13.2.r13.2/compiler.37668154_0
+CASE_EXIT {"path": "goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1", "shape": "", "returncode": 1}
+test_requested_candidate (__main__.RemainingRepairsTests.test_requested_candidate) ... /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gemm/kernels/grouped_gemm_masked_blackwell.py:2059: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  a_major_mode: tcgen05.OperandMajorMode,
+/jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gemm/kernels/grouped_gemm_masked_blackwell.py:2061: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  b_major_mode: tcgen05.OperandMajorMode,
+/jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gdn_kernels/blackwell/gated_delta_net_chunked.py:99: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  from cutlass.cute.nvgpu.tcgen05 import OperandMajorMode
+/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/repository/goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1/fa_v9.py:354: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  tiled_mma = utils.make_trivial_tiled_mma(BFloat16, tcgen05.OperandMajorMode.K, tcgen05.OperandMajorMode.K,
+/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/_mlir_helpers/op.py:281: DeprecationWarning: make_trivial_tiled_mma with ab_dtype is deprecated, use the overload with separate a_dtype and b_dtype instead
+  res_or_list = opFunc(*args, **kwargs, loc=loc)
+<string>:11: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/repository/goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1/fa_v9.py:356: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  tiled_mma_pv = utils.make_trivial_tiled_mma(BFloat16, tcgen05.OperandMajorMode.K, tcgen05.OperandMajorMode.MN,
+ERROR
+======================================================================
+ERROR: test_requested_candidate (__main__.RemainingRepairsTests.test_requested_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/compiler.py", line 139, in compile
+    pm.run(module.operation)
+cutlass._mlir._mlir_libs._site_initialize.<locals>.MLIRError: Failure while executing pass pipeline:
+error: unknown: NVVM_ERROR_COMPILATION, libNVVM extra log: NVVM backend compilation failed
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/test_remaining_forward_base_gpu.py", line 77, in test_requested_candidate
+    call, reset, _ = prepare(Captured(fn, args, {}))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/paired.py", line 142, in prepare
+    initial = call()
+              ^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/paired.py", line 141, in <lambda>
+    call = lambda: entry.fn(*entry.args, **entry.kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/kernelgoal-remainder-03413a0/remaining-fa4f-b8-r4/repository/goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1/fa_v9.py", line 920, in attn
+    fn = cute.compile(FlashFwd(B, S, HQ, HKV, num_sms, MODE, NUM_EMUL), mQ, mK, mV, mO, mDbg, stream)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/compiler.py", line 1250, in __call__
+    return self._compile(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/compiler.py", line 1400, in _compile
+    return func._dsl_object._func(func, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/dsl.py", line 2680, in _func
+    return self._func_impl(funcBody, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/dsl.py", line 2693, in _func_impl
+    result = self.generate_mlir(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/dsl.py", line 2301, in generate_mlir
+    jit_function = self.compile_and_cache(
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/cutlass_dsl/cutlass.py", line 925, in compile_and_cache
+    return super().compile_and_cache(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/dsl.py", line 2033, in compile_and_cache
+    engine = self.compile_and_jit(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/dsl.py", line 1553, in compile_and_jit
+    kernel = self.compiler_provider.compile_and_jit(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/compiler.py", line 203, in compile_and_jit
+    self.compile(
+  File "/jiuzhang_train/user/chenyaojian/expert-line-audit-c2264b2/dsl46cu13/nvidia_cutlass_dsl/dsl_packages/cutlass/base_dsl/compiler.py", line 160, in compile
+    raise CompilerDiagnosticError(
+cutlass.base_dsl.compiler.CompilerDiagnosticError: [91merror:[0m NVVM backend compilation failed
+  [91merror:[0m libNVVM failed while compiling generated device IR.
+  [94mnote:[0m target architecture: sm_100a
+  [94mnote:[0m backend log:
+        NVVM backend compilation failed
+  [92msuggestion:[0m check that CUDA_TOOLKIT_PATH is set correctly and that the CUDA toolkit supports
+              target architecture sm_100a; rerun with IR dump flags if backend context is needed
+----------------------------------------------------------------------
+Ran 1 test in 4.421s
+FAILED (errors=1)
+CLOCK_AFTER_SKIPPED_FAILED_CANDIDATE
+ARCHIVE_CHUNK 0 eJwdjN0ORDAQhV9F5nqxqA37KiKTwWhlm7JaP4l4d+runC/nOwfwPjgL36A6YCKn7gRyJI12MFIzWkUTxz0J7Lculn/CpkAj3uUHVZbibxXY0mJJ35tGc5hHCbwCeDT/5cvMbplNO3aeJGd9XkL7Jrk=
+MARK_ARCHIVE_DONE 1
