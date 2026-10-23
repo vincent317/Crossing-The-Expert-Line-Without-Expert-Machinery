@@ -100,7 +100,7 @@ def _passB(mgrp_ptr,ngrp_ptr, eg_ptr,
 @triton.jit
 def _passC(qbar_ptr,khsc_ptr,atot_ptr,uv_ptr,uk_ptr,rtril_ptr,eg_ptr,o_ptr,
            T,H, C:tl.constexpr,D:tl.constexpr,BV:tl.constexpr,L:tl.constexpr,
-           G:tl.constexpr,IP:tl.constexpr):
+           G:tl.constexpr,IP:tl.constexpr,final_state_ptr=None):
     g=tl.program_id(0); h=tl.program_id(1); pv=tl.program_id(2)
     rows=tl.arange(0,C); dd=tl.arange(0,D); vd=pv*BV+tl.arange(0,BV)
     ri=rows[:,None]; ci=rows[None,:]
@@ -121,6 +121,12 @@ def _passC(qbar_ptr,khsc_ptr,atot_ptr,uv_ptr,uk_ptr,rtril_ptr,eg_ptr,o_ptr,
         o=tl.dot(qbar,Eb)+tl.dot(Rt,W.to(tl.bfloat16))
         tl.store(o_ptr+voff,o.to(o_ptr.dtype.element_ty))
         E=atot[:,None]*E+tl.dot(tl.trans(khsc),W.to(tl.bfloat16))
+    if final_state_ptr is not None:
+        if g == G - 1:
+            # E is [K,V]; the output contract stores state as [N,H,V,K].
+            final_off = h * D * D + vd[None, :] * D + dd[:, None]
+            tl.store(final_state_ptr + final_off, E)
+
 
 def kda_forward8(q,k,v,g_log,beta,scale,C=32,G=16,BV=64,ns=5,ip="tf32",
                  nw1=2,nwA=4,nwB=4,nwC=4,st1=1,stA=1,stN=1,stC=1,store_dt=torch.bfloat16):

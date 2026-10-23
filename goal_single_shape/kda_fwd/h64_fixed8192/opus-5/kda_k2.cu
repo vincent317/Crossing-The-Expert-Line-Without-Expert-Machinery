@@ -257,15 +257,12 @@ __global__ __launch_bounds__(128, 4) void kda_prep_kernel(
     for (int j = 0; j < C / 2; ++j) {
       float2 gv = __bfloat1622float2(
           *(const __nv_bfloat162*)(gg + base + (long)(t0 + j) * H * D + d));
-      // Floor the per-step log decay so the cumulative span over a chunk stays
-      // inside the bf16/fp32 exponent range even for pathological gates
-      // (C * |LGMIN| / 2 must stay below ~88).  Decay below e^LGMIN per step is
-      // numerically dead anyway.
+      // Match the bounded sigmoid gate used by the mathematical reference.
 #ifdef PA_NOGATE1
       acc.x += -0.05f; acc.y += -0.05f;
 #else
-      acc.x += fmaxf(-Ahead * softplus_fast(gv.x + dtb2.x), LGMIN);
-      acc.y += fmaxf(-Ahead * softplus_fast(gv.y + dtb2.y), LGMIN);
+      acc.x += LGMIN / (1.f + expf(-Ahead * (gv.x + dtb2.x)));
+      acc.y += LGMIN / (1.f + expf(-Ahead * (gv.y + dtb2.y)));
 #endif
       b[j] = acc;
     }

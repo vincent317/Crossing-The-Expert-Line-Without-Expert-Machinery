@@ -92,38 +92,38 @@ def _wy(Q, K, V, AIN, BIN, ALOG, DTB, CU,
     # NSQ truncates after M^(2^NSQ - 1), leaving a residual bounded by
     # ||M||^(2^NSQ) which check.py validates against the tolerance.
     T = tl.where(rows[:, None] == rows[None, :], 1.0, 0.0) - M
-    Pb = M.to(kmat.dtype)
+    Pb = M
     for _ in tl.static_range(NSQ):
-        P = tl.dot(Pb, Pb)
-        Pb = P.to(kmat.dtype)
-        T = T + tl.dot(T.to(kmat.dtype), Pb)
+        P = tl.dot(Pb, Pb, input_precision="tf32x3")
+        Pb = P
+        T = T + tl.dot(T, Pb, input_precision="tf32x3")
 
-    Tb = T.to(kmat.dtype)
+    Tb = T
     woff = (cid * HV + hv) * 2 * C * D + rows[:, None] * D + dcol[None, :]
     off = (cid * HV + hv) * C * D + rows[:, None] * D + dcol[None, :]
     # keep both tiles in bf16: an fp32 copy alive across the attention block
     # costs 2x32 registers per thread and drops the CTA/SM occupancy to one
     Wm = tl.dot(Tb, ((beta * tl.exp2(G))[:, None] *
-                     kmat.to(tl.float32)).to(kmat.dtype)).to(kmat.dtype)
+                     kmat.to(tl.float32)), input_precision="tf32x3")
     vmat = tl.load(V + (tts[:, None] * HV + hv) * D + dcol[None, :],
                    mask=good[:, None], other=0.0)
-    Uv = tl.dot(Tb, (beta[:, None] * vmat.to(tl.float32)).to(kmat.dtype)).to(kmat.dtype)
+    Uv = tl.dot(Tb, beta[:, None] * vmat.to(tl.float32), input_precision="tf32x3")
 
     qmat = tl.load(Q + (tts[:, None] * HQK + hq) * D + dcol[None, :],
                    mask=good[:, None], other=0.0)
     le = rows[:, None] >= rows[None, :]
     Wat = (tl.where(le, tl.dot(qmat, tl.trans(kmat)) * SCALE, 0.0) *
-           tl.exp2(tl.where(le, G[:, None] - G[None, :], -1.0e30))).to(kmat.dtype)
+           tl.exp2(tl.where(le, G[:, None] - G[None, :], -1.0e30)))
     tl.store(OUT + (tts[:, None] * HV + hv) * D + dcol[None, :],
-             tl.dot(Wat, Uv).to(kmat.dtype), mask=good[:, None])
+             tl.dot(Wat, Uv, input_precision="tf32x3").to(kmat.dtype), mask=good[:, None])
     Qe = (tl.exp2(G) * SCALE)[:, None] * qmat.to(tl.float32) \
-        - tl.dot(Wat, Wm)
-    tl.store(WQ + woff + C * D, Qe.to(kmat.dtype))
+        - tl.dot(Wat, Wm, input_precision="tf32x3")
+    tl.store(WQ + woff + C * D, Qe)
 
     # fold diag(exp(G_C - G)) into the two tiles the sequential pass consumes
     e = tl.exp2(GC - G)[:, None]
-    tl.store(WQ + woff, (e * Wm.to(tl.float32)).to(kmat.dtype))
-    tl.store(UV + off, (e * Uv.to(tl.float32)).to(kmat.dtype))
+    tl.store(WQ + woff, e * Wm)
+    tl.store(UV + off, e * Uv)
     tl.store(GCS + cid * HV + hv, tl.exp2(GC))
 
 
@@ -173,10 +173,10 @@ def _scan(K, WQ, UV, OUT, GCS, STATE, NEWSTATE, CU,
         Sb = St.to(Wm.dtype)
         optr = OUT + (tts[:, None] * HV + hv) * D + rr[None, :]
         ob = tl.load(optr, mask=gd[:, None], other=0.0)
-        tl.store(optr, (ob.to(tl.float32) + tl.dot(Qe, Sb)).to(Wm.dtype),
+        tl.store(optr, (ob.to(tl.float32) + tl.dot(Qe, Sb, input_precision="tf32x3")).to(Wm.dtype),
                  mask=gd[:, None])
-        Ue = (Uvm.to(tl.float32) - tl.dot(Wm, Sb)).to(Wm.dtype)
-        St = St * gc + tl.dot(tl.trans(km), Ue)
+        Ue = (Uvm.to(tl.float32) - tl.dot(Wm, Sb, input_precision="tf32x3")).to(Wm.dtype)
+        St = St * gc + tl.dot(tl.trans(km).to(tl.float32), Ue, input_precision="tf32x3")
 
     tl.store(NEWSTATE + sbase, tl.trans(St))
 
@@ -190,14 +190,15 @@ class GDN:
         self.C, self.split = C, split
         self.nch = (T + C - 1) // C + N
         self.maxc = 1 << ((T + C - 1) // C).bit_length()
-        self.nsq = C.bit_length() - 2 if nsq is None else nsq
+        # Complete the nilpotent inverse; truncation can destabilize long recurrences.
+        self.nsq = max(C.bit_length() - 2, 0 if nsq is None else nsq)
         self.scale = D ** -0.5 if scale is None else scale
         self.nw = (nw_wy, nw_scan)
         self.st = (st_wy, st_scan)
         dev = "cuda"
         z = lambda *s: torch.zeros(*s, device=dev, dtype=dtype)
-        self.WQ = z(self.nch, HV, 2 * C, D)     # [W ; Qeff] per (chunk, head)
-        self.UV = z(self.nch, HV, C, D)
+        self.WQ = torch.zeros(self.nch, HV, 2 * C, D, device=dev, dtype=torch.float32)     # [W ; Qeff] per (chunk, head)
+        self.UV = torch.zeros(self.nch, HV, C, D, device=dev, dtype=torch.float32)
         self.OUT = z(T, HV, D)
         self.GCS = torch.zeros(self.nch, HV, device=dev, dtype=torch.float32)
         self.NEWSTATE = torch.zeros(N, HV, D, D, device=dev, dtype=torch.float32)

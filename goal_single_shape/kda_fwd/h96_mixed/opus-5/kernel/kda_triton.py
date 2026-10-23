@@ -96,18 +96,18 @@ def kda_fwd_kernel(
         ec = tl.exp(Lref[None, :] - Lb)
         eref = tl.exp(Lref)                                # = exp(Lend - Lref)
 
-        Ka = (k * (er * eref[None, :])).to(tl.bfloat16)     # k * exp(Lb)
-        Qa = (q * (er * (eref[None, :] * SCALE))).to(tl.bfloat16)
-        Ke = (k * (ec * eref[None, :])).to(tl.bfloat16)     # k * exp(Lend - Lb)
+        Ka = (k * (er * eref[None, :]))     # k * exp(Lb)
+        Qa = (q * (er * (eref[None, :] * SCALE)))
+        Ke = (k * (ec * eref[None, :]))     # k * exp(Lend - Lb)
 
         if ABL == 3:
             Tm = eye
             mq = eye
         else:
-            Kr = (k * er).to(tl.bfloat16)
-            Kc = tl.trans((k * ec).to(tl.bfloat16))
-            mm = tl.dot(Kr, Kc)
-            mq = tl.dot((q * (er * SCALE)).to(tl.bfloat16), Kc)
+            Kr = k * er
+            Kc = tl.trans(k * ec)
+            mm = tl.dot(Kr, Kc, input_precision="tf32x3")
+            mq = tl.dot(q * (er * SCALE), Kc, input_precision="tf32x3")
             A = tl.where(lower, -bb[:, None] * mm, 0.0)
             if ABL == 1:
                 Tm = eye + A
@@ -115,17 +115,17 @@ def kda_fwd_kernel(
                 S = eye + A
                 P = A
                 for _ in tl.static_range(NINV):
-                    P = tl.dot(P, P)
-                    S = S + tl.dot(P, S)
+                    P = tl.dot(P, P, input_precision="tf32x3")
+                    S = S + tl.dot(P, S, input_precision="tf32x3")
                 Tm = S
 
-        hb = hs if SBF16 else hs.to(tl.bfloat16)
-        X = (bb[:, None] * (v - tl.dot(Ka, hb))).to(tl.bfloat16)
-        Ub = tl.dot(Tm.to(tl.bfloat16), X).to(tl.bfloat16)
-        o = tl.dot(tl.where(lower_eq, mq, 0.0).to(tl.bfloat16), Ub, tl.dot(Qa, hb))
+        hb = hs.to(tl.float32)
+        X = bb[:, None] * (v - tl.dot(Ka, hb, input_precision="tf32x3"))
+        Ub = tl.dot(Tm, X, input_precision="tf32x3")
+        o = tl.dot(tl.where(lower_eq, mq, 0.0), Ub, tl.dot(Qa, hb, input_precision="tf32x3"), input_precision="tf32x3")
         tl.store(OUT + offv, o.to(tl.bfloat16), mask=m[:, None])
 
-        hn = tl.dot(tl.trans(Ke), Ub, tl.exp(Lend)[:, None] * hb.to(tl.float32))
+        hn = tl.dot(tl.trans(Ke).to(tl.float32), Ub.to(tl.float32), tl.exp(Lend)[:, None] * hb, input_precision="tf32x3")
         hs = hn.to(tl.bfloat16) if SBF16 else hn
 
     tl.store(sp, hs.to(tl.float32))

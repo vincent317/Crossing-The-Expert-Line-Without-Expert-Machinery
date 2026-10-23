@@ -42,13 +42,14 @@ def kda_forward12(q,k,v,g_log,beta,scale,C=32,G=4,BV=128,BM=64,ns=1,ip="tf32",
     mgrp=torch.empty(G,H,D,D,device=q.device,dtype=store_dt)
     ngrp=torch.empty(G,H,D,D,device=q.device,dtype=torch.float32)
     eg=torch.empty(G,H,D,D,device=q.device,dtype=torch.float32)
+    final_state=torch.empty((1,H,D,D),device=q.device,dtype=torch.float32)
     _pass1[(NC,H)](q,k,v,g_log,beta,uv,uk,qbar,khsc,atot,rtril,T,H,scale,
                    C=C,D=D,NS=ns,IP=ip,num_warps=nw1,num_stages=st1)
     _passAN2[(G,H,D//BM)](uv,uk,khsc,atot,mgrp,ngrp,T,H,C=C,D=D,BM=BM,L=L,IP=ip,num_warps=nwAN,num_stages=stAN)
     _passB[(H,)](mgrp,ngrp,eg,H,D=D,G=G,IP=ip,num_warps=nwB,num_stages=1)
     _passC[(G,H,D//BV)](qbar,khsc,atot,uv,uk,rtril,eg,o,T,H,C=C,D=D,BV=BV,L=L,G=G,IP=ip,
-                        num_warps=nwC,num_stages=stC)
-    return o
+                        final_state_ptr=final_state,num_warps=nwC,num_stages=stC)
+    return o, final_state
 
 if __name__=="__main__":
     from kda_ref import build_inputs
@@ -58,7 +59,7 @@ if __name__=="__main__":
     d=build_inputs(N=1,L=8192,seed=12345)
     q,k,v,gl,beta,scale=d['q'],d['k'],d['v'],d['g_log'],d['beta'],d['scale']
     _,T,H,D=q.shape
-    o=kda_forward12(q,k,v,gl,beta,scale)
+    o,_=kda_forward12(q,k,v,gl,beta,scale)
     err=(o.float()-of).abs().max().item()
     print(f"correctness: err={err:.3e} tol={tol:.3e} PASS={err<tol}")
     def t(fn,it=200):
@@ -92,6 +93,6 @@ if __name__=="__main__":
     print("=== full v12 ; target<=0.392 ref=0.470 ===")
     for G in [8,16]:
         for BM in [32,64]:
-            ms=bench(C=32,G=G,BV=128,BM=BM); oo=kda_forward12(q,k,v,gl,beta,scale,C=32,G=G,BV=128,BM=BM)
+            ms=bench(C=32,G=G,BV=128,BM=BM); oo,_=kda_forward12(q,k,v,gl,beta,scale,C=32,G=G,BV=128,BM=BM)
             er=(oo.float()-of).abs().max().item()
             print(f"C=32 G={G} BV=128 BM={BM}: {ms:.4f} PASS={er<tol}")

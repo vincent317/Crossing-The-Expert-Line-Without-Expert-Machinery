@@ -1,17 +1,4 @@
-"""BEST validated KDA forward kernel (self-contained deliverable) — 1645us on B200.
-
-Identical algorithm to the triton_kda_bf16st.py fallback, with the sweep-confirmed best
-config baked in as defaults: C=64, BV=64, ndbl=1 (Neumann-series correctness floor),
-num_warps=8, num_stages=1.  One program per (seq,head) = 768 programs; V split into two
-64-wide halves (M0,M1) so the tl.dot accumulators stay inside B200 TMEM's 512-column limit
-(C=128 and single-V-pass both overflow TMEM in triton -> proven design ceiling).
-
-bf16 operands everywhere (range-safe: state M can exceed fp16), fp16 out_dtype on the bounded
-matmuls (T-doubling, U=Td@R, qd@Mt, P@U, U^T@khd) to cut register/TMEM footprint.
-W=kf@kd^T and P=qd@kd^T stay fp32 (operands touch exp(-G) growth).
-
-Validated vs the fp32 naive oracle: out max-abs 6.11e-4 (tol 4.73e-3), state 7.82e-3
-(tol 6.55e-2)."""
+"""Range-safe KDA: 16-token chunks, full triangular inverse, FP32 accumulation."""
 import torch
 import triton
 import triton.language as tl
@@ -67,8 +54,8 @@ def _kda_fwd_kernel(
         T = eye + Nmat
         Ni = Nmat
         for _ in tl.range(NDBL):
-            Ni = tl.dot(Ni.to(DT), Ni.to(DT), out_dtype=f16).to(tl.float32)
-            T = tl.dot(T.to(DT), (eye + Ni).to(DT), out_dtype=f16).to(tl.float32)
+            Ni = tl.dot(Ni.to(DT), Ni.to(DT), out_dtype=tl.float32).to(tl.float32)
+            T = tl.dot(T.to(DT), (eye + Ni).to(DT), out_dtype=tl.float32).to(tl.float32)
         Td = T.to(DT)
         P = ((tl.dot(qd, tl.trans(kd)) * ltri)).to(DT)       # matmul fp32, mask, cast bf16
         Alk = A_last[None, :]
@@ -79,12 +66,12 @@ def _kda_fwd_kernel(
             Mt = tl.trans(Mv)                                 # already bf16
             vv = tl.load(v_ptr + rows[:, None] * (H * V) + h * V + offs_v[None, :]).to(tl.float32)
             R = (beta[:, None] * (vv - tl.dot(kf, Mt).to(tl.float32))).to(DT)
-            U = tl.dot(Td, R, out_dtype=f16)
-            o = (tl.dot(qd, Mt, out_dtype=f16).to(tl.float32)
-                 + tl.dot(P, U.to(DT), out_dtype=f16).to(tl.float32))
+            U = tl.dot(Td, R, out_dtype=tl.float32)
+            o = (tl.dot(qd, Mt, out_dtype=tl.float32).to(tl.float32)
+                 + tl.dot(P, U.to(DT), out_dtype=tl.float32).to(tl.float32))
             tl.store(out_ptr + rows[:, None] * (H * V) + h * V + offs_v[None, :],
                      o.to(out_ptr.dtype.element_ty))
-            Mv = (Mv.to(tl.float32) * Alk + tl.dot(tl.trans(U.to(DT)), khd, out_dtype=f16).to(tl.float32)).to(DT)
+            Mv = (Mv.to(tl.float32) * Alk + tl.dot(tl.trans(U.to(DT)), khd, out_dtype=tl.float32).to(tl.float32)).to(DT)
             M0 = tl.where(vt == 0, Mv, M0)
             M1 = tl.where(vt == 1, Mv, M1)
 
@@ -93,7 +80,7 @@ def _kda_fwd_kernel(
     tl.store(fb + offs_v1[:, None] * K + offs_k[None, :], M1.to(fstate_ptr.dtype.element_ty))
 
 
-def triton_kda(inp, lower_bound=-1.0, scale=None, C=64, BV=64, ndbl=1, dt='bf16',
+def triton_kda(inp, lower_bound=-1.0, scale=None, C=16, BV=64, ndbl=3, dt='bf16',
                num_warps=8, num_stages=1):
     q, k, v, g = inp["q"], inp["k"], inp["v"], inp["g"]
     beta, A_log, dt_bias = inp["beta"], inp["A_log"], inp["dt_bias"]
@@ -121,7 +108,7 @@ if __name__ == "__main__":
     torch.cuda.set_device(0)
     inp = make_inputs(seed=0)
     o_n, s_n = naive_kda(inp, lower_bound=LOWER_BOUND)
-    cfg = dict(C=64, BV=64, ndbl=1, num_warps=8, num_stages=1)
+    cfg = dict(C=16, BV=64, ndbl=3, num_warps=8, num_stages=1)
     o_t, s_t = triton_kda(inp, lower_bound=LOWER_BOUND, **cfg)
     om = (o_t.float() - o_n).abs().max().item()
     sm = (s_t.float() - s_n).abs().max().item()

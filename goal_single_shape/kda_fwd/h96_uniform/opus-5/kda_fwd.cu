@@ -341,8 +341,8 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
   for (int c = 0; c < CPT; c++) dtb[c] = DT_BIAS[h * DD + d0 + c];
 
 
-  for (int c0 = 0; c0 < L; c0 += CB, gQ += CB * gstride, gK += CB * gstride,
-                                     gG += CB * gstride, gB += CB * H) {
+  for (int c0 = 0; c0 < L; c0 += 32, gQ += 32 * gstride, gK += 32 * gstride,
+                                     gG += 32 * gstride, gB += 32 * H) {
 #if !defined(MMA_ONLY) && SKIP != 1
     // ============================ prologue ============================
     // Issue every global load for this chunk up front so their latency
@@ -352,7 +352,7 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
     // load is long-latency; it used to sit immediately before barrier 3,
     // where all sixteen warps then waited on it.  Issued here its latency is
     // covered by the whole prologue, and only one register is held.
-    const bf16 bv = (tid < CB) ? gB[(size_t)tid * H] : bf16(0.f);
+    const bf16 bv = (tid < 32 && c0 + tid < L) ? gB[(size_t)tid * H] : bf16(0.f);
     float cs[TPT][CPT], run[CPT];
     CUTE_UNROLL
     for (int c = 0; c < CPT; c++) run[c] = 0.f;
@@ -360,12 +360,13 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
     for (int i = 0; i < TPT; i++) {
       CUTE_UNROLL
       {
-      const bf16xC gv = *reinterpret_cast<const bf16xC*>(gG + i * gstride);
+      const bool valid = t0 + i < 32 && c0 + t0 + i < L;
+      const bf16xC gv = valid ? *reinterpret_cast<const bf16xC*>(gG + i * gstride) : bf16xC{};
       CUTE_UNROLL
 #if SKIP == 15
       for (int c = 0; c < CPT; c++) { run[c] += float(gv.v[c]); cs[i][c] = run[c]; }
 #else
-      for (int c = 0; c < CPT; c++) { run[c] += lb2 * sigmoid_fast(Aexp * (float(gv.v[c]) + dtb[c])); cs[i][c] = run[c]; }
+      for (int c = 0; c < CPT; c++) { run[c] += valid ? lb2 * sigmoid_fast(Aexp * (float(gv.v[c]) + dtb[c])) : 0.f; cs[i][c] = run[c]; }
 #endif
       }
     }
@@ -430,8 +431,8 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
         CUTE_UNROLL
         for (int c = 0; c < CPT; c++) { kv.v[c] = bf16(scale); qv2.v[c] = bf16(lb2); }
 #else
-        const bf16xC kv = *reinterpret_cast<const bf16xC*>(gK + i * gstride);
-        const bf16xC qv2 = *reinterpret_cast<const bf16xC*>(gQ + i * gstride);
+        const bf16xC kv = (t0 + i < 32 && c0 + t0 + i < L) ? *reinterpret_cast<const bf16xC*>(gK + i * gstride) : bf16xC{};
+        const bf16xC qv2 = (t0 + i < 32 && c0 + t0 + i < L) ? *reinterpret_cast<const bf16xC*>(gQ + i * gstride) : bf16xC{};
 #endif
         float s = 0.f, sq2 = 0.f, fa[CPT], fb[CPT], fq[CPT];
         CUTE_UNROLL
@@ -470,7 +471,7 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
       }
     }
 #endif
-    if (tid < CB) sh.bs[tid] = sigmoid_fast(float(bv));   // load issued above
+    if (tid < CB) sh.bs[tid] = (tid < 32 && c0 + tid < L) ? sigmoid_fast(float(bv)) : 0.f;   // load issued above
     SBAR(3);
 
 #endif
@@ -515,7 +516,7 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
       int t = 0;
       TCHUNK(128) {
         CUTE_UNROLL
-        for (int j = 0; j < TJ; ++j) vpf[t][j] = *reinterpret_cast<const bf16x8*>(vp0 + C0 + j * 8);
+        for (int j = 0; j < TJ; ++j) vpf[t][j] = (tlo < 32 && c0 + tlo < L) ? *reinterpret_cast<const bf16x8*>(vp0 + C0 + j * 8) : bf16x8{};
         t++;
       }
     }
@@ -758,7 +759,7 @@ __global__ __launch_bounds__(NTHR) void kda_fwd_kernel(
     {   // 16 lanes per token: one 256-byte contiguous store per token
       const int lane = tid & 15, tok0 = tid >> 4;
       CUTE_UNROLL
-      for (int t = tok0; t < CB; t += NTHR / 16) {
+      for (int t = tok0; t < 32 && c0 + t < L; t += NTHR / 16) {
         const MCur<128> cO(t);
         const bf16x8 w = *reinterpret_cast<const bf16x8*>(&sh.A2[cO(lane * 8)]);
         *reinterpret_cast<bf16x8*>(OUT + (size_t)(bos + c0 + t) * H * DD

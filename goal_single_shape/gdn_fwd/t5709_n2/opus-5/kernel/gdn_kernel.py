@@ -45,7 +45,7 @@ def _l2norm_rows(P_ptr, t0, clen, hk, NH: tl.constexpr, C: tl.constexpr, D: tl.c
     d = tl.arange(0, D)
     x = tl.load(P_ptr + (t0 + r[:, None]) * (NH * D) + hk * D + d[None, :],
                 mask=(r < clen)[:, None], other=0.0).to(tl.float32)
-    return x * tl.rsqrt(tl.sum(x * x, 1) + 1e-6)[:, None]
+    return x  # The public contract supplies Q/K; do not renormalize them.
 
 
 @triton.jit
@@ -76,9 +76,9 @@ def _chunk_ut(K_ptr, V_ptr, A_ptr, B_ptr, ALOG_ptr, DTB_ptr, t0, clen, h, hk,
     x_inv = (r[:, None] == r[None, :]).to(tl.float32) + p
     pj = p
     for _ in tl.static_range(NS - 1):
-        pjb = pj.to(tl.bfloat16)
-        pj = tl.dot(pjb, pjb)
-        x_inv = x_inv + tl.dot(x_inv.to(tl.bfloat16), pj.to(tl.bfloat16))
+        pjb = pj
+        pj = tl.dot(pjb, pjb, input_precision="tf32x3")
+        x_inv = x_inv + tl.dot(x_inv, pj, input_precision="tf32x3")
 
     tm = (x_inv * beta[None, :]).to(tl.bfloat16)
     vv = tl.load(V_ptr + (t0 + r[:, None]) * (NHV * D) + h * D + d[None, :],
@@ -407,7 +407,9 @@ class Runner:
         self.plan = plan
         self.cfg = dict(NHQ=NHQ, NHV=NHV, GRP=NHV // NHQ, D=D)
         self.scale = D ** -0.5 if scale is None else scale
-        self.bv_scan, self.bv_out, self.ns = bv_scan, bv_out, ns
+        self.bv_scan, self.bv_out = bv_scan, bv_out
+        # Every triangular power through C-1 is required for stable state transitions.
+        self.ns = max(ns, plan["chunk"].bit_length() - 1)
         self.mode, self.bw, self.fused_attn = mode, bw, fused_attn
         self.fuse_prep_attn = fuse_prep and fused_attn and plan["m"] == 1
         self.warps = (warps_prep, warps_scan, warps_out, warps_seg, warps_top)
