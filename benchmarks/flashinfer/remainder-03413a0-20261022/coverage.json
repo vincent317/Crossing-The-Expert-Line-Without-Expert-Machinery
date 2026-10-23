@@ -5192,7 +5192,7 @@
     },
     {
       "path": "ablation/dsa_decode_fwd/t8_topk2048/fable-5.1-ncu-skill",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "ablation/dsa_decode_fwd/t8_topk2048/fable-5.1-ncu-skill/kernel.py",
@@ -5247,7 +5247,14 @@
         "missing_outputs": []
       },
       "evidence": "../paired-repair-specs.json",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340628",
+        "evidence": "../ablation-repair-20261023/repair-dsa-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-flame-chase",
@@ -5392,7 +5399,7 @@
     },
     {
       "path": "ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [
         {
           "path": "ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill/fa4bwd.py",
@@ -5465,7 +5472,14 @@
         "repaired_source_sha256": "7c97e8b822be125937f978dd830889c34d6bdbb8470aceab46d18810250db6e7"
       },
       "evidence": "../clock-guarded-20261022/fa4-pipeline-diagnosis.md",
-      "test_status": "prior_source_failed"
+      "test_status": "prior_source_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340629",
+        "evidence": "../ablation-repair-20261023/repair-fa4-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-no-accuracy-constraint",
@@ -5576,7 +5590,7 @@
     },
     {
       "path": "ablation/gdn_fwd/t8192_n20/fable-5.1-ncu",
-      "status": "invalid",
+      "status": "repaired_pass",
       "matched": [],
       "unmatched": [
         {
@@ -5604,7 +5618,14 @@
       "failure_reason": "CUDA 13.2 segfault; CUDA 12.9 compiled but stalled for over five minutes with GPU utilization 100% and tensor activity 0%; stopped.",
       "result_file": "cuda12-inspect.log",
       "additional_evidence": "cuda12-stall-metrics.json",
-      "test_status": "retest_failed"
+      "test_status": "retest_failed",
+      "repair": {
+        "date": "2026-10-23",
+        "job": "tasks/1340630",
+        "evidence": "../ablation-repair-20261023/repair-gdn-r1-results.json",
+        "previous_status": "invalid",
+        "scope": "Source hashes and validated inputs are recorded in the repair evidence; original fields describe the historical commit."
+      }
     },
     {
       "path": "ablation/gdn_fwd/t8192_n20/fable-5.1-ncu-skill",

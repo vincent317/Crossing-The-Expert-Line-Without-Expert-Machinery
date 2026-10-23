@@ -1,12 +1,12 @@
 # 当前上游算子复测结果
 
-本报告于 2026-10-23 发布。结论仅适用于下述被测提交，不代表发布时最新代码已复测。
+本报告于 2026-10-23 发布并补充三项消融修复验收。历史记录对应下述固定提交；`repaired_pass` 行对应修复证据内的源码哈希，不代表其他最新代码已复测。
 
 固定上游提交：`03413a0a10e670d6881314765b4a07bfdcbe87ba`。统计单位是实现目录，不是算子家族或 workload。
 
-共 135 个实现目录、11 个算子家族；在已测输入范围内通过 114 个，标记 `invalid` 20 个（失败或输出不完整），缺少候选实现 1 个，待收尾 0 个。当前活动任务：无。
+共 135 个实现目录、11 个算子家族；在已测输入范围内通过 117 个（原版 114 个、修复后 3 个），标记 `invalid` 17 个（失败或输出不完整），缺少候选实现 1 个，待收尾 0 个。当前活动任务：无。
 
-`coverage.json` 是逐目录结论、源码对应关系和证据入口。按用户要求，20 个未通过验收的实现统一标记为 `invalid`，不修复、不启动修复后重测；原测试状态保留在 `test_status`，失败原因和证据不变。计数包括昨晚已测且源码匹配的记录，未将修复版通过结论套用到上游原版。原版失败但本地修复版通过的目录有 10 个。
+`coverage.json` 是逐目录结论、源码对应关系和证据入口。按最新要求，仅修复三项消融实现并重测通过，取消这三项的 `invalid`；其余 17 项保持 `invalid`，未修复。原测试状态保留在 `test_status`，原源码匹配、失败原因和证据仍描述历史提交；新增 `repair` 字段链接修复后验收。计数包括昨晚已测且源码匹配的记录，未将修复版通过结论套用到上游原版。原版失败但本地修复版通过的目录有 10 个。
 
 ## GDN 全 shape
 
@@ -18,7 +18,7 @@
 
 完整通过的 GDN 批次都有前后及每 25 项频率检查；以原始日志中的 `SMOKE_RESULT` 为准。其余新增通过项的三轮热/冷缓存耗时汇总在 `monitor-passing-results.json`，每轮各 50 次；全 shape 官方计时与此协议不同，不能直接混排比较。
 
-## Invalid 与阻塞
+## Invalid、消融修复与阻塞
 
 - **invalid** `goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5`：缺少规定的 LSE 输出。 证据：`other-additional-results.json`。
 - **invalid** `goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1`：Top-k 成员集合错误；按 token 交错布局寻址，与输入的分页布局不符。 证据：`other-additional-results.json`。
@@ -37,9 +37,9 @@
 - **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v11`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
 - **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v14`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
 - **invalid** `kda05_reproduction/dsa_decode_fwd/opus-4.8/dsa_triton_v15`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
-- **invalid** `ablation/dsa_decode_fwd/t8_topk2048/fable-5.1-ncu-skill`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../paired-repair-specs.json`。
-- **invalid** `ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill`：上游源码匹配先前失败版本；修复后通过不能转移。 证据：`../clock-guarded-20261022/fa4-pipeline-diagnosis.md`。
-- **invalid** `ablation/gdn_fwd/t8192_n20/fable-5.1-ncu`：CUDA 13.2 下段错误退出；CUDA 12.9 下编译成功但执行超过 5 分钟未返回，GPU 利用率 100%、Tensor Core 活跃度 0，已停止。 证据：`cuda12-inspect.log`。
+- **repaired_pass** `ablation/dsa_decode_fwd/t8_topk2048/fable-5.1-ncu-skill`：修复后精度及重复调用检查通过，已取消 invalid；见[修复验收](../ablation-repair-20261023/README.md)。
+- **repaired_pass** `ablation/fa4_bwd/varlen_t32768_n13_h16/fable-5.1-ncu-skill`：修复后精度及重复调用检查通过，已取消 invalid；见[修复验收](../ablation-repair-20261023/README.md)。
+- **repaired_pass** `ablation/gdn_fwd/t8192_n20/fable-5.1-ncu`：修复后精度及重复调用检查通过，已取消 invalid；见[修复验收](../ablation-repair-20261023/README.md)。
 - **invalid** `goal_full_shape/moe_fp8_fwd/opus-5/moe_fp8_block_scale_ds_routing_topk8_ng8_kg4_e32_h7168_i2048`：19/19 workload 均出现 Triton launch 参数不匹配：要求 36 个，实际 27 个。 证据：`fullshape-r2-select.log`。
 
 ## 验证边界
