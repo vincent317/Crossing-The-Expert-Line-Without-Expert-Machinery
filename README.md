@@ -25,27 +25,6 @@ The agent writes its own correctness oracle and timing loop. With **Fable 5.1**,
 kernels it produces reach **1.08×–1.58×** the fastest expert-written references on
 FlashAttention-4 backward, DeepSeek Sparse Attention and Gated DeltaNet.
 
-## Highlights
-
-- 🧪 **Naive loop**: only the generic agent loop every coding agent already runs; no harness engineering
-- 🚀 **Past the expert line**: Fable 5.1 is at or above the expert references on all three operators studied (**1.08×** FA4 bwd, **1.58×** DSA, **1.58×** GDN)
-- ⚡ **FlashAttention-4 backward**: Fable 5.1 beats FA4's own official backward kernels on two of three shapes
-- 🤖 **Past the specialized agents**: on DSA and GDN, KDA-0.5 reaches 1.45× and 1.28×, AKO4X's archived kernels 1.02× and 0.57×; Fable 5.1 reaches 1.58× on both
-- 📈 **Across model generations**: Opus 4.8, Opus 5 and Fable 5.1 under one prompt, harness and stopping rule, so the model is the only variable
-- ✅ **Verified by us, not the agent**: every reported kernel is checked against a naive fp32 oracle on held-out inputs, at the error scale of the reference it claims to beat
-- 📦 **Open kernels**: CUDA, CuTe DSL and Triton kernels for 11 operator families, under Apache 2.0
-
-How the naive loop differs from specialized kernel agents
-(the three kernel-specific harness components, from Table 1 of the paper):
-
-| System | Evaluation infra | Domain knowledge | Prescribed workflow |
-|-|-|-|-|
-| **Naive loop (ours)** | ❌ | ❌ | ❌ |
-| KDA | ✅ NCU profiler skill | ✅ | ✅ |
-| AKO | ✅ | ✅ | ✅ |
-| AVO | ✅ | ✅ | ✅ |
-| CAKE | ✅ | ✅ | ✅ |
-
 ## News
 
 - 📌 **Pinned**: the paper draft is available as [`paper.pdf`](paper.pdf).

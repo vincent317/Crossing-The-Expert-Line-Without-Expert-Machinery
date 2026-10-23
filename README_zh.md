@@ -23,26 +23,6 @@
 都由 agent 自己编写。使用 **Fable 5.1** 时，生成的算子在 FlashAttention-4 反向、
 DeepSeek Sparse Attention 和 Gated DeltaNet 上达到最快专家参照的 **1.08×–1.58×**。
 
-## 亮点
-
-- 🧪 **朴素循环**：只保留所有编程 agent 都有的通用循环，不做任何 harness 工程
-- 🚀 **越过专家线**：Fable 5.1 在三个算子上全部持平或超过专家参照（FA4 反向 **1.08×**、DSA **1.58×**、GDN **1.58×**）
-- ⚡ **FlashAttention-4 反向**：Fable 5.1 在三个 shape 中的两个上快于 FA4 官方反向算子
-- 🤖 **超过专用 agent**：在 DSA 和 GDN 上，KDA-0.5 为 1.45× 和 1.28×，AKO4X 归档算子为 1.02× 和 0.57×，Fable 5.1 两者都是 1.58×
-- 📈 **跨模型代际**：Opus 4.8、Opus 5、Fable 5.1 使用同一 prompt、harness 和停止规则，模型是唯一变量
-- ✅ **由我们而非 agent 验证**：每个报告的算子都在 agent 没见过的输入上，以所比参照的误差量级对照朴素 fp32 实现检查
-- 📦 **开源算子**：覆盖 11 个算子族的 CUDA、CuTe DSL 和 Triton 算子，Apache 2.0 许可
-
-朴素循环与专用算子 agent 的区别（三类算子专用 harness 组件，取自论文表 1）：
-
-| 系统 | 评测设施 | 领域知识 | 规定工作流 |
-|-|-|-|-|
-| **朴素循环（本文）** | ❌ | ❌ | ❌ |
-| KDA | ✅ NCU profiler skill | ✅ | ✅ |
-| AKO | ✅ | ✅ | ✅ |
-| AVO | ✅ | ✅ | ✅ |
-| CAKE | ✅ | ✅ | ✅ |
-
 ## 动态
 
 - 📌 **置顶**：论文草稿见 [`paper.pdf`](paper.pdf)。
