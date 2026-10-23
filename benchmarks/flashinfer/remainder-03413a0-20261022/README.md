@@ -4,7 +4,7 @@
 
 固定上游提交：`03413a0a10e670d6881314765b4a07bfdcbe87ba`。统计单位是实现目录，不是算子家族或 workload。
 
-共 135 个实现目录、11 个算子家族；在各自已测输入与判据范围内通过 134 个（原版 114 个、修复后 20 个），当前 `invalid` 0 个。此前缺失的 T3 Top-k 已由上游提交 `731d977` 补齐，新增实现待复测 1 个，当前已知缺少实现 0 个。本轮 17 项任务均已完成。
+共 135 个实现目录、11 个算子家族；在各自已测输入与判据范围内通过 135 个（原版及新补实现 115 个、修复后 20 个），当前 `invalid` 0 个。此前缺失的 T3 Top-k 已由上游提交 `731d977` 补齐，并完成[补复测](../t3-retest-20261023/README.md)；待复测 0 个，当前已知缺少实现 0 个。修复与补复测任务均已完成。
 
 `coverage.json` 是逐目录结论、源码对应关系和证据入口。三项消融及其余 17 项均已修复验收，见[本轮修复报告](../remaining-repair-20261023/README.md)。原测试状态、失败原因和历史源码对应关系保留；`repair` 链接新源码的验证证据。Top-k 合法输入回归与旧异常输入分开记录；MoE 沿用 atol=1、rtol=0.3、匹配比例≥90%，不代表逐元素 0.01 精度。六个 FA4 全 shape 目录的原有代表性覆盖限制仍然有效。
 
@@ -22,7 +22,7 @@
 
 - **repaired_pass** `goal_single_shape/dsa_decode_fwd/t2_topk2048/opus-5`：[修复验收](../remaining-repair-20261023/README.md)。历史失败：缺少规定的 LSE 输出。 证据：`other-additional-results.json`。
 - **repaired_pass** `goal_single_shape/dsa_topk_indexer/topk_T2_B_mid/fable-5.1`：[修复验收](../remaining-repair-20261023/README.md)。历史失败：Top-k 成员集合错误；按 token 交错布局寻址，与输入的分页布局不符。 证据：`other-additional-results.json`。
-- `goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1`：历史提交只有 reference 调用脚本；上游 `731d977` 已补齐 CUDA kernel，新版本尚未复测。证据：`coverage.json`。
+- `goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1`：历史提交只有 reference 调用脚本；上游 `731d977` 已补齐 CUDA kernel，新版本已通过[补复测](../t3-retest-20261023/README.md)。证据：`coverage.json`。
 - **repaired_pass** `goal_single_shape/fa4_bwd/varlen_t32768_n13_h16/opus-4.8`：[修复验收](../remaining-repair-20261023/README.md)。历史失败：候选导入了仓库缺失的 problem 模块。 证据：`backward-0-results.json`。
 - **repaired_pass** `goal_single_shape/fa4_fwd/gqa_b1_n32768_h32_kv8_causal/fable-5.1`：[修复验收](../remaining-repair-20261023/README.md)。历史失败：CUDA 12.9 下可运行；134217728 个元素中有 1 个不满足 atol=0.01、rtol=0.01、全部元素通过的判据，最大绝对误差 0.015625。 证据：`cuda12-fa4-b1-results.json`。
 - **repaired_pass** `goal_single_shape/fa4_fwd/gqa_b8_n4096_h32_kv4_causal/fable-5.1`：[修复验收](../remaining-repair-20261023/README.md)。历史失败：CuTe DSL 的 NVVM 后端编译失败。 证据：`clock-evidence-final-results.json`。

@@ -54,4 +54,4 @@ MLA prefill 原始长度分布缺失，使用保持总量和关键长度的合�
 
 这些 GPU 测试依赖固定审计环境、官方 definition/输入、Tri Dao cache，以及共享盘上的 official、paired、metrics、kernel_span、run_gdn 等工具。仓库未附带全部外部依赖；具备入口指定的共享环境时可执行入口重建验收，不能宣称任意干净机器开箱即跑。本地静态检查不代替 GPU 验收。
 
-此前缺少独立候选实现的是 `goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1`。收尾同步发现上游 `731d977` 已补齐 CUDA 实现；新版本尚未纳入本轮复测，当前标记 implementation_added_unverified，不能算作通过。
+此前缺少独立候选实现的是 `goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1`。收尾同步发现上游 `731d977` 已补齐 CUDA 实现；新版本当时未纳入该批次；随后已完成[独立补复测](../t3-retest-20261023/README.md)，当前已标记 tested_pass。

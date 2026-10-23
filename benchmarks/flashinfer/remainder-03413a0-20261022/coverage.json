@@ -345,14 +345,21 @@
     },
     {
       "path": "goal_single_shape/dsa_topk_indexer/topk_T3_C_large/fable-5.1",
-      "status": "implementation_added_unverified",
+      "status": "tested_pass",
       "matched": [],
       "unmatched": [],
-      "reason": "Repository run_all.py aliases the reference; no independent candidate kernel.",
       "previous_status": "blocked_missing_candidate",
       "implementation_update": {
         "commit": "731d977",
-        "scope": "Upstream added a CUDA implementation after the original audit. The new source has not been retested in this repair batch."
+        "scope": "Upstream implementation added in 731d977; now validated by the linked retest evidence."
+      },
+      "historical_reason": "Repository run_all.py aliases the reference; no independent candidate kernel.",
+      "retest": {
+        "date": "2026-10-23",
+        "job": "tasks/1341194",
+        "previous_status": "implementation_added_unverified",
+        "evidence": "../t3-retest-20261023/t3-retest-r2-results.json",
+        "scope": "Canonical T3 lengths and page table with valid FP8 packing; signed and nonnegative weights, seeds 0/42; 400 exact-membership and scratch-reset checks. Three hot/cold timing rounds per weight distribution."
       }
     },
     {
