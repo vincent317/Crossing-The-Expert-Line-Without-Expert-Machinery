@@ -79,16 +79,17 @@ DEVI float poly_exp2(float x) {
 }
 DEVI void named_bar_sync(int id, int nthreads) { asm volatile("bar.sync %0, %1;" ::"r"(id), "r"(nthreads) : "memory"); }
 
-// 8 packed f16 score pairs -> packed f16 P' = 2^(min(x, X_CLAMP) - X_CLAMP), x = c*s - m*c.
-// z = relu(off - c*s) with off = m*c + X_CLAMP (HFMA2), p = 2^(-z) (MUFU with the negation folded in), sums in f16 (HADD2).
-// No PRMT/F2FP/HMNMX2: those classes were measured to stall the MMA issuer on the same SMSP.
-DEVI void exp8p(const uint32_t* r, uint32_t* pk, uint32_t nc2, uint32_t off2, uint32_t& lh) {
+// Keep scores and normalization in FP32. The diagonal maximum is a shift,
+// not an upper bound: earlier causal keys can have larger scores.
+DEVI void exp8p(const uint32_t* r, uint32_t* pk, float scale, float maximum,
+               float& sum_lo, float& sum_hi) {
 #pragma unroll
   for (int x = 0; x < 8; ++x) {
-    uint32_t z = fma_relu_f16x2(r[x], nc2, off2);
-    uint32_t p2 = ex2_neg_f16x2(z);
-    lh = add_f16x2(lh, p2);
-    pk[x] = p2;
+    float lo = exp2f(__uint_as_float(r[2*x]) * scale - maximum - X_CLAMP);
+    float hi = exp2f(__uint_as_float(r[2*x+1]) * scale - maximum - X_CLAMP);
+    pk[x] = cvt_f16x2(lo, hi);
+    sum_lo += f16lo(pk[x]);
+    sum_hi += f16hi(pk[x]);
   }
 }
 
@@ -206,7 +207,7 @@ fa_fwd_kernel(const __grid_constant__ CUtensorMap tq, const __grid_constant__ CU
   } else if (warp == 1) {
     // ===================== S-GEMM issuer =====================
     if (lane == 0) {
-      const uint32_t idesc_ss = make_idesc_f16_acc16(BM, BN, false, false);
+      const uint32_t idesc_ss = make_idesc_f16(BM, BN, false, false);
       uint64_t da[QSTAGES][8], db[KSTAGES][8];
 #pragma unroll
       for (int kk = 0; kk < 8; ++kk) {
@@ -313,10 +314,9 @@ fa_fwd_kernel(const __grid_constant__ CUtensorMap tq, const __grid_constant__ CU
     const uint32_t t_s = tmem_base + T_S0 + bpar * 128 + lane_off + half * 64;
     const uint32_t t_p = tmem_base + T_P0 + bpar * 64 + lane_off + half * 32;
     const float c = p.scale_log2;
-    const uint32_t nc2 = cvt_f16x2(-c, -c);
     const int pair_bar = 1 + wl + 4 * bpar;     // named barrier ids 1..8: the two column-half warps of the same rows/parity
     uint32_t kv_iter = 0;
-    uint32_t r[32];
+    uint32_t r[64];
     uint32_t pk[16];
     float m_used = 0.f;
     long long acc_ws = 0, acc_cmp = 0, acc_st = 0, n_slow = 0, acc_rs = 0, acc_wpv = 0; PROF_T(t_start);
@@ -328,7 +328,6 @@ fa_fwd_kernel(const __grid_constant__ CUtensorMap tq, const __grid_constant__ CU
       float l0 = 0.f, l1 = 0.f;
       const int diag_par = (int)(kv_iter & 1);
       const int j0 = (bpar == diag_par) ? 0 : 1;
-      uint32_t off2 = 0;
       for (int j = j0; j < nb; j += 2) {
         const uint32_t kv = kv_iter + j;
         const uint32_t n = kv >> 1;                 // index of this block among its parity
@@ -339,45 +338,40 @@ fa_fwd_kernel(const __grid_constant__ CUtensorMap tq, const __grid_constant__ CU
         tc_fence_after();
         PROF_T(t2);
         float b0 = 0.f, b1 = 0.f;
-        tmem_ld32_pack(t_s, r);
-        tmem_ld32_pack(t_s + 32, r + 16);
+        tmem_ld32(t_s, r);
+        tmem_ld32(t_s + 32, r + 32);
         tmem_ld_wait();
         tc_fence_before();
         if (lane == 0) mbar_arrive(&sm.bar_s_read[bpar]);   // S buffer consumed: the issuer may overwrite it
         if (j == 0) {
           // diagonal block: mask, my 64 columns' row max, exchange with the other half, publish m
-          uint32_t mx2 = 0xFC00FC00u;
+          float mx = -INFINITY;
 #pragma unroll
-          for (int cidx = 0; cidx < 32; ++cidx) {
-            int col = half * 64 + 2 * cidx;
-            if (col > rloc) r[cidx] = 0xFC00FC00u;
-            else if (col + 1 > rloc) r[cidx] = (r[cidx] & 0xFFFFu) | 0xFC000000u;
-            mx2 = max_f16x2(mx2, r[cidx]);
+          for (int cidx = 0; cidx < 64; ++cidx) {
+            int col = half * 64 + cidx;
+            if (col > rloc) r[cidx] = __float_as_uint(-INFINITY);
+            mx = fmaxf(mx, __uint_as_float(r[cidx]));
           }
-          float mx = fmaxf(f16lo(mx2), f16hi(mx2));
           sm.xch_epi[wl][bpar][half][lane] = mx;
           named_bar_sync(pair_bar, 64);
           mx = fmaxf(mx, sm.xch_epi[wl][bpar][half ^ 1][lane]);
           named_bar_sync(pair_bar, 64);
-          m_used = mx * c; off2 = cvt_f16x2(m_used + X_CLAMP, m_used + X_CLAMP);
+          m_used = mx * c;
           if (half == 0) sm.m_pub[rloc] = m_used;
           __syncwarp();
           if (lane == 0) mbar_arrive(&sm.bar_m_ready);
           l0 = 0.f; l1 = 0.f;
         } else if (j == 1) {
           mbar_wait(&sm.bar_m_ready, (uint32_t)k & 1);
-          m_used = sm.m_pub[rloc]; off2 = cvt_f16x2(m_used + X_CLAMP, m_used + X_CLAMP);
+          m_used = sm.m_pub[rloc];
           l0 = 0.f; l1 = 0.f;
         }
-        uint32_t lh = 0;
-        exp8p(r, pk, nc2, off2, lh);
-        exp8p(r + 8, pk + 8, nc2, off2, lh);
-        add_f32x2(b0, b1, b0, b1, f16lo(lh), f16hi(lh)); lh = 0;
+        exp8p(r, pk, c, m_used, b0, b1);
+        exp8p(r + 16, pk + 8, c, m_used, b0, b1);
         if (n >= 1) { PROF_T(t0b); mbar_wait(&sm.bar_pv_done[bpar], (n - 1) & 1); PROF_ACC(acc_wpv, t0b); tc_fence_after(); }
         tmem_st16(t_p, pk);
-        exp8p(r + 16, pk, nc2, off2, lh);
-        exp8p(r + 24, pk + 8, nc2, off2, lh);
-        add_f32x2(b0, b1, b0, b1, f16lo(lh), f16hi(lh));
+        exp8p(r + 32, pk, c, m_used, b0, b1);
+        exp8p(r + 48, pk + 8, c, m_used, b0, b1);
         tmem_st16(t_p + 16, pk);
         PROF_ACC(acc_cmp, t2);
         PROF_T(t3);

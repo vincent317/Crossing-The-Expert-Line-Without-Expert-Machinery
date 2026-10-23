@@ -11,7 +11,6 @@ dq kernel: parallel over Q blocks.
 import torch
 import triton
 import triton.language as tl
-import problem as P
 
 
 # ---------------- preprocessing (NOT timed): O, LSE ----------------
@@ -493,6 +492,7 @@ def make_state(q, k, v, cu, scale):
 
 
 if __name__ == "__main__":
+    import problem as P
     dev = "cuda"
     q, k, v = P.make_inputs(dev, requires_grad=False)
     cu = P.cu_seqlens(dev)
