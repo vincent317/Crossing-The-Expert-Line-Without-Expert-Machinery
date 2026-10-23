@@ -1,0 +1,110 @@
+now using node mbkj-k8s-existed-node-l4t0
+name, uuid, driver_version
+NVIDIA B200, GPU-56cb82ec-1e85-23f6-1168-6a8221dd2d07, 580.105.08
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2026 NVIDIA Corporation
+Built on Thu_Mar_19_11:12:51_PM_PDT_2026
+Cuda compilation tools, release 13.2, V13.2.78
+Build cuda_13.2.r13.2/compiler.37668154_0
+EVAL_HASH /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/flashinfer-bench/flashinfer_bench/bench/config.py 8f2fc3c906b865876d1e69d446eb41a62f32c3dc8ad37411d09b27e95a7212de
+EVAL_HASH /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/flashinfer-bench/flashinfer_bench/bench/timing.py c9165db58615afdf03a223120b37418ed5afaf538b4450641f432f53bf68cbe3
+All done.
+SMOKE_RESULT selection {"passed": true, "policy_version": 2, "loaded_samples": 25, "fast_samples": 25, "active_reasons": [], "loaded_clocks": {"1965.0": 25}, "minimum_sm_mhz": 1900, "required_fast_fraction": 0.9}
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2025 NVIDIA Corporation
+Built on Wed_Apr__9_19:24:57_PDT_2025
+Cuda compilation tools, release 12.9, V12.9.41
+Build cuda_12.9.r12.9/compiler.35813241_0
+CASE_EXIT {"path": "ablation/gdn_fwd/t8192_n20/fable-5.1-ncu", "shape": "", "returncode": 1}
+test_requested_candidate (__main__.RepositoryForwardTests.test_requested_candidate) ... /jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gemm/kernels/grouped_gemm_masked_blackwell.py:2059: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  a_major_mode: tcgen05.OperandMajorMode,
+/jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gemm/kernels/grouped_gemm_masked_blackwell.py:2061: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  b_major_mode: tcgen05.OperandMajorMode,
+/jiuzhang_train/user/chenyaojian/kda-astra-high-20261019/venv/lib/python3.12/site-packages/flashinfer/gdn_kernels/blackwell/gated_delta_net_chunked.py:99: DeprecationWarning: tcgen05.OperandMajorMode is deprecated, use cute.nvgpu.OperandMajorMode instead
+  from cutlass.cute.nvgpu.tcgen05 import OperandMajorMode
+WATCHDOG: kernel hung. epoch 1 nA 48 nitems 1112 nrec 320. CTAs not done:
+  bid   1 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid   3 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid   5 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid   7 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid   8 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item    4  Mci  42  Lci  43  Sci  43
+  bid   9 phase 341 | p1 items lane0  332 lane1   42 pstage 43 | rec item   43  Mci  42  Lci 167  Sci 170
+  bid  10 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item    5  Mci  42  Lci  43  Sci  43
+  bid  11 phase 341 | p1 items lane0  332 lane1   42 pstage 43 | rec item   43  Mci  42  Lci 167  Sci 170
+  bid  13 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  15 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  17 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  19 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  21 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  23 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  25 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  27 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  29 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  31 phase 421 | p1 items lane0  417 lane1   53 pstage 53 | rec item   53  Mci  52  Lci 211  Sci 210
+  bid  32 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   16  Mci  37  Lci  38  Sci  38
+  bid  33 phase 301 | p1 items lane0  292 lane1   37 pstage 38 | rec item   38  Mci  37  Lci 147  Sci 150
+  bid  34 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   17  Mci  37  Lci  38  Sci  38
+  bid  35 phase 301 | p1 items lane0  292 lane1   37 pstage 38 | rec item   38  Mci  37  Lci 147  Sci 150
+  bid  36 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   18  Mci  37  Lci  38  Sci  38
+  bid  37 phase 301 | p1 items lane0  292 lane1   37 pstage 38 | rec item   38  Mci  37  Lci 147  Sci 150
+  bid  38 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   19  Mci  37  Lci  38  Sci  38
+  bid  39 phase 301 | p1 items lane0  292 lane1   37 pstage 38 | rec item   38  Mci  37  Lci 147  Sci 150
+  bid  41 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  43 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  45 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  47 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  49 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  51 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  53 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  55 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  57 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  59 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  61 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  63 phase 309 | p1 items lane0  305 lane1   39 pstage 39 | rec item   39  Mci  38  Lci 155  Sci 154
+  bid  65 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  67 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  69 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  71 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  73 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  75 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  77 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  79 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  81 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  83 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  85 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  87 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  89 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  91 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  93 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  95 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid  97 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid  99 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 101 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 103 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 105 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 107 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 109 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 111 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 113 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 115 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 117 phase 45 | p1 items lane0   41 lane1    6 pstage  6 | rec item    6  Mci   5  Lci  23  Sci  22
+  bid 119 phase 45 | p1 items lane0   41 lane1    6 pstage  6 | rec item    6  Mci   5  Lci  23  Sci  22
+  bid 121 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 123 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 125 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 127 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 129 phase 45 | p1 items lane0   41 lane1    6 pstage  6 | rec item    6  Mci   5  Lci  23  Sci  22
+  bid 131 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   5  Lci   3  Sci   2
+  bid 132 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   72  Mci   4  Lci   5  Sci   5
+  bid 133 phase 37 | p1 items lane0   28 lane1    4 pstage  5 | rec item    5  Mci   4  Lci  15  Sci  18
+  bid 134 phase 2 | p1 items lane0   -1 lane1   -1 pstage  0 | rec item   73  Mci   4  Lci   5  Sci   5
+  bid 135 phase 37 | p1 items lane0   28 lane1    4 pstage  5 | rec item    5  Mci   4  Lci  15  Sci  18
+  bid 137 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 139 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 141 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 143 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   0  Lci   3  Sci   2
+  bid 145 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+  bid 147 phase 5 | p1 items lane0    1 lane1    1 pstage  1 | rec item    1  Mci   1  Lci   3  Sci   2
+CLOCK_AFTER_SKIPPED_FAILED_CANDIDATE
+ARCHIVE_CHUNK 0 eJyrVkqtyCwpVrJSiK5WKkgsyQCylBKTchJLMvPz9NNT8uLTylP0SywMLY3i84wM9NOAcqm6pnqGunnJpUo6CkrFGYkFqSBNIE5RaklpUV5yfgpIxLA2thYAursd7Q==
+MARK_ARCHIVE_DONE 1
