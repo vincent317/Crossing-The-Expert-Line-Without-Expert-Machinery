@@ -72,10 +72,10 @@ constexpr int DPW = DC / WARPS;            // dims per warp in P.V (128)
 #define PROLOAD 0
 #endif
 #ifndef TAGVAL
-#define TAGVAL 1      // PROGW==1: validate partial/m,l tags after the poll loop (allows SIGNAL=9: no producer fence)
+#define TAGVAL 0      // PROGW==1: validate partial/m,l tags after the poll loop (allows SIGNAL=9: no producer fence)
 #endif
 #ifndef TAGPROD
-#define TAGPROD (PROGW >= 3 || TAGVAL)   // producer writes tagged partials / m,l words
+#define TAGPROD 0   // producer writes tagged partials / m,l words
 #endif
 #ifndef GUARD1
 #define GUARD1 0      // PROGW==3: issue loads only on warp-uniform change
@@ -146,7 +146,7 @@ constexpr int DPW = DC / WARPS;            // dims per warp in P.V (128)
 #define TIM_REL 0
 #endif
 #ifndef SIGNAL
-#define SIGNAL 9      // 9: no producer fence (partials are tag-validated by the consumer) ; 0: red.release ; 1: __threadfence + red.relaxed ; 2: fence.acq_rel.gpu + red.relaxed (fastest)
+#define SIGNAL 1      // 9: no producer fence (partials are tag-validated by the consumer) ; 0: red.release ; 1: __threadfence + red.relaxed ; 2: fence.acq_rel.gpu + red.relaxed (fastest)
 #endif
 #ifndef OML
 #define OML 0         // 1: (m, l) embedded in the o-partial rows (272 B segments: 256 B data + 16 B {m, l})
@@ -181,7 +181,7 @@ constexpr int DPW = DC / WARPS;            // dims per warp in P.V (128)
 #define LSEPF 0       // 1: prefetch the lse lines into L2 at kernel start (partial-line writes then merge into resident lines)
 #endif
 #ifndef PROGW
-#define PROGW 1       // 1: each warp polls the line itself and loads its own chunks' partials as their bits appear
+#define PROGW 0       // 1: each warp polls the line itself and loads its own chunks' partials as their bits appear
 #endif
 #ifndef MLVEC
 #define MLVEC 0       // 1: m/l rows via 16 B vector loads + smem

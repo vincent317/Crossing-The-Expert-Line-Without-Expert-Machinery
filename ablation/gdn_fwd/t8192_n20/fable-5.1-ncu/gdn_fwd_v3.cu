@@ -934,6 +934,8 @@ DEVI void recur_item(unsigned char* smem, const uint32_t tmem_base, const int bi
     while (fa < nc) {
       int lim = nc - fa; if (lim > 16) lim = 16;
       { const int room = *skw + 32 - fa; if (room < lim) lim = room; }   // staging ring backpressure
+      // The loader advances skw concurrently; keep every lane on one cursor.
+      lim = __shfl_sync(0xffffffffu, lim, 0);
       bool mine = false;
       if (lim > 0 && lane < lim) mine = !FUSED || ld_relaxed_gpu(flagp(fa + lane)) == epoch;
       const unsigned m = __ballot_sync(0xffffffffu, mine);
@@ -1458,23 +1460,10 @@ gdn_fused_kernel(const __grid_constant__ CUtensorMap tmQ, const __grid_constant_
 // ------------------------------------------------------------------------------------------------
 // host side
 // ------------------------------------------------------------------------------------------------
-typedef CUresult (*PFN_encodeTiled)(CUtensorMap*, CUtensorMapDataType, cuuint32_t, void*, const cuuint64_t*,
-                                    const cuuint64_t*, const cuuint32_t*, const cuuint32_t*, CUtensorMapInterleave,
-                                    CUtensorMapSwizzle, CUtensorMapL2promotion, CUtensorMapFloatOOBfill);
-static PFN_encodeTiled get_encode() {
-  static PFN_encodeTiled fn = nullptr;
-  if (!fn) {
-    void* p = nullptr;
-    cudaDriverEntryPointQueryResult qres;
-    cudaGetDriverEntryPoint("cuTensorMapEncodeTiled", &p, cudaEnableDefault, &qres);
-    fn = (PFN_encodeTiled)p;
-  }
-  return fn;
-}
 static int make_tmap(CUtensorMap* tm, void* ptr, int rank, const cuuint64_t* dims, const cuuint64_t* strides_bytes,
                      const cuuint32_t* box, CUtensorMapSwizzle swz) {
   cuuint32_t estr[3] = {1, 1, 1};
-  CUresult r = get_encode()(tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, rank, ptr, dims, strides_bytes + 1, box, estr,
+  CUresult r = cuTensorMapEncodeTiled(tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, rank, ptr, dims, strides_bytes + 1, box, estr,
                             CU_TENSOR_MAP_INTERLEAVE_NONE, swz, CU_TENSOR_MAP_L2_PROMOTION_L2_128B,
                             CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE);
   return (int)r;
@@ -1587,7 +1576,7 @@ extern "C" int gdn_fwd_launch(const void* q, const void* k, const void* v, const
       while (std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count() < 3.0) { if (cudaStreamQuery(stream) == cudaSuccess) { done = true; break; } }
       if (!done) {
         fprintf(stderr, "WATCHDOG: kernel hung. epoch %d nA %d nitems %d nrec %d. CTAs not done:\n", tabs.epoch, tabs.nA, tabs.nitems, tabs.nrec);
-        for (int b = 0; b < num_sms; b++) { const int* w = h_wd + 1024 + b * 8; if (w[0] != 3)
+        for (int b = 0; b < num_sms; b++) { const int* w = h_wd + 1024 + b * 16; if (w[0] != 3)
           fprintf(stderr, "  bid %3d phase %d | p1 items lane0 %4d lane1 %4d pstage %2d | rec item %4d  Mci %3d  Lci %3d  Sci %3d\n", b, w[0], w[1], w[5], w[3], w[2], w[4], w[6], w[7]); }
         std::vector<int> hf(nc * 8); if (cudaMemcpyAsync(hf.data(), flags, nc * 8 * 4, cudaMemcpyDeviceToHost, 0) == cudaSuccess) {}
         exit(1);

@@ -319,7 +319,7 @@ __global__ void __launch_bounds__(NUM_THREADS, 1) fa4_bwd_kernel(const __grid_co
     } else {
       // ---- B: dV += P^T dO as soon as P^T is in TMEM (p_ready), then dK += dS^T Q and dQ^T(g) = K^T dS^T(g) (dS^T smem[g&1])
       //      into the same buffer once dS is ready: same issuing thread, so the MMAs execute in order (no WAR hop).
-      //      Commits: do_empty after dV, q_empty after dK (S/dP of the sub-tile are earlier in the pipe), dq_done after dQ,
+      //      Commits: do_empty after both dV and dP, q_empty after dK, dq_done after dQ,
       //      acc_done at the item end.
       const uint64_t dQmn0  = make_desc<UMMA::Major::MN>(smem + SM_Q, LayQmn{});
       const uint64_t dDOmn0 = make_desc<UMMA::Major::MN>(smem + SM_DO, LayQmn{});
@@ -343,12 +343,14 @@ __global__ void __launch_bounds__(NUM_THREADS, 1) fa4_bwd_kernel(const __grid_co
 #endif
           tc_fence_after();
           if (first) { MBW(&bar_acc_free[0], (it & 1) ^ 1); MBW(&bar_acc_free[1], (it & 1) ^ 1); tc_fence_after(); }
+          // dV is independent of dP: wait for its own dO tile before reading.
+          MBW(&bar_do_full[sd], (g / DOSTAGES) & 1);
+          tc_fence_after();
           TR(g, 5);
           if (elect_one()) {
             const uint64_t dDOmn = desc_advance(dDOmn0, sd * 16384);
             #pragma unroll
             for (int s = 0; s < 4; ++s) umma_ts(tdV, tb + 8 * s, desc_advance(dDOmn, 2048 * s), idesc_KV, !(first && s == 0));
-            umma_commit(&bar_do_empty[sd]);
           }
           __syncwarp();
 #ifdef NAMED_BARS
@@ -358,6 +360,8 @@ __global__ void __launch_bounds__(NUM_THREADS, 1) fa4_bwd_kernel(const __grid_co
 #endif
           tc_fence_after();
           if (elect_one()) {
+            // pds_ready proves A2 finished dP; this commit also waits for B's dV.
+            umma_commit(&bar_do_empty[sd]);
             const uint64_t dQmn = desc_advance(dQmn0, sq * 16384);
             #pragma unroll
             for (int s = 0; s < 4; ++s) umma_ts(tdK, tb + 32 + 8 * s, desc_advance(dQmn, 2048 * s), idesc_KV, !(first && s == 0));
