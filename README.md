@@ -10,8 +10,8 @@
 [![Kernels](https://img.shields.io/badge/Kernels-B200%20sm__100a-76b900)](#repository-layout)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery?style=flat)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/stargazers)
-[![Issues](https://img.shields.io/github/issues/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/issues)
+[![Stars](https://img.shields.io/github/stars/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal?style=flat)](https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal/stargazers)
+[![Issues](https://img.shields.io/github/issues/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal)](https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal/issues)
 
 <img src="assets/figure3.png" width="80%" alt="Speedup of JustGoal and the KDA-0.5 reproduction over the reference kernel across model generations on four operators">
 
@@ -32,37 +32,32 @@ implementation on **5 of the 10** operators that have one. With **Fable 5.1**, s
 JustGoal achieves a geometric mean speedup of **1.24×** across 12 evaluation shapes over our
 KDA-0.5 reproduction.
 
-## News
-
-- 📌 **Pinned**: the paper draft is available as [`paper.pdf`](paper.pdf).
-- **2026-10-23**: Retest results for the released kernels, including the directories classified as invalid, are in [`benchmarks/flashinfer/`](benchmarks/flashinfer/remainder-03413a0-20261022/README.md).
-- **2026-10-22**: Kernel code released under the Apache License 2.0.
-- **2026-09-25**: Paper draft added.
-
 ## Repository Layout
 
 | Directory | Contents |
 |-|-|
 | [`goal_single_shape/`](goal_single_shape/) | `/goal` runs on a single specified shape |
 | [`goal_full_shape/`](goal_full_shape/) | `/goal` runs on all shapes of an operator definition |
-| [`kda05_reproduction/`](kda05_reproduction/) | Runs under the KDA-0.5 setup |
-| [`kda05_single_shape/`](kda05_single_shape/) | Runs under the KDA-0.5 setup on a single specified shape |
+| [`kda05_reproduction_full_shape/`](kda05_reproduction_full_shape/) | Runs under the KDA-0.5 setup |
+| [`kda05_reproduction_single_shape/`](kda05_reproduction_single_shape/) | Runs under the KDA-0.5 setup on a single specified shape |
 | [`ablation/`](ablation/) | Ablation runs |
-| [`benchmarks/`](benchmarks/) | Retest results and evidence |
 
-Kernels are organized as `<operator>/<shape>/<model>/`. The `goal_full_shape/`,
-`kda05_reproduction/` and `kda05_single_shape/` kernels come with a
-[flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench) `solution.json`.
+Every folder is organized as `<model>/<operator>/<shape>/`. In the full-shape folders the
+shape level is the flashinfer-bench definition; `kda05_reproduction_full_shape/` adds a
+level for each released version and `ablation/` one for each variant. The `goal_full_shape/`,
+`kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` kernels come
+with a [flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench)
+`solution.json`.
 
 ## Environment
 
 - GPU: NVIDIA B200 (`sm_100a`)
 - CUDA: 13.0 (`nvcc` 13.0.88, driver 580.105.08). Two kernels point at a CUDA 13.1
-  toolkit: `goal_single_shape/mla_paged_prefill/b1_q33_kv34/opus-5` and
-  `goal_single_shape/gqa_paged_decode/b16_kv2841/opus-5`.
+  toolkit: `goal_single_shape/opus-5/mla_paged_prefill/b1_q33_kv34` and
+  `goal_single_shape/opus-5/gqa_paged_decode/b16_kv2841`.
 - CuTe DSL (`nvidia-cutlass-dsl`): 4.6.2. The DSA, GDN and MoE kernels in
-  `kda05_reproduction/` and `kda05_single_shape/` use 4.6.0, the version pinned by the
-  KDA-0.5 setup.
+  `kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` use 4.6.0,
+  the version pinned by the KDA-0.5 setup.
 
 ## Contributing
 
@@ -82,7 +77,7 @@ build failures, and retest results from other B200 setups.
             and Shen, Yifei and Xiang, Shengye and Li, Zhen and Gan, Lin and Li, Yuxuan
             and Han, Xu and Liu, Zhiyuan},
   year   = {2026},
-  howpublished = {\url{https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery}}
+  howpublished = {\url{https://github.com/vincent317/JustGoal-Surpassing-Expert-Kernels-and-Specialized-Kernel-Agents-with-Only-a-Goal}}
 }
 ```
 
