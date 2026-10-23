@@ -1,8 +1,8 @@
 <div align="center">
 
-# Crossing the Expert Line Without Expert Machinery
+# JustGoal: Surpassing Expert Kernels and Specialized Kernel Agents with Only a Goal
 
-**前沿编程 agent 在朴素循环中写出的 GPU 算子，在 NVIDIA B200 上超过专家手写算子**
+**只给通用 agent 一个优化目标，在 NVIDIA B200 上写出的 GPU 算子**
 
 [English](README.md) | **中文**
 
@@ -13,15 +13,21 @@
 [![Stars](https://img.shields.io/github/stars/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery?style=flat)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/stargazers)
 [![Issues](https://img.shields.io/github/issues/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery)](https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery/issues)
 
-<img src="assets/figure1.png" width="60%" alt="三代模型相对专家参照的加速比">
+<img src="assets/figure3.png" width="80%" alt="JustGoal 与 KDA-0.5 复现在四个算子上跨三代模型相对参照算子的加速比">
+
+<sub>JustGoal 与 KDA-0.5 复现在四个算子上跨三代模型相对参照算子的加速比；每根柱子是该算子各
+shape 的几何平均，虚线为参照算子。</sub>
 
 </div>
 
-本仓库发布论文 [*Crossing the Expert Line Without Expert Machinery*](paper.pdf) 中生成的
-算子（kernel）代码。通用编程 agent 只拿到一个 workload shape 和一段简短目标，在**朴素循环**
-（naive loop）中迭代：不提供任何算子专用的评测设施、领域知识或工作流，正确性检查和计时
-都由 agent 自己编写。使用 **Fable 5.1** 时，生成的算子在 FlashAttention-4 反向、
-DeepSeek Sparse Attention 和 Gated DeltaNet 上达到最快专家参照的 **1.08×–1.58×**。
+本仓库发布论文
+[*JustGoal: Surpassing Expert Kernels and Specialized Kernel Agents with Only a Goal*](paper.pdf)
+中生成的算子（kernel）代码。JustGoal 只给通用 agent 一个优化目标和约束，不预先配置任何算子专用的
+评测设施、知识库或搜索工作流；agent 自己搭建评测循环并迭代优化实现。在 NVIDIA B200 上，JustGoal
+在 **11 个算子中的 9 个**上超过所评测的开源库实现，逐算子几何平均加速比为 **1.14–2.34×**；在有
+专用 kernel agent 基线的 10 个算子中，有 **5 个**超过所评测的最快 agent 生成实现。使用
+**Fable 5.1** 时，单 shape JustGoal 在 12 个评测 shape 上相对我们的 KDA-0.5 复现取得 **1.24×**
+的几何平均加速比。
 
 ## 动态
 
@@ -29,16 +35,6 @@ DeepSeek Sparse Attention 和 Gated DeltaNet 上达到最快专家参照的 **1.
 - **2026-10-23**：已发布算子的复测结果（含判定为 invalid 的目录）见 [`benchmarks/flashinfer/`](benchmarks/flashinfer/remainder-03413a0-20261022/README.md)。
 - **2026-10-22**：算子代码以 Apache License 2.0 发布。
 - **2026-09-25**：加入论文草稿。
-
-## 目录
-
-- [仓库结构](#仓库结构)
-- [环境](#环境)
-- [局限](#局限)
-- [参与贡献](#参与贡献)
-- [引用](#引用)
-- [许可证](#许可证)
-- [致谢](#致谢)
 
 ## 仓库结构
 
@@ -63,14 +59,6 @@ DeepSeek Sparse Attention 和 Gated DeltaNet 上达到最快专家参照的 **1.
 - CuTe DSL（`nvidia-cutlass-dsl`）：4.6.2。`kda05_reproduction/` 中的 DSA、GDN、MoE
   算子使用 KDA-0.5 设定钉住的 4.6.0。
 
-## 局限
-
-- 算子只面向 B200，也只在 B200 上测过。
-- 大多数算子针对优化时的 shape 专门化，不是通用库算子。
-- 论文是初步草稿。[`benchmarks/`](benchmarks/) 中的复测把部分已发布目录判为 invalid，
-  使用具体算子前请先查看
-  [`coverage.json`](benchmarks/flashinfer/remainder-03413a0-20261022/coverage.json)。
-
 ## 参与贡献
 
 欢迎提 Issue 和 Pull Request，特别是结果错误或编译失败的报告，以及在其他 B200
@@ -82,11 +70,12 @@ DeepSeek Sparse Attention 和 Gated DeltaNet 上达到最快专家参照的 **1.
 <summary>BibTeX</summary>
 
 ```bibtex
-@misc{chen2026crossing,
-  title  = {Crossing the Expert Line Without Expert Machinery},
-  author = {Chen, Yaojian and Peng, Dazhi and Li, Leshan and Sun, Haojun
-            and Zheng, Yiyun and He, Qingfeng and Zhu, Zhui and Xiang, Shengye
-            and Li, Zhen and Gan, Lin and Li, Yuxuan and Han, Xu and Liu, Zhiyuan},
+@misc{chen2026justgoal,
+  title  = {JustGoal: Surpassing Expert Kernels and Specialized Kernel Agents with Only a Goal},
+  author = {Chen, Yaojian and Peng, Dazhi and Zhu, Zhui and Li, Leshan and Sun, Haojun
+            and Zheng, Yiyun and He, Qingfeng and Li, Shangzhan and Deng, Xianglong
+            and Shen, Yifei and Xiang, Shengye and Li, Zhen and Gan, Lin and Li, Yuxuan
+            and Han, Xu and Liu, Zhiyuan},
   year   = {2026},
   howpublished = {\url{https://github.com/vincent317/Crossing-The-Expert-Line-Without-Expert-Machinery}}
 }
@@ -106,4 +95,5 @@ BSD-3-Clause 头部和许可，清单见 [`NOTICE`](NOTICE)。
 竞赛 workload、[FlashAttention](https://github.com/Dao-AILab/flash-attention) 以及
 [CUTLASS / CuTe DSL](https://github.com/NVIDIA/cutlass)。
 
-本工作来自[清华大学](https://www.tsinghua.edu.cn/)和[面壁智能](https://modelbest.cn/)。
+本工作来自[清华大学](https://www.tsinghua.edu.cn/)、[面壁智能](https://modelbest.cn/)、
+[哈尔滨工业大学](https://www.hit.edu.cn/)和[中国科学院大学](https://www.ucas.ac.cn/)。
