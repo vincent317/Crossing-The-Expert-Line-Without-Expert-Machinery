@@ -38,9 +38,10 @@ shape 的几何平均，虚线为参照算子。</sub>
 | [`kda05_reproduction_full_shape/`](kda05_reproduction_full_shape/) | KDA-0.5 设定下的实验 |
 | [`kda05_reproduction_single_shape/`](kda05_reproduction_single_shape/) | KDA-0.5 设定下指定单个 shape 的实验 |
 | [`ablation/`](ablation/) | 消融实验 |
-| [`benchmarks/`](benchmarks/) | 复测结果与证据 |
 
-算子按 `<算子>/<shape>/<模型>/` 组织。`goal_full_shape/`、
+各目录统一按 `<模型>/<算子>/<shape>/` 组织。覆盖全部 shape 的目录中，shape 这一层是
+flashinfer-bench 的 definition；`kda05_reproduction_full_shape/` 再下一层是各个发布版本，
+`ablation/` 再下一层是各个消融变体。`goal_full_shape/`、
 `kda05_reproduction_full_shape/` 和 `kda05_reproduction_single_shape/` 中的算子附带
 [flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench) 的 `solution.json`。
 
@@ -48,8 +49,8 @@ shape 的几何平均，虚线为参照算子。</sub>
 
 - GPU：NVIDIA B200（`sm_100a`）
 - CUDA：13.0（`nvcc` 13.0.88，驱动 580.105.08）。有两个算子指向 CUDA 13.1 工具链：
-  `goal_single_shape/mla_paged_prefill/b1_q33_kv34/opus-5` 和
-  `goal_single_shape/gqa_paged_decode/b16_kv2841/opus-5`。
+  `goal_single_shape/opus-5/mla_paged_prefill/b1_q33_kv34` 和
+  `goal_single_shape/opus-5/gqa_paged_decode/b16_kv2841`。
 - CuTe DSL（`nvidia-cutlass-dsl`）：4.6.2。`kda05_reproduction_full_shape/` 和
   `kda05_reproduction_single_shape/` 中的 DSA、GDN、MoE 算子使用 KDA-0.5 设定钉住的 4.6.0。
 

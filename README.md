@@ -41,9 +41,10 @@ KDA-0.5 reproduction.
 | [`kda05_reproduction_full_shape/`](kda05_reproduction_full_shape/) | Runs under the KDA-0.5 setup |
 | [`kda05_reproduction_single_shape/`](kda05_reproduction_single_shape/) | Runs under the KDA-0.5 setup on a single specified shape |
 | [`ablation/`](ablation/) | Ablation runs |
-| [`benchmarks/`](benchmarks/) | Retest results and evidence |
 
-Kernels are organized as `<operator>/<shape>/<model>/`. The `goal_full_shape/`,
+Every folder is organized as `<model>/<operator>/<shape>/`. In the full-shape folders the
+shape level is the flashinfer-bench definition; `kda05_reproduction_full_shape/` adds a
+level for each released version and `ablation/` one for each variant. The `goal_full_shape/`,
 `kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` kernels come
 with a [flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench)
 `solution.json`.
@@ -52,8 +53,8 @@ with a [flashinfer-bench](https://github.com/flashinfer-ai/flashinfer-bench)
 
 - GPU: NVIDIA B200 (`sm_100a`)
 - CUDA: 13.0 (`nvcc` 13.0.88, driver 580.105.08). Two kernels point at a CUDA 13.1
-  toolkit: `goal_single_shape/mla_paged_prefill/b1_q33_kv34/opus-5` and
-  `goal_single_shape/gqa_paged_decode/b16_kv2841/opus-5`.
+  toolkit: `goal_single_shape/opus-5/mla_paged_prefill/b1_q33_kv34` and
+  `goal_single_shape/opus-5/gqa_paged_decode/b16_kv2841`.
 - CuTe DSL (`nvidia-cutlass-dsl`): 4.6.2. The DSA, GDN and MoE kernels in
   `kda05_reproduction_full_shape/` and `kda05_reproduction_single_shape/` use 4.6.0,
   the version pinned by the KDA-0.5 setup.
