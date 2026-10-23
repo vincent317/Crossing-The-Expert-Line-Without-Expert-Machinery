@@ -1,7 +1,7 @@
 {
   "name": "cute_fabwd_varlen_v5c_fusedzero",
   "definition": "attention_bwd_varlen_causal_h16_d128",
-  "author": "pengdazhi",
+  "author": "opus48",
   "spec": {
     "language": "python",
     "target_hardware": [

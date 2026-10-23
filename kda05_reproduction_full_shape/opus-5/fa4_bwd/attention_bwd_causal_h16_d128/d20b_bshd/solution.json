@@ -1,7 +1,7 @@
 {
   "name": "d20b_bshd",
   "definition": "attention_bwd_causal_h16_d128",
-  "author": "pengdazhi",
+  "author": "opus5",
   "spec": {
     "language": "python",
     "target_hardware": [

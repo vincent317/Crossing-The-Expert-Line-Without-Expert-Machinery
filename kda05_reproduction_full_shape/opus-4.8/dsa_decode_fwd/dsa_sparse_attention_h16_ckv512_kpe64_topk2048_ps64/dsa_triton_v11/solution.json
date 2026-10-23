@@ -1,7 +1,7 @@
 {
   "name": "dsa_triton_v11",
   "definition": "dsa_sparse_attention_h16_ckv512_kpe64_topk2048_ps64",
-  "author": "pengdazhi",
+  "author": "opus48",
   "spec": {
     "language": "triton",
     "target_hardware": [

@@ -1,7 +1,7 @@
 {
  "name": "dsa_fable51_v6_9",
  "definition": "dsa_sparse_attention_h16_ckv512_kpe64_topk2048_ps64",
- "author": "pengdazhi-fable51",
+ "author": "fable51",
  "spec": {
   "language": "python",
   "target_hardware": [
