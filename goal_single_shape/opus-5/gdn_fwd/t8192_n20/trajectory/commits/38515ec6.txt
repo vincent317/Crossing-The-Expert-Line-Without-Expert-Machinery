@@ -1,4 +1,0 @@
-Docs: add SUMMARY skeleton and amortized timing in bench
-SUMMARY.md
-bench.py
-final_run.py

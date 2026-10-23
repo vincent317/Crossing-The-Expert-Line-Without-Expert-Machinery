@@ -1,2 +1,0 @@
-Test: also cross-check the single-chunk WY form on the CPU
-verify_math.py

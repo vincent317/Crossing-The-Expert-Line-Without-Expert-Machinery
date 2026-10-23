@@ -1,3 +1,0 @@
-Fix: pass ptxas -v via --ptxas-options (torch appends -std=c++20 to -Xptxas)
-build_ext.py
-run_next.sh

@@ -1,7 +1,0 @@
-Feat: FlashAttention causal MHA backward in Triton for B200
-bench.py
-common.py
-kernel.py
-naive.py
-probe.py
-ref_bench.py

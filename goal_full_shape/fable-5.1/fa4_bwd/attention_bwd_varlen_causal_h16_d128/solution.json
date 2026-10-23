@@ -1,7 +1,7 @@
 {
  "name": "gluon_bwd_varlen_v2",
  "definition": "attention_bwd_varlen_causal_h16_d128",
- "author": "pengdazhi-agent",
+ "author": "fable51",
  "spec": {
   "language": "python",
   "target_hardware": [

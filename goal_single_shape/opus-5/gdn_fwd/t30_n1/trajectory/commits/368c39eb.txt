@@ -1,3 +1,0 @@
-Docs: final result against the CuTe-DSL reference, and what the last 5% needs
-SUMMARY.md
-bench.py

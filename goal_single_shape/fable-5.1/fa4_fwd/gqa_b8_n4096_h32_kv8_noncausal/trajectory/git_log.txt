@@ -1,3 +1,0 @@
-2010a4c Feat: add FA-fwd benchmark harness and Triton kernel for B200
-80dd35e Feat: add no-running-max FA kernel and bf16 MMA ceiling probe
-ddedda4 Docs: record measured bf16 ceiling showing the 1.2x target is unreachable

@@ -1,3 +1,0 @@
-Fix: keep the benchmark alive when one implementation fails to build
-bench.py
-check.py

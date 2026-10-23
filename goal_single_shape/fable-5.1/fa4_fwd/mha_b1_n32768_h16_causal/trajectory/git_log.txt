@@ -1,9 +1,0 @@
-37584f9 Feat: WIP tcgen05 flash-attn fwd varlen kernel + ref/tolerance benches
-4a61df3 Feat: v2 kernel (QTILE=256/KTILE=64, 3-stage K/V, QK lookahead) + debug harness
-0c6c68e Perf: fold softmax scale into exp2 and add lazy O rescale (thresh 2^8)
-1f5355f Feat: v3 persistent kernel with atomic work counter (LPT dynamic scheduling)
-56dd801 Fix: tcgen05.st operand numbering in tmem_st32 (address is %0, data %1..%32)
-7ad9710 Chore: cycle-level profiling mode (FA_MODE=9) + tcgen05.mma throughput microbench
-e99e3ff Feat: v4 kernel (QTILE=128/KTILE=128, lazy rescale) + SUMMARY + design docs
-70183e8 Fix: add v2-specific test scripts (bench_v2.py, check_v2.py)
-90d7542 Docs: final SUMMARY.md with accurate test data and terminal evidence

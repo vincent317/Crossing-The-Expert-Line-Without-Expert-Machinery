@@ -1,2 +1,0 @@
-Docs: list every file and point Reproduce at the one-command entry points
-README.md

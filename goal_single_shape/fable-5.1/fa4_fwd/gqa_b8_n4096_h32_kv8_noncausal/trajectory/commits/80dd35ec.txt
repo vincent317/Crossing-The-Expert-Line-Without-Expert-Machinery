@@ -1,5 +1,0 @@
-Feat: add no-running-max FA kernel and bf16 MMA ceiling probe
-bench_sweep2.py
-bench_sweep3.py
-fa_triton2.py
-fa_triton3.py

@@ -1,5 +1,0 @@
-Perf: tcgen05 UMMA + TMEM path with TMA gather4 swizzled operands
-bench.py
-check.py
-dsa_kernel.cu
-dsa_kernel.py

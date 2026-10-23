@@ -1,7 +1,7 @@
 {
   "name": "gdn_prefill_b200_cuda",
   "definition": "gdn_prefill_qk4_v8_d128_k_last",
-  "author": "pengdazhi",
+  "author": "opus5",
   "spec": {
     "language": "python",
     "target_hardware": [

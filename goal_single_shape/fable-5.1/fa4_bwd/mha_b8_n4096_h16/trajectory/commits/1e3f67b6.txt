@@ -1,6 +1,0 @@
-Test: measure fp8 e4m3 feasibility and per-GEMM error attribution
-fp8_feasible.py
-fp8_mixed.py
-runs/1052353/log.txt
-runs/1052363/log.txt
-runs/task.json

@@ -1,4 +1,0 @@
-Chore: add measurement variants and final A/B results to the summary
-SUMMARY.md
-dsa_topk_kernel.cu
-topk_indexer.py

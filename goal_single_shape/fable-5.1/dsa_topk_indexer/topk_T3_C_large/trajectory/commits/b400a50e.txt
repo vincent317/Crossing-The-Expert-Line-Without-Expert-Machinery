@@ -1,3 +1,0 @@
-Refactor: broadcast tail parameters via shfl; finalize summary numbers
-SUMMARY.md
-dsa_topk_kernel.cu

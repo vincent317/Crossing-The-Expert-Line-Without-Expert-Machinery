@@ -1,5 +1,0 @@
-39c90ac Feat: DSA sparse attention fwd kernel, naive reference, bench and check
-537d0ad Perf: TMA row gather, pipelined mma, live-only reduction, release publish
-36b36e8 Perf: per-SM slot chunk assignment, 8-warp CTAs, single softmax; add SUMMARY
-1b387e0 Perf: tcgen05 UMMA + TMEM path with TMA gather4 swizzled operands
-3695d96 Docs: keep mma.sync kernel as default, add tcgen05 variant and UMMA findings

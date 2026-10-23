@@ -1,5 +1,0 @@
-Docs: record B200 measurements and the remaining performance gap
-SUMMARY.md
-final.py
-kda_triton.py
-run_final.sh

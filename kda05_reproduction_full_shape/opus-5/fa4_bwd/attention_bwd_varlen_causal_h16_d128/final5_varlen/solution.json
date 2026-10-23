@@ -1,7 +1,7 @@
 {
   "name": "final5_varlen",
   "definition": "attention_bwd_varlen_causal_h16_d128",
-  "author": "pengdazhi",
+  "author": "opus5",
   "spec": {
     "language": "python",
     "target_hardware": [

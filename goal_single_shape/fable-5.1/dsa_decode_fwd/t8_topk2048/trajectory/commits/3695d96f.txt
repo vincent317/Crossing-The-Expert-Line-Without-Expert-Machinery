@@ -1,7 +1,0 @@
-Docs: keep mma.sync kernel as default, add tcgen05 variant and UMMA findings
-SUMMARY.md
-dsa_kernel.cu
-dsa_kernel.py
-dsa_kernel_tcgen05.cu
-dsa_kernel_tcgen05.py
-umma_bench.py

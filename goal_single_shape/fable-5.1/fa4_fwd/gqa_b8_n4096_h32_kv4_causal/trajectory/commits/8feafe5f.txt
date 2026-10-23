@@ -1,5 +1,0 @@
-Test: add final evidence script (ref vs stage-S, same data and harness)
-__pycache__/final_eval.cpython-312.pyc
-final_eval.py
-runs/1052254/log.txt
-runs/task.json

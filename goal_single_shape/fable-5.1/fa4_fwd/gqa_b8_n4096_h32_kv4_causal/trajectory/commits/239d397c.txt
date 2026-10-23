@@ -1,7 +1,0 @@
-Feat: add stage-E kernel with tree reductions and FMA exp2 emulation
-__pycache__/bench_gluon_b.cpython-312.pyc
-__pycache__/kernel_gluon_e.cpython-312.pyc
-bench_gluon_b.py
-kernel_gluon_e.py
-runs/1051490/log.txt
-runs/task.json

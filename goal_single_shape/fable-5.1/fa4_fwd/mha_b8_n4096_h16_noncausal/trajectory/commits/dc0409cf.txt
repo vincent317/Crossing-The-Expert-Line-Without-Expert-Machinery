@@ -1,2 +1,0 @@
-Fix: fence generic-proxy smem writes before tcgen05.mma reads them
-fmha.cu
