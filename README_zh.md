@@ -29,13 +29,6 @@ shape 的几何平均，虚线为参照算子。</sub>
 **Fable 5.1** 时，单 shape JustGoal 在 12 个评测 shape 上相对我们的 KDA-0.5 复现取得 **1.24×**
 的几何平均加速比。
 
-## 动态
-
-- 📌 **置顶**：论文草稿见 [`paper.pdf`](paper.pdf)。
-- **2026-10-23**：已发布算子的复测结果（含判定为 invalid 的目录）见 [`benchmarks/flashinfer/`](benchmarks/flashinfer/remainder-03413a0-20261022/README.md)。
-- **2026-10-22**：算子代码以 Apache License 2.0 发布。
-- **2026-09-25**：加入论文草稿。
-
 ## 仓库结构
 
 | 目录 | 内容 |
