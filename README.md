@@ -32,13 +32,6 @@ implementation on **5 of the 10** operators that have one. With **Fable 5.1**, s
 JustGoal achieves a geometric mean speedup of **1.24×** across 12 evaluation shapes over our
 KDA-0.5 reproduction.
 
-## News
-
-- 📌 **Pinned**: the paper draft is available as [`paper.pdf`](paper.pdf).
-- **2026-10-23**: Retest results for the released kernels, including the directories classified as invalid, are in [`benchmarks/flashinfer/`](benchmarks/flashinfer/remainder-03413a0-20261022/README.md).
-- **2026-10-22**: Kernel code released under the Apache License 2.0.
-- **2026-09-25**: Paper draft added.
-
 ## Repository Layout
 
 | Directory | Contents |
